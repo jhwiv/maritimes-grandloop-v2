@@ -56,7 +56,7 @@
   --teal3: #3E5C57;
   --sp4:4px;--sp8:8px;--sp12:12px;--sp16:16px;--sp24:24px;--sp32:32px;--sp48:48px;
   --r6:6px;--r9:9px;--r12:12px;
-  --hdr:104px;
+  --hdr:84px;
 }
 html{-webkit-text-size-adjust:100%}
 body{
@@ -84,23 +84,12 @@ img{display:block;max-width:100%}
 #site-header.scrolled{
   box-shadow:0 2px 20px rgba(0,0,0,.35);
 }
-.hdr-top-row{
-  display:flex;align-items:center;
-  margin-bottom:1px;
-}
-.hdr-brand{
-  font-family:'Playfair Display',serif;
-  font-size:12px;font-weight:700;
-  color:var(--gold2);
-  white-space:nowrap;
-  flex-shrink:0;
-}
 .hdr-rows{
-  display:flex;flex-direction:column;gap:0;
+  display:flex;flex-direction:column;gap:4px;
 }
 .hdr-row-1,.hdr-row-2,.hdr-row-3{
   display:flex;align-items:center;
-  gap:2px;
+  gap:4px 6px;
   flex-wrap:nowrap;
   overflow-x:auto;
   -webkit-overflow-scrolling:touch;
@@ -110,12 +99,12 @@ img{display:block;max-width:100%}
 .hdr-row-1::-webkit-scrollbar,.hdr-row-2::-webkit-scrollbar,.hdr-row-3::-webkit-scrollbar{display:none}
 .nav-chip{
   font-family:'DM Mono',monospace;
-  font-size:8px;letter-spacing:.05em;
+  font-size:11px;letter-spacing:0.06em;
   text-transform:uppercase;
   font-weight:600;
-  padding:4px 8px;
+  padding:8px 16px;
   min-height:22px;
-  border-radius:12px;
+  border-radius:20px;
   white-space:nowrap;
   color:rgba(255,255,255,.55);
   border:1px solid transparent;
@@ -141,8 +130,7 @@ img{display:block;max-width:100%}
 .nav-chip:active{transform:scale(.95);transition-duration:.05s}
 .hdr-section-label{display:none!important}
 @media(min-width:601px){
-  .nav-chip{font-size:9px;padding:5px 10px;min-height:26px;border-radius:14px}
-  .hdr-brand{font-size:13px}
+  .nav-chip{font-size:11px;padding:8px 16px;min-height:26px;border-radius:20px}
 }
 
 /* ── FERRY ALERT BAR ───────────────────────────── */
@@ -370,6 +358,58 @@ img{display:block;max-width:100%}
   font-style:italic;font-size:15px;
   color:var(--steel);line-height:1.65;
   max-width:420px;
+}
+
+/* ── LOCATION BANNERS ─────────────────────────── */
+.location-banner{
+  height:150px;position:relative;overflow:hidden;
+  background:var(--navy);
+}
+.location-banner-img{
+  position:absolute;inset:0;
+  background-size:cover;background-position:center;
+  filter:brightness(.55);
+}
+.location-banner-content{
+  position:relative;z-index:1;height:100%;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  text-align:center;padding:0 var(--sp24);
+}
+.location-banner-flag{font-size:1.5rem;margin-bottom:4px}
+.location-banner-city{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(20px,5vw,28px);font-weight:700;
+  color:#fff;letter-spacing:.02em;
+}
+.location-banner-sub{
+  font-family:'DM Mono',monospace;font-size:9px;
+  letter-spacing:.2em;text-transform:uppercase;
+  color:rgba(255,255,255,.7);margin-top:4px;
+}
+
+/* ── DAY BANNERS ──────────────────────────────── */
+.day-banner{
+  background:var(--navy);
+  padding:20px var(--sp24);
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+  border-top:1px solid rgba(200,168,75,.15);
+}
+.day-banner::before{
+  content:'';display:block;width:40px;height:2px;
+  background:var(--gold);margin:0 auto 12px;
+}
+.day-banner-eyebrow{
+  font-family:'DM Mono',monospace;font-size:9px;
+  letter-spacing:.24em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:4px;
+}
+.day-banner-title{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(16px,4vw,22px);font-weight:700;
+  color:#fff;line-height:1.2;
 }
 
 /* ── STOP CARDS ─────────────────────────────────── */
@@ -1422,6 +1462,16 @@ body:has(#search-card.open) #a2hs-banner{display:none!important}
   font-family:'Crimson Pro',serif;font-size:14px;
   color:var(--steel);margin-top:var(--sp4);line-height:1.45;
 }
+.wx-advisory{
+  font-family:'Crimson Pro',serif;font-size:13px;
+  color:var(--body);line-height:1.45;
+  margin-top:var(--sp4);
+  padding:4px 8px;
+  border-left:2px solid var(--gold);
+  background:var(--gold3);
+  border-radius:0 6px 6px 0;
+}
+.wx-advisory:empty{display:none}
 .wx-stats{
   display:flex;gap:var(--sp12);
   margin-top:var(--sp12);padding-top:var(--sp8);
@@ -1439,6 +1489,77 @@ body:has(#search-card.open) #a2hs-banner{display:none!important}
 .wx-c{display:none}
 @media(max-width:600px){
   .wx-card{width:100%;max-width:none}
+}
+
+/* ── TIME PILL ───────────────────────────────────── */
+#time-pill{
+  position:fixed;
+  bottom:calc(var(--sp24) + env(safe-area-inset-bottom,0px));
+  right:var(--sp16);
+  z-index:175;
+  display:none;
+  align-items:center;gap:0;
+  background:var(--navy);
+  border:1px solid rgba(200,168,75,.2);
+  border-radius:20px;
+  padding:5px 12px;
+  box-shadow:0 4px 24px rgba(0,0,0,.45),0 0 0 1px rgba(0,0,0,.15);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  font-family:'DM Mono',monospace;
+  transition:opacity .3s,transform .3s;
+  cursor:pointer;
+  user-select:none;-webkit-user-select:none;
+}
+#time-pill.visible{display:flex}
+#time-pill .tp-zone{
+  display:flex;flex-direction:column;align-items:center;
+  min-width:52px;
+}
+#time-pill .tp-flag{
+  font-size:10px;line-height:1;
+  margin-bottom:1px;
+}
+#time-pill .tp-time{
+  font-size:11px;font-weight:600;
+  color:var(--cream);
+  letter-spacing:.02em;
+  white-space:nowrap;
+}
+#time-pill .tp-label{
+  font-size:7px;letter-spacing:.1em;
+  text-transform:uppercase;
+  color:rgba(200,168,75,.7);
+  margin-top:1px;
+}
+#time-pill .tp-sep{
+  width:1px;height:20px;
+  background:rgba(200,168,75,.2);
+  margin:0 8px;
+}
+
+/* ── PRONUNCIATION BUTTONS ────────────────────────── */
+.stop-pron{
+  display:inline-flex;align-items:center;gap:3px;
+  font-family:'DM Mono',monospace;
+  font-size:9px;letter-spacing:.06em;
+  color:var(--gold-text);
+  background:var(--gold3);
+  border:1px solid rgba(200,168,75,.18);
+  padding:2px 8px;
+  border-radius:12px;
+  margin-left:var(--sp8);
+  font-weight:400;
+  white-space:nowrap;
+  vertical-align:middle;
+  cursor:pointer;
+  transition:background .2s,border-color .2s;
+  text-decoration:none;
+}
+.stop-pron:active{transform:scale(.93);transition-duration:.05s}
+.stop-pron:hover{
+  background:rgba(200,168,75,.18);
+  border-color:rgba(200,168,75,.35);
 }
 
 /* ── ALTERRA BRANDING ──────────────────────────── */
@@ -1554,7 +1675,10 @@ body.map-fullscreen #chat-fab-wrap,
 body.map-fullscreen #search-card,
 body.map-fullscreen #chat-panel,
 body.map-fullscreen #site-footer,
-body.map-fullscreen #offline-bar{display:none!important}
+body.map-fullscreen #offline-bar,
+body.map-fullscreen .location-banner,
+body.map-fullscreen .day-banner,
+body.map-fullscreen #time-pill{display:none!important}
 body.map-fullscreen #page-wrap{padding-top:0!important;max-width:none;padding-left:0;padding-right:0}
 body.map-fullscreen #main-content{position:fixed;inset:0;z-index:9000;overflow:hidden;background:var(--navy2)}
 body.map-fullscreen #main-content > #page-wrap > section:not(#section-map),
@@ -2081,11 +2205,8 @@ body.hero-visible #ferry-chip{
 
 <!-- ── SITE HEADER ────────────────────────────────── -->
 <header id="site-header" class="on-hero no-transition" role="banner">
-  <div class="hdr-top-row">
-    <div class="hdr-brand">Maritimes Summer 2026</div>
-  </div>
   <div class="hdr-rows">
-    <nav class="hdr-row-1" aria-label="Day sections">
+    <nav class="hdr-nav hdr-row-1" aria-label="Day sections">
       <button class="nav-chip active" data-target="section-condensed">Overview</button>
       <button class="nav-chip" data-target="section-day1">Portland</button>
       <button class="nav-chip" data-target="section-day2">Digby</button>
@@ -2094,13 +2215,13 @@ body.hero-visible #ferry-chip{
       <button class="nav-chip" data-target="section-day5">Twillingate</button>
       <button class="nav-chip" data-target="section-fogo">Fogo</button>
     </nav>
-    <nav class="hdr-row-2" aria-label="Return sections">
+    <nav class="hdr-nav hdr-row-2" aria-label="Return sections">
       <button class="nav-chip" data-target="section-day9">Return</button>
       <button class="nav-chip" data-target="section-day10">Pictou</button>
       <button class="nav-chip" data-target="section-day11">Fredericton</button>
       <button class="nav-chip" data-target="section-day12">Home</button>
     </nav>
-    <nav class="hdr-row-3" aria-label="Reference sections">
+    <nav class="hdr-nav hdr-row-3" aria-label="Reference sections">
       <button class="nav-chip" data-target="section-essentials">Info</button>
       <button class="nav-chip" data-target="section-reference">Reference</button>
       <button class="nav-chip" data-target="section-history">History</button>
@@ -2248,6 +2369,18 @@ body.hero-visible #ferry-chip{
   </div>
 </section>
 
+<div class="location-banner" role="img" aria-label="Portland">
+  <div class="location-banner-img" style="background-image:url('https://images.unsplash.com/photo-1414609245224-afa02bfb3fda?w=1600&h=400&fit=crop&crop=center&q=80&auto=format')"></div>
+  <div class="location-banner-content">
+    <div class="location-banner-flag">🇺🇸</div>
+    <div class="location-banner-city">Portland, Maine</div>
+    <div class="location-banner-sub">Saturday 27 June</div>
+  </div>
+</div>
+<div class="day-banner">
+  <div class="day-banner-eyebrow">Day 1</div>
+  <div class="day-banner-title">Saturday · 27 June</div>
+</div>
 <span class="section-anchor" id="section-day1-anchor"></span>
 <section id="section-day1" aria-label="Day 1 itinerary">
   <div class="content-section">
@@ -2261,6 +2394,7 @@ body.hero-visible #ferry-chip{
         <div class="wx-top"><span class="wx-hi">--°</span><span class="wx-lo">Loading…</span></div>
         <div class="wx-cond">Portland, ME · Loading forecast…</div>
         <div class="wx-narrative" id="wx-day1-narrative"></div>
+        <div class="wx-advisory" id="wx-day1-advisory"></div>
         <div class="wx-stats">
           <span class="wx-stat">Rain --%</span>
           <span class="wx-stat">Wind -- mph</span>
@@ -2317,6 +2451,10 @@ body.hero-visible #ferry-chip{
 <!-- ══════════════════════════════════════════════════
      DAY 2 — PORTLAND → DIGBY
      ══════════════════════════════════════════════════ -->
+<div class="day-banner">
+  <div class="day-banner-eyebrow">Day 2</div>
+  <div class="day-banner-title">Sunday · 28 June</div>
+</div>
 <span class="section-anchor" id="section-day2-anchor"></span>
 <section id="section-day2" class="day-break" aria-label="Day 2 itinerary">
   <div class="content-section">
@@ -2330,6 +2468,7 @@ body.hero-visible #ferry-chip{
         <div class="wx-top"><span class="wx-hi">--°</span><span class="wx-lo">Loading…</span></div>
         <div class="wx-cond">Digby, NS · Loading forecast…</div>
         <div class="wx-narrative" id="wx-day2-narrative"></div>
+        <div class="wx-advisory" id="wx-day2-advisory"></div>
         <div class="wx-stats">
           <span class="wx-stat">Rain --%</span>
           <span class="wx-stat">Wind -- mph</span>
@@ -2365,7 +2504,7 @@ body.hero-visible #ferry-chip{
       </article>
       <article class="stop is-ferry" role="listitem">
         <div class="stop-time">2:15 PM AT <span class="stop-time-badge badge-ferry">⛴ Ferry</span></div>
-        <h3 class="stop-title ferry-title">MV Fundy Rose · Saint John → Digby</h3>
+        <h3 class="stop-title ferry-title">MV Fundy Rose · Saint John → Digby<button class="stop-pron" onclick="speakWord('Fundy','en-CA')">🔊 FUN-dee</button></h3>
         <p class="stop-body">Board the Fundy Rose for the 2.5-hour crossing of the Bay of Fundy. Arrive Digby at approximately 4:45 PM Atlantic Time. Beautiful views of the bay and coast.</p>
         <div class="stop-meta">
           <span class="meta-chip" data-popup data-popup-title="Bay Ferries — Fundy Rose" data-popup-body="The MV Fundy Rose is a high-speed catamaran operated by Bay Ferries, crossing the Bay of Fundy between Saint John, NB and Digby, NS. The 2.5-hour crossing runs daily in summer with morning and afternoon sailings. The ship has a cafeteria, lounge, outdoor deck, and vehicle deck." data-popup-tip="Book online at fundyrose.ca. Arrive at the terminal 60-90 min before departure. Vehicles board first, then walk-ons." data-popup-link="https://www.fundyrose.ca/" data-popup-link-label="Bay Ferries Website">⛴ Bay Ferries</span>
@@ -2411,6 +2550,18 @@ body.hero-visible #ferry-chip{
 <!-- ══════════════════════════════════════════════════
      DAY 3 — DIGBY → LUNENBURG
      ══════════════════════════════════════════════════ -->
+<div class="location-banner" role="img" aria-label="Digby">
+  <div class="location-banner-img" style="background-image:url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=1600&h=400&fit=crop&crop=center&q=80&auto=format')"></div>
+  <div class="location-banner-content">
+    <div class="location-banner-flag">🇨🇦</div>
+    <div class="location-banner-city">Nova Scotia</div>
+    <div class="location-banner-sub">Digby · Annapolis Royal · Lunenburg</div>
+  </div>
+</div>
+<div class="day-banner">
+  <div class="day-banner-eyebrow">Day 3</div>
+  <div class="day-banner-title">Monday · 29 June</div>
+</div>
 <span class="section-anchor" id="section-day3-anchor"></span>
 <section id="section-day3" class="day-break" aria-label="Day 3 itinerary">
   <div class="content-section">
@@ -2424,6 +2575,7 @@ body.hero-visible #ferry-chip{
         <div class="wx-top"><span class="wx-hi">--°</span><span class="wx-lo">Loading…</span></div>
         <div class="wx-cond">Lunenburg, NS · Loading forecast…</div>
         <div class="wx-narrative" id="wx-day3-narrative"></div>
+        <div class="wx-advisory" id="wx-day3-advisory"></div>
         <div class="wx-stats">
           <span class="wx-stat">Rain --%</span>
           <span class="wx-stat">Wind -- mph</span>
@@ -2450,7 +2602,7 @@ body.hero-visible #ferry-chip{
       </article>
       <article class="stop" role="listitem">
         <div class="stop-time">Afternoon</div>
-        <h3 class="stop-title">Explore Lunenburg</h3>
+        <h3 class="stop-title">Explore Lunenburg<button class="stop-pron" onclick="speakWord('Lunenburg','en-CA')">🔊 LOO-nen-burg</button></h3>
         <p class="stop-body">UNESCO World Heritage Site since 1995. Wander the colourful harbour, visit the Fisheries Museum of the Atlantic, and see the Bluenose II (when docked). The town's architecture is beautifully preserved — a photographer's dream.</p>
         <div class="stop-meta">
           <span class="meta-chip" data-popup data-popup-title="UNESCO World Heritage Site" data-popup-body="Old Town Lunenburg was designated a UNESCO World Heritage Site in 1995 for being the best surviving example of a planned British colonial settlement in North America. The town grid was laid out in 1753 and remains virtually unchanged." data-popup-tip="The colourful waterfront buildings are iconic, but walk up the hill streets for the best architecture.">🏛 UNESCO Heritage</span>
@@ -2485,6 +2637,10 @@ body.hero-visible #ferry-chip{
 <!-- ══════════════════════════════════════════════════
      DAY 4 — LUNENBURG → OVERNIGHT FERRY
      ══════════════════════════════════════════════════ -->
+<div class="day-banner">
+  <div class="day-banner-eyebrow">Day 4</div>
+  <div class="day-banner-title">Tuesday · 30 June</div>
+</div>
 <span class="section-anchor" id="section-day4-anchor"></span>
 <section id="section-day4" class="day-break" aria-label="Day 4 itinerary">
   <div class="content-section">
@@ -2498,6 +2654,7 @@ body.hero-visible #ferry-chip{
         <div class="wx-top"><span class="wx-hi">--°</span><span class="wx-lo">Loading…</span></div>
         <div class="wx-cond">North Sydney, NS · Loading forecast…</div>
         <div class="wx-narrative" id="wx-day4-narrative"></div>
+        <div class="wx-advisory" id="wx-day4-advisory"></div>
         <div class="wx-stats">
           <span class="wx-stat">Rain --%</span>
           <span class="wx-stat">Wind -- mph</span>
@@ -2553,6 +2710,18 @@ body.hero-visible #ferry-chip{
 <!-- ══════════════════════════════════════════════════
      DAY 5 — PORT AUX BASQUES → TWILLINGATE
      ══════════════════════════════════════════════════ -->
+<div class="location-banner" role="img" aria-label="Newfoundland">
+  <div class="location-banner-img" style="background-image:url('https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=1600&h=400&fit=crop&crop=center&q=80&auto=format')"></div>
+  <div class="location-banner-content">
+    <div class="location-banner-flag">🇨🇦</div>
+    <div class="location-banner-city">Newfoundland</div>
+    <div class="location-banner-sub">Canada Day · The Rock awaits</div>
+  </div>
+</div>
+<div class="day-banner">
+  <div class="day-banner-eyebrow">Day 5</div>
+  <div class="day-banner-title">Wednesday · 1 July · Canada Day 🇨🇦</div>
+</div>
 <span class="section-anchor" id="section-day5-anchor"></span>
 <section id="section-day5" class="day-break" aria-label="Day 5 itinerary">
   <div class="content-section">
@@ -2566,6 +2735,7 @@ body.hero-visible #ferry-chip{
         <div class="wx-top"><span class="wx-hi">--°</span><span class="wx-lo">Loading…</span></div>
         <div class="wx-cond">Twillingate, NL · Loading forecast…</div>
         <div class="wx-narrative" id="wx-day5-narrative"></div>
+        <div class="wx-advisory" id="wx-day5-advisory"></div>
         <div class="wx-stats">
           <span class="wx-stat">Rain --%</span>
           <span class="wx-stat">Wind -- mph</span>
@@ -2579,7 +2749,7 @@ body.hero-visible #ferry-chip{
     <div class="stops" role="list">
       <article class="stop" role="listitem">
         <div class="stop-time">Morning</div>
-        <h3 class="stop-title">Arrive Port aux Basques</h3>
+        <h3 class="stop-title">Arrive Port aux Basques<button class="stop-pron" onclick="speakWord('Port aux Basques','fr-CA')">🔊 PORT oh BASK</button></h3>
         <p class="stop-body">Disembark and begin the drive east across Newfoundland. The Trans-Canada Highway crosses stunning, empty landscapes — boreal forest, rivers, and barrens.</p>
         <div class="stop-meta">
           <span class="meta-chip" data-popup data-popup-title="Port aux Basques → Twillingate" data-popup-body="The longest driving day in Newfoundland. Trans-Canada Highway to Corner Brook, then Deer Lake, then the Road to the Isles to Twillingate. The landscape shifts from coastal mountains to boreal forest to the dramatic northern coast." data-popup-tip="Break it up: coffee in Corner Brook, lunch in Deer Lake, arrive Twillingate by late afternoon.">🚗 ~560 km total to Twillingate</span>
@@ -2610,7 +2780,7 @@ body.hero-visible #ferry-chip{
 
       <article class="stop" role="listitem">
         <div class="stop-time">Evening</div>
-        <h3 class="stop-title">Arrive Twillingate</h3>
+        <h3 class="stop-title">Arrive Twillingate<button class="stop-pron" onclick="speakWord('Twillingate','en-CA')">🔊 TWILL-in-gate</button></h3>
         <p class="stop-body">The "Iceberg Capital of the World." If the timing is right (late June/early July), massive icebergs drift past from Greenland. Stunning coastal scenery, lighthouses, and whale watching.</p>
         <div class="stop-meta">
           <span class="meta-chip" data-popup data-popup-title="Iceberg Alley — Twillingate" data-popup-body="Every spring and early summer, massive icebergs calved from Greenland&#39;s glaciers drift south along Newfoundland&#39;s northeast coast. Twillingate is the prime viewing spot — some bergs tower 15+ storeys high and glow blue-white against the dark Atlantic." data-popup-tip="Late June is peak season. Long Point Lighthouse has the best land-based viewing. Book a boat tour for up-close encounters.">🧊 Iceberg Alley</span>
@@ -2650,6 +2820,18 @@ body.hero-visible #ferry-chip{
 <!-- ══════════════════════════════════════════════════
      DAYS 6–8 — FOGO ISLAND
      ══════════════════════════════════════════════════ -->
+<div class="location-banner" role="img" aria-label="Fogo Island">
+  <div class="location-banner-img" style="background-image:url('https://images.unsplash.com/photo-1545231027-637d2f6210f8?w=1600&h=400&fit=crop&crop=center&q=80&auto=format')"></div>
+  <div class="location-banner-content">
+    <div class="location-banner-flag">⭐</div>
+    <div class="location-banner-city">Fogo Island</div>
+    <div class="location-banner-sub">Three nights · The edge of the world</div>
+  </div>
+</div>
+<div class="day-banner">
+  <div class="day-banner-eyebrow">Days 6–8</div>
+  <div class="day-banner-title">July 2–4 · Three Nights</div>
+</div>
 <span class="section-anchor" id="section-fogo-anchor"></span>
 <section id="section-fogo" class="day-break" aria-label="Days 6–8 Fogo Island">
   <div class="content-section">
@@ -2663,6 +2845,7 @@ body.hero-visible #ferry-chip{
         <div class="wx-top"><span class="wx-hi">--°</span><span class="wx-lo">Loading…</span></div>
         <div class="wx-cond">Fogo Island, NL · Loading forecast…</div>
         <div class="wx-narrative" id="wx-fogo-narrative"></div>
+        <div class="wx-advisory" id="wx-fogo-advisory"></div>
         <div class="wx-stats">
           <span class="wx-stat">Rain --%</span>
           <span class="wx-stat">Wind -- mph</span>
@@ -2690,7 +2873,7 @@ body.hero-visible #ferry-chip{
       </article>
       <article class="stop" role="listitem">
         <div class="stop-time">Day 6 · Arrival</div>
-        <h3 class="stop-title">Check In · Fogo Island Inn</h3>
+        <h3 class="stop-title">Check In · Fogo Island Inn<button class="stop-pron" onclick="speakWord('Fogo','en-CA')">🔊 FOH-go</button></h3>
         <p class="stop-body">Arrive at one of the world's most architecturally stunning hotels. Built on stilts at the edge of the North Atlantic, designed by Todd Saunders. Every room faces the sea. The inn is a social enterprise — all profits go back to the community.</p>
         <div class="stop-meta">
           <span class="meta-chip" data-popup data-popup-title="World-Class Accommodation" data-popup-body="Fogo Island Inn is regularly named one of the best hotels in the world. A social enterprise where 100% of operating surpluses are reinvested into the community. Rates include all meals, and the cuisine features hyper-local ingredients." data-popup-tip="The inn&#39;s community host program pairs you with a local who shows you the island through their eyes. Don&#39;t skip it.">⭐ World-class</span>
@@ -2743,6 +2926,10 @@ body.hero-visible #ferry-chip{
 <!-- ══════════════════════════════════════════════════
      DAY 9 — FOGO → OVERNIGHT FERRY
      ══════════════════════════════════════════════════ -->
+<div class="day-banner">
+  <div class="day-banner-eyebrow">Day 9</div>
+  <div class="day-banner-title">Sunday · 5 July</div>
+</div>
 <span class="section-anchor" id="section-day9-anchor"></span>
 <section id="section-day9" class="day-break" aria-label="Day 9 itinerary">
   <div class="content-section">
@@ -2756,6 +2943,7 @@ body.hero-visible #ferry-chip{
         <div class="wx-top"><span class="wx-hi">--°</span><span class="wx-lo">Loading…</span></div>
         <div class="wx-cond">North Sydney, NS · Loading forecast…</div>
         <div class="wx-narrative" id="wx-day9-narrative"></div>
+        <div class="wx-advisory" id="wx-day9-advisory"></div>
         <div class="wx-stats">
           <span class="wx-stat">Rain --%</span>
           <span class="wx-stat">Wind -- mph</span>
@@ -2828,6 +3016,18 @@ body.hero-visible #ferry-chip{
 <!-- ══════════════════════════════════════════════════
      DAY 10 — NORTH SYDNEY → PICTOU
      ══════════════════════════════════════════════════ -->
+<div class="location-banner" role="img" aria-label="Nova Scotia Return">
+  <div class="location-banner-img" style="background-image:url('https://images.unsplash.com/photo-1472214103451-9374bd1c798e?w=1600&h=400&fit=crop&crop=center&q=80&auto=format')"></div>
+  <div class="location-banner-content">
+    <div class="location-banner-flag">🇨🇦</div>
+    <div class="location-banner-city">Nova Scotia</div>
+    <div class="location-banner-sub">Pictou · Homeward bound</div>
+  </div>
+</div>
+<div class="day-banner">
+  <div class="day-banner-eyebrow">Day 10</div>
+  <div class="day-banner-title">Monday · 6 July</div>
+</div>
 <span class="section-anchor" id="section-day10-anchor"></span>
 <section id="section-day10" class="day-break" aria-label="Day 10 itinerary">
   <div class="content-section">
@@ -2841,6 +3041,7 @@ body.hero-visible #ferry-chip{
         <div class="wx-top"><span class="wx-hi">--°</span><span class="wx-lo">Loading…</span></div>
         <div class="wx-cond">Pictou, NS · Loading forecast…</div>
         <div class="wx-narrative" id="wx-day10-narrative"></div>
+        <div class="wx-advisory" id="wx-day10-advisory"></div>
         <div class="wx-stats">
           <span class="wx-stat">Rain --%</span>
           <span class="wx-stat">Wind -- mph</span>
@@ -2866,7 +3067,7 @@ body.hero-visible #ferry-chip{
       </article>
       <article class="stop" role="listitem">
         <div class="stop-time">Afternoon</div>
-        <h3 class="stop-title">Explore Pictou</h3>
+        <h3 class="stop-title">Explore Pictou<button class="stop-pron" onclick="speakWord('Pictou','en-CA')">🔊 PIK-too</button></h3>
         <p class="stop-body">Pictou is the "Birthplace of New Scotland" — where the first Scottish settlers landed in 1773. Visit the Ship Hector Heritage Quay, stroll the charming waterfront, and enjoy local seafood.</p>
         <div class="stop-meta">
           <span class="meta-chip" data-popup data-popup-title="Pictou — Scottish Heritage" data-popup-body="Known as the &#39;Birthplace of New Scotland.&#39; In 1773, the Ship Hector brought the first large wave of Scottish Highlanders to Nova Scotia. Their descendants shaped the province&#39;s culture, music, and identity. Pictou still celebrates this heritage with annual Highland Games." data-popup-tip="The local accent and place names (New Glasgow, Scotsburn, etc.) reflect the deep Scottish roots.">🏴󠁧󠁢󠁳󠁣󠁴󠁿 Scottish Heritage</span>
@@ -2903,6 +3104,18 @@ body.hero-visible #ferry-chip{
 <!-- ══════════════════════════════════════════════════
      DAY 11 — PICTOU → FREDERICTON
      ══════════════════════════════════════════════════ -->
+<div class="location-banner" role="img" aria-label="New Brunswick">
+  <div class="location-banner-img" style="background-image:url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=1600&h=400&fit=crop&crop=center&q=80&auto=format')"></div>
+  <div class="location-banner-content">
+    <div class="location-banner-flag">🇨🇦</div>
+    <div class="location-banner-city">New Brunswick</div>
+    <div class="location-banner-sub">Fredericton · Capital city detour</div>
+  </div>
+</div>
+<div class="day-banner">
+  <div class="day-banner-eyebrow">Day 11</div>
+  <div class="day-banner-title">Tuesday · 7 July</div>
+</div>
 <span class="section-anchor" id="section-day11-anchor"></span>
 <section id="section-day11" class="day-break" aria-label="Day 11 itinerary">
   <div class="content-section">
@@ -2916,6 +3129,7 @@ body.hero-visible #ferry-chip{
         <div class="wx-top"><span class="wx-hi">--°</span><span class="wx-lo">Loading…</span></div>
         <div class="wx-cond">Fredericton, NB · Loading forecast…</div>
         <div class="wx-narrative" id="wx-day11-narrative"></div>
+        <div class="wx-advisory" id="wx-day11-advisory"></div>
         <div class="wx-stats">
           <span class="wx-stat">Rain --%</span>
           <span class="wx-stat">Wind -- mph</span>
@@ -2950,7 +3164,7 @@ body.hero-visible #ferry-chip{
       </article>
       <article class="stop" role="listitem">
         <div class="stop-time">Afternoon</div>
-        <h3 class="stop-title">Fredericton Riverfront</h3>
+        <h3 class="stop-title">Fredericton Riverfront<button class="stop-pron" onclick="speakWord('Fredericton','en-CA')">🔊 FRED-rik-ton</button></h3>
         <p class="stop-body">Stroll along the Saint John River. Fredericton is a pretty, walkable capital with excellent craft beer, riverside trails, and the Beaverbrook Art Gallery. A relaxing penultimate stop.</p>
         <div class="stop-meta">
           <span class="meta-chip" data-popup data-popup-title="Fredericton — Provincial Capital" data-popup-body="New Brunswick&#39;s capital is a charming, walkable city on the Saint John River. Tree-lined streets, Victorian architecture, and a thriving arts scene. The riverfront trail is excellent for an evening walk." data-popup-tip="The Beaverbrook Art Gallery has a Salvador Dalí — unexpected for a small Maritime city.">🏛 Provincial Capital</span>
@@ -2986,6 +3200,10 @@ body.hero-visible #ferry-chip{
 <!-- ══════════════════════════════════════════════════
      DAY 12 — FREDERICTON → PORTLAND
      ══════════════════════════════════════════════════ -->
+<div class="day-banner">
+  <div class="day-banner-eyebrow">Day 12</div>
+  <div class="day-banner-title">Wednesday · 8 July</div>
+</div>
 <span class="section-anchor" id="section-day12-anchor"></span>
 <section id="section-day12" class="day-break" aria-label="Day 12 itinerary">
   <div class="content-section">
@@ -2999,6 +3217,7 @@ body.hero-visible #ferry-chip{
         <div class="wx-top"><span class="wx-hi">--°</span><span class="wx-lo">Loading…</span></div>
         <div class="wx-cond">Portland, ME · Loading forecast…</div>
         <div class="wx-narrative" id="wx-day12-narrative"></div>
+        <div class="wx-advisory" id="wx-day12-advisory"></div>
         <div class="wx-stats">
           <span class="wx-stat">Rain --%</span>
           <span class="wx-stat">Wind -- mph</span>
@@ -6009,6 +6228,26 @@ if ('serviceWorker' in navigator) {
 })();
 </script>
 
+<div id="time-pill" aria-label="Timezone comparison">
+  <div class="tp-zone" id="tp-viewer">
+    <span class="tp-flag" id="tp-viewer-flag"></span>
+    <span class="tp-time" id="tp-viewer-time"></span>
+    <span class="tp-label" id="tp-viewer-label"></span>
+  </div>
+  <div class="tp-sep" id="tp-sep-1"></div>
+  <div class="tp-zone" id="tp-away">
+    <span class="tp-flag" id="tp-away-flag">🇨🇦</span>
+    <span class="tp-time" id="tp-away-time"></span>
+    <span class="tp-label" id="tp-away-label">DESTINATION</span>
+  </div>
+  <div class="tp-sep" id="tp-sep-2"></div>
+  <div class="tp-zone" id="tp-home">
+    <span class="tp-flag" id="tp-home-flag">🇺🇸</span>
+    <span class="tp-time" id="tp-home-time"></span>
+    <span class="tp-label" id="tp-home-label">HOME</span>
+  </div>
+</div>
+
 <script>
 // ── Restaurant Menu Modal System ──
 (function(){
@@ -6359,6 +6598,69 @@ if ('serviceWorker' in navigator) {
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape' && overlay.classList.contains('visible')) closeMenu();
   });
+})();
+
+// ── FLOATING TIME PILL (3-zone) ─────────────────────────
+(function() {
+  var pill = document.getElementById('time-pill');
+  if (!pill) return;
+
+  var HOME_TZ = 'America/New_York';
+  var HOME_FLAG = '\ud83c\uddfa\ud83c\uddf8';
+  var HOME_LABEL = 'HOME';
+
+  // Trip phases and their timezones
+  var PHASES = [
+    { start: '2026-06-27', end: '2026-06-27', tz: 'America/New_York', flag: '\ud83c\uddfa\ud83c\uddf8', label: 'PORTLAND' },
+    { start: '2026-06-28', end: '2026-06-29', tz: 'America/Halifax', flag: '\ud83c\udde8\ud83c\udde6', label: 'NOVA SCOTIA' },
+    { start: '2026-06-30', end: '2026-06-30', tz: 'America/Halifax', flag: '\u26f4', label: 'FERRY' },
+    { start: '2026-07-01', end: '2026-07-04', tz: 'America/St_Johns', flag: '\ud83c\udde8\ud83c\udde6', label: 'NEWFOUNDLAND' },
+    { start: '2026-07-05', end: '2026-07-05', tz: 'America/St_Johns', flag: '\u26f4', label: 'RETURN FERRY' },
+    { start: '2026-07-06', end: '2026-07-07', tz: 'America/Halifax', flag: '\ud83c\udde8\ud83c\udde6', label: 'NOVA SCOTIA' },
+    { start: '2026-07-08', end: '2026-07-08', tz: 'America/New_York', flag: '\ud83c\uddfa\ud83c\uddf8', label: 'HOME' }
+  ];
+
+  function getPhase() {
+    var now = new Date();
+    var today = now.toISOString().slice(0, 10);
+    for (var i = 0; i < PHASES.length; i++) {
+      if (today >= PHASES[i].start && today <= PHASES[i].end) return PHASES[i];
+    }
+    // Default: show Newfoundland as the "away" timezone
+    return { tz: 'America/St_Johns', flag: '\ud83c\udde8\ud83c\udde6', label: 'NEWFOUNDLAND' };
+  }
+
+  function fmtTime(tz) {
+    return new Date().toLocaleTimeString('en-US', {
+      timeZone: tz, hour: 'numeric', minute: '2-digit', hour12: true
+    });
+  }
+
+  function update() {
+    var phase = getPhase();
+    var viewerTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    var viewerLabel = viewerTz.split('/').pop().replace(/_/g, ' ').toUpperCase();
+
+    // Viewer zone
+    document.getElementById('tp-viewer-flag').textContent = '\ud83c\udf10';
+    document.getElementById('tp-viewer-time').textContent = fmtTime(viewerTz);
+    document.getElementById('tp-viewer-label').textContent = viewerLabel.length > 10 ? 'LOCAL' : viewerLabel;
+
+    // Destination zone
+    document.getElementById('tp-away-flag').textContent = phase.flag;
+    document.getElementById('tp-away-time').textContent = fmtTime(phase.tz);
+    document.getElementById('tp-away-label').textContent = phase.label;
+
+    // Home zone
+    document.getElementById('tp-home-flag').textContent = HOME_FLAG;
+    document.getElementById('tp-home-time').textContent = fmtTime(HOME_TZ);
+    document.getElementById('tp-home-label').textContent = HOME_LABEL;
+
+    pill.classList.add('visible');
+  }
+
+  update();
+  setInterval(update, 30000);
 })();
 </script>
 
