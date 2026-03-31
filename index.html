@@ -15,6 +15,8 @@
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" href="icon-192.png">
 <title>Maritimes · Summer 2026</title>
+<!-- Preload hero background image so it starts loading immediately -->
+<link rel="preload" as="image" href="https://images.unsplash.com/photo-1668139225815-75a91275edb2?w=1400&q=80&auto=format">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -187,96 +189,100 @@ img{display:block;max-width:100%}
 
 /* ── HERO ───────────────────────────────────────── */
 #hero{
-  min-height:auto;
-  background:var(--navy2);
+  min-height:100vh;min-height:100dvh;
+  max-width:none;
+  background:url('https://images.unsplash.com/photo-1668139225815-75a91275edb2?w=1400&q=80&auto=format') center/cover no-repeat;
   display:flex;flex-direction:column;
-  justify-content:center;
-  padding:var(--sp24) var(--sp24) var(--sp32);
+  justify-content:flex-end;
+  padding:0 var(--sp24) 80px;
   position:relative;
   overflow:hidden;
 }
-.hero-grid{
+.hero-overlay{
   position:absolute;inset:0;
-  background-image:
-    linear-gradient(rgba(201,169,110,.04) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(201,169,110,.04) 1px,transparent 1px);
-  background-size:80px 80px;
-  pointer-events:none;
-  opacity:.6;
+  background:linear-gradient(
+    to bottom,
+    rgba(0,0,0,.15) 0%,
+    rgba(0,0,0,.05) 40%,
+    rgba(0,0,0,.35) 70%,
+    rgba(0,0,0,.6) 100%
+  );
+  pointer-events:none;z-index:1;
 }
-.hero-vignette{
-  position:absolute;inset:0;
-  background:radial-gradient(ellipse 100% 80% at 50% 60%,transparent 20%,var(--navy2) 100%);
-  pointer-events:none;
+.hero-brand{
+  position:absolute;top:16px;left:var(--sp24);z-index:3;
+  font-family:'Playfair Display',serif;
+  font-size:16px;font-weight:700;font-style:italic;
+  color:#fff;
+  text-shadow:0 1px 4px rgba(0,0,0,.4);
+  opacity:0;animation:fadeUp .6s ease .1s forwards;
 }
 .hero-inner{position:relative;z-index:2}
 .hero-eyebrow{
   font-family:'DM Mono',monospace;
   font-size:10px;letter-spacing:.28em;
   text-transform:uppercase;
-  color:var(--gold);
-  margin-bottom:var(--sp16);
+  color:rgba(255,255,255,.75);
+  margin-bottom:var(--sp12);
   opacity:0;animation:fadeUp .6s ease .2s forwards;
 }
 .hero-title{
   font-family:'Playfair Display',serif;
   font-weight:900;
-  font-size:clamp(28px,7vw,52px);
-  line-height:.95;letter-spacing:-.02em;
-  color:var(--gold2);
-  text-shadow:0 2px 40px rgba(201,169,110,.2);
-  margin-bottom:2px;
+  font-size:clamp(56px,13vw,120px);
+  line-height:.9;letter-spacing:-.02em;
+  color:#fff;
+  text-shadow:0 2px 12px rgba(0,0,0,.3);
+  margin-bottom:4px;
   opacity:0;animation:fadeUp .7s ease .35s forwards;
 }
-.hero-dates{
+.hero-subtitle{
   font-family:'Playfair Display',serif;
   font-style:italic;
-  font-size:clamp(17px,3vw,24px);
-  color:rgba(220,215,200,.85);
-  letter-spacing:.04em;
-  margin-bottom:var(--sp24);
-  opacity:0;animation:fadeUp .6s ease .55s forwards;
+  font-size:clamp(16px,4vw,22px);
+  color:rgba(255,255,255,.85);
+  margin-bottom:var(--sp8);
+  text-shadow:0 1px 4px rgba(0,0,0,.3);
+  opacity:0;animation:fadeUp .6s ease .5s forwards;
 }
-.hero-rule{
-  width:48px;height:2px;
-  background:var(--gold);
-  margin-bottom:var(--sp24);
-  opacity:0;animation:fadeUp .5s ease .7s forwards;
-}
-.hero-desc{
-  font-family:'Crimson Pro',serif;
-  font-style:italic;
-  font-size:17px;color:rgba(230,222,210,.8);
-  max-width:440px;line-height:1.7;
+.hero-dates{
+  font-family:'DM Mono',monospace;
+  font-size:10px;letter-spacing:.2em;
+  text-transform:uppercase;
+  color:rgba(255,255,255,.6);
   margin-bottom:var(--sp32);
-  opacity:0;animation:fadeUp .6s ease .8s forwards;
+  opacity:0;animation:fadeUp .6s ease .6s forwards;
 }
 .hero-actions{
-  display:flex;gap:var(--sp12);flex-wrap:wrap;
-  opacity:0;animation:fadeUp .6s ease .95s forwards;
+  display:flex;flex-direction:column;gap:var(--sp12);
+  max-width:320px;
+  opacity:0;animation:fadeUp .6s ease .8s forwards;
 }
 .hero-btn{
-  display:inline-flex;align-items:center;gap:var(--sp8);
+  display:inline-flex;align-items:center;justify-content:center;gap:var(--sp8);
   font-family:'DM Mono',monospace;
   font-size:10px;letter-spacing:.1em;text-transform:uppercase;
-  padding:10px 20px;border-radius:var(--r6);
+  padding:12px 24px;border-radius:var(--r6);
   font-weight:500;transition:all .2s;
-  min-height:40px;
+  min-height:44px;
+  text-align:center;
 }
 .hero-btn-primary{
-  background:var(--gold);color:var(--navy2);
+  background:rgba(255,255,255,.92);color:var(--navy2);
+  backdrop-filter:blur(4px);
+  border:1px solid rgba(255,255,255,.3);
 }
-.hero-btn-primary:hover{background:var(--gold2);transform:translateY(-1px)}
+.hero-btn-primary:hover{background:#fff;transform:translateY(-1px)}
 .hero-btn-primary:active{transform:scale(.97);transition-duration:.05s}
 .hero-btn-secondary{
-  background:rgba(255,255,255,.08);
-  color:rgba(255,255,255,.85);
-  border:1px solid rgba(255,255,255,.2);
+  background:rgba(255,255,255,.12);
+  color:#fff;
+  border:1px solid rgba(255,255,255,.3);
+  backdrop-filter:blur(4px);
 }
 .hero-btn-secondary:hover{
-  background:rgba(255,255,255,.1);
-  color:#fff;
-  border-color:rgba(255,255,255,.25);
+  background:rgba(255,255,255,.2);
+  border-color:rgba(255,255,255,.5);
 }
 .hero-btn-secondary:active{transform:scale(.97);transition-duration:.05s}
 .hero-countdown{
@@ -284,9 +290,10 @@ img{display:block;max-width:100%}
   font-family:'DM Mono',monospace;
   font-size:10px;letter-spacing:.12em;
   text-transform:uppercase;
-  color:var(--gold);
-  background:rgba(201,169,110,.08);
-  border:1px solid rgba(201,169,110,.2);
+  color:rgba(255,255,255,.85);
+  background:rgba(255,255,255,.1);
+  border:1px solid rgba(255,255,255,.2);
+  backdrop-filter:blur(4px);
   padding:6px 16px;
   border-radius:20px;
   margin-top:var(--sp12);
@@ -294,8 +301,14 @@ img{display:block;max-width:100%}
 }
 .hero-countdown .cd-num{
   font-size:14px;font-weight:700;
-  color:var(--gold2);
+  color:#fff;
 }
+.hero-scroll-hint{
+  position:absolute;bottom:16px;left:50%;transform:translateX(-50%);
+  z-index:2;color:rgba(255,255,255,.5);font-size:20px;
+  animation:heroFloat 2s ease-in-out infinite;
+}
+@keyframes heroFloat{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(-6px)}}
 
 /* ── SECTION ANCHORS ────────────────────────────── */
 .section-anchor{
@@ -2098,23 +2111,16 @@ body.hero-visible #ferry-chip{
 
 <!-- ── HERO ─────────────────────────────────────── -->
 <section id="hero" aria-label="Trip overview">
-  <div class="hero-grid"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-brand">A Curated Trip · Portland → Fogo Island</div>
   <button class="hero-hamburger" id="hero-hamburger-btn" aria-label="Open navigation">
     <span></span><span></span><span></span>
   </button>
-  
-  <div class="hero-vignette"></div>
   <div class="hero-inner">
     <div class="hero-eyebrow">A 12-Day Road Trip · Portland → Fogo Island → Home</div>
-    <div class="hero-title" aria-label="Newfoundland & Nova Scotia">Newfoundland<br>&amp; Nova Scotia</div>
-    <p class="alterra-powered" style="padding:0;margin:0 0 var(--sp12) 0;font-size:0.65rem;">
-      powered by <span class="alterra-name" style="font-size:0.8rem;">Alterra</span><span class="alterra-digital" style="font-size:0.55rem;">, digital</span>
-    </p>
-
+    <h1 class="hero-title" aria-label="Newfoundland & Nova Scotia">Newfoundland<br>&amp; Nova Scotia</h1>
+    <div class="hero-subtitle">powered by <span style="font-family:'Playfair Display',serif;font-weight:700;font-style:normal;font-size:1.1em">Alterra</span><span style="font-size:.75em;opacity:.7">, digital</span></div>
     <div class="hero-dates">June 27 – July 8, 2026</div>
-    <div class="hero-rule"></div>
-    <div class="hero-desc">A grand loop through the Canadian Maritimes. Three ferries, one legendary island, and 12 days of Atlantic coastline.</div>
-
     <div class="hero-actions">
       <button class="hero-btn hero-btn-primary" onclick="navTo('section-condensed',null)">Explore the Itinerary</button>
       <button class="hero-btn hero-btn-secondary" onclick="navTo('section-essentials',null)">View Essentials</button>
