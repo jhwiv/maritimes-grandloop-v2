@@ -311,6 +311,11 @@ img{display:block;max-width:100%}
   animation:heroFloat 2s ease-in-out infinite;
 }
 @keyframes heroFloat{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(-6px)}}
+@media(max-width:480px){
+  .hero-title{font-size:clamp(40px,11vw,56px)}
+  .hero-brand{font-size:13px}
+  #hero{padding:0 var(--sp16) 60px}
+}
 
 /* ── SECTION ANCHORS ────────────────────────────── */
 .section-anchor{
