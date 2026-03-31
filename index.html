@@ -3859,11 +3859,22 @@ function navTo(sectionId, btn) {
   const section = document.getElementById(sectionId);
   if (!section) return;
 
+  // Find the topmost banner above this section (location-banner or day-banner)
+  var scrollTarget = section;
+  var anchor = document.getElementById(sectionId + '-anchor');
+  if (anchor) {
+    var prev = anchor.previousElementSibling;
+    while (prev && (prev.classList.contains('day-banner') || prev.classList.contains('location-banner'))) {
+      scrollTarget = prev;
+      prev = prev.previousElementSibling;
+    }
+  }
+
   const hdr = document.getElementById('site-header');
   const hdrH = hdr ? hdr.getBoundingClientRect().height : 82;
 
   const gap = 20;
-  const targetTop = Math.max(0, section.getBoundingClientRect().top + window.scrollY - hdrH - gap);
+  const targetTop = Math.max(0, scrollTarget.getBoundingClientRect().top + window.scrollY - hdrH - gap);
 
   try { window.scrollTo({ top: targetTop, behavior: 'smooth' }); } catch(e) { window.scrollTo(0, targetTop); }
 }
