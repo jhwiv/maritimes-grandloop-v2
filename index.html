@@ -193,6 +193,7 @@ img{display:block;max-width:100%}
   max-width:none;
   width:100vw;
   margin-left:calc(-50vw + 50%);
+  margin-top:calc(-1 * (var(--hdr) + 32px));
   background:url('https://images.unsplash.com/photo-1668139225815-75a91275edb2?w=1400&q=80&auto=format') center/cover no-repeat;
   display:flex;flex-direction:column;
   justify-content:flex-end;
@@ -3745,7 +3746,6 @@ function onScroll() {
 }
 
 window.addEventListener('scroll', onScroll, { passive: true });
-onScroll();
 
 // ── COUNTDOWN TIMER ────────────────────────────────────
 (function() {
@@ -3908,18 +3908,16 @@ const floatMenu = document.getElementById('float-menu');
 
 // Float menu: show after 300px scroll (patched into onScroll below)
 function updateFloatMenu(scroll) {
-  if (!floatMenu) return;
-  if (scroll > 300) floatMenu.classList.add('visible');
-  else floatMenu.classList.remove('visible');
+  var fm = floatMenu || document.getElementById('float-menu');
+  if (!fm) return;
+  if (scroll > 300) fm.classList.add('visible');
+  else fm.classList.remove('visible');
 }
 
-// Wire up FAB jump + trigger buttons
-const fabJumpBtn = document.getElementById('fab-jump-btn');
-const fabTriggerBtn2 = document.getElementById('fab-trigger-btn');
-const fabTopBtn = document.getElementById('fab-top-btn');
-if (fabJumpBtn) fabJumpBtn.addEventListener('click', fabJump);
-if (fabTriggerBtn2) fabTriggerBtn2.addEventListener('click', toggleFab);
-if (fabTopBtn) fabTopBtn.addEventListener('click', function() { window.scrollTo({ top: 0, behavior: 'smooth' }); });
+// Run initial scroll state now that all dependencies are declared
+onScroll();
+
+// FAB button wiring moved to after float-menu HTML (below)
 
 // ── TIME-AWARE AUTO-NAVIGATION ──────────────────────
 (function() {
@@ -4301,6 +4299,17 @@ if (fabTopBtn) fabTopBtn.addEventListener('click', function() { window.scrollTo(
     <button class="float-btn" aria-label="Toggle quick menu" id="fab-trigger-btn">⋯</button>
   </div>
 </div>
+<script>
+// Wire up FAB buttons now that float-menu exists in DOM
+(function(){
+  var fabJumpBtn = document.getElementById('fab-jump-btn');
+  var fabTriggerBtn = document.getElementById('fab-trigger-btn');
+  var fabTopBtn = document.getElementById('fab-top-btn');
+  if (fabJumpBtn) fabJumpBtn.addEventListener('click', fabJump);
+  if (fabTriggerBtn) fabTriggerBtn.addEventListener('click', toggleFab);
+  if (fabTopBtn) fabTopBtn.addEventListener('click', function() { window.scrollTo({ top: 0, behavior: 'smooth' }); });
+})();
+</script>
 
 <!-- ── FLOATING FABs ────────────────────────────────── -->
 <div class="fab-wrap" id="search-fab-wrap">
