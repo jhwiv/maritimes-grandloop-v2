@@ -6527,6 +6527,12 @@ if ('serviceWorker' in navigator) {
 </script>
 
 <div id="time-pill" aria-label="Timezone comparison">
+  <div class="tp-zone" id="tp-pdx">
+    <span class="tp-flag" id="tp-pdx-flag">🌲</span>
+    <span class="tp-time" id="tp-pdx-time"></span>
+    <span class="tp-label" id="tp-pdx-label">PORTLAND OR</span>
+  </div>
+  <div class="tp-sep"></div>
   <div class="tp-zone" id="tp-east">
     <span class="tp-flag" id="tp-east-flag">🇺🇸</span>
     <span class="tp-time" id="tp-east-time"></span>
@@ -7418,7 +7424,8 @@ if ('serviceWorker' in navigator) {
     var sep = document.getElementById('tp-sep-1');
     var destZone = document.getElementById('tp-dest');
 
-    // Always show US Eastern
+    // Always show Portland OR and US Eastern
+    document.getElementById('tp-pdx-time').textContent = fmtTime('America/Los_Angeles');
     document.getElementById('tp-east-time').textContent = fmtTime(EASTERN.tz);
 
     // If trip is in Eastern timezone, hide the second zone
