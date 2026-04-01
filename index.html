@@ -2195,33 +2195,32 @@ body.hero-visible #ferry-chip{
 /* ── WELCOME / ONBOARDING SCREEN ─────────────────── */
 #welcome-screen{
   position:fixed;inset:0;z-index:99999;
-  background:linear-gradient(170deg,#0f1e35 0%,#0a1525 60%,#111d2b 100%);
+  background:var(--cream);
   display:flex;flex-direction:column;
-  align-items:center;justify-content:center;
-  padding:20px 32px;
-  text-align:center;
+  padding:0;
 }
 #welcome-screen.hidden{
   opacity:0;pointer-events:none;
   transition:opacity .5s ease;
 }
+/* Dark hero band at top */
+.welcome-hero{
+  background:linear-gradient(170deg,#0f1e35,#0a1525);
+  padding:48px 24px 28px;
+  text-align:center;
+  flex-shrink:0;
+}
 .welcome-skip-bar{
-  position:absolute;top:0;right:0;
-  padding:16px 20px;
+  position:absolute;top:12px;right:16px;z-index:1;
 }
 .welcome-skip{
   font-family:'DM Mono',monospace;
   font-size:9px;letter-spacing:.12em;
   text-transform:uppercase;
-  color:rgba(201,169,110,.6);
+  color:rgba(255,255,255,.45);
   background:none;border:none;cursor:pointer;
 }
-.welcome-skip:hover{color:var(--gold)}
-.welcome-icon{
-  width:72px;height:72px;border-radius:18px;
-  margin-bottom:20px;
-  box-shadow:0 6px 28px rgba(0,0,0,.5);
-}
+.welcome-skip:hover{color:rgba(255,255,255,.7)}
 .welcome-eyebrow{
   font-family:'DM Mono',monospace;
   font-size:8px;letter-spacing:.3em;
@@ -2230,68 +2229,90 @@ body.hero-visible #ferry-chip{
 }
 .welcome-title{
   font-family:'Playfair Display',serif;
-  font-size:clamp(26px,7vw,36px);font-weight:800;
-  color:#fff;line-height:1.12;margin-bottom:6px;
+  font-size:clamp(28px,7.5vw,38px);font-weight:800;
+  color:#fff;line-height:1.1;margin-bottom:6px;
 }
 .welcome-subtitle{
-  font-family:'Playfair Display',serif;
-  font-style:italic;
-  font-size:clamp(14px,3.8vw,17px);
-  color:rgba(255,255,255,.55);margin-bottom:18px;
+  font-family:'DM Mono',monospace;
+  font-size:9px;letter-spacing:.15em;
+  text-transform:uppercase;
+  color:rgba(255,255,255,.4);
+}
+/* Cream content area */
+.welcome-content{
+  flex:1;padding:24px 24px 28px;
+  display:flex;flex-direction:column;
+  gap:16px;
+  overflow-y:auto;
 }
 .welcome-body{
   font-family:'Crimson Pro',serif;
-  font-size:15px;line-height:1.55;
-  color:rgba(255,255,255,.55);
-  max-width:100%;margin-bottom:22px;
+  font-size:15.5px;line-height:1.55;
+  color:var(--navy);text-align:center;
 }
-.welcome-divider{
-  width:36px;height:2px;
-  background:var(--gold);margin:0 auto 18px;opacity:.35;
-}
-.welcome-install-row{
-  display:flex;gap:8px;width:100%;margin-bottom:10px;
-}
-.welcome-install-btn{
-  display:flex;align-items:center;gap:10px;
-  background:rgba(255,255,255,.06);
-  border:1px solid rgba(201,169,110,.2);
+/* What's Inside card */
+.welcome-card{
+  background:#fff;
+  border:1px solid var(--divider);
   border-radius:12px;
-  padding:12px 16px;
-  text-align:left;cursor:pointer;
-  transition:all .2s;color:#fff;flex:1;
+  padding:16px;
 }
-.welcome-install-btn:hover{
-  background:rgba(201,169,110,.1);border-color:rgba(201,169,110,.4);
-}
-.welcome-install-icon{font-size:20px;flex-shrink:0}
-.welcome-install-text{display:flex;flex-direction:column}
-.welcome-install-title{
+.welcome-card-label{
   font-family:'DM Mono',monospace;
-  font-size:9px;letter-spacing:.06em;
-  text-transform:uppercase;font-weight:600;
-  color:rgba(255,255,255,.85);
+  font-size:7.5px;letter-spacing:.22em;
+  text-transform:uppercase;
+  color:var(--gold);margin-bottom:10px;
+  text-align:center;
 }
-.welcome-install-desc{
+.welcome-features{
+  display:grid;grid-template-columns:1fr 1fr;gap:6px;
+}
+.welcome-feature{
+  display:flex;align-items:center;gap:8px;
+  padding:8px 10px;
+  border-radius:8px;
+  background:rgba(10,21,37,.03);
+}
+.welcome-feature-icon{font-size:16px;flex-shrink:0}
+.welcome-feature-name{
+  font-family:'DM Mono',monospace;
+  font-size:8px;letter-spacing:.06em;
+  text-transform:uppercase;
+  color:var(--navy);font-weight:600;
+}
+/* Install instructions */
+.welcome-install{
+  background:#fff;
+  border:1px solid var(--divider);
+  border-radius:12px;
+  padding:14px 16px;
+}
+.welcome-install-label{
+  font-family:'DM Mono',monospace;
+  font-size:7.5px;letter-spacing:.22em;
+  text-transform:uppercase;
+  color:var(--gold);margin-bottom:8px;
+}
+.welcome-install-step{
   font-family:'Crimson Pro',serif;
-  font-size:12px;color:rgba(255,255,255,.4);margin-top:1px;
+  font-size:14px;line-height:1.6;
+  color:rgba(10,21,37,.65);
+  padding:2px 0;
 }
-.welcome-install-steps{
-  text-align:left;padding:10px 16px;
-  font-family:'Crimson Pro',serif;font-size:13px;
-  color:rgba(255,255,255,.6);line-height:1.55;
-  background:rgba(255,255,255,.04);
-  border:1px solid rgba(255,255,255,.08);
-  border-radius:10px;margin-bottom:14px;
-  width:100%;display:none;
+.welcome-install-step strong{color:var(--navy)}
+.welcome-install-step .step-label{
+  font-family:'DM Mono',monospace;
+  font-size:8px;letter-spacing:.08em;
+  text-transform:uppercase;
+  font-weight:700;
+  color:var(--navy);
 }
-.welcome-install-steps strong{color:rgba(255,255,255,.85)}
+/* Pro tip */
 .welcome-tip{
   background:rgba(201,169,110,.08);
-  border:1px solid rgba(201,169,110,.15);
+  border:1px solid rgba(201,169,110,.18);
   border-radius:10px;
-  padding:12px 16px;width:100%;
-  text-align:left;margin-bottom:24px;
+  padding:12px 14px;
 }
 .welcome-tip-label{
   font-family:'DM Mono',monospace;
@@ -2302,8 +2323,9 @@ body.hero-visible #ferry-chip{
 .welcome-tip-text{
   font-family:'Crimson Pro',serif;
   font-size:13.5px;line-height:1.5;
-  color:rgba(255,255,255,.6);
+  color:rgba(10,21,37,.55);
 }
+/* CTA button */
 .welcome-enter-btn{
   display:flex;align-items:center;justify-content:center;
   font-family:'DM Mono',monospace;
@@ -2311,11 +2333,12 @@ body.hero-visible #ferry-chip{
   text-transform:uppercase;font-weight:600;
   padding:14px 20px;width:100%;
   border-radius:8px;
-  background:var(--gold);color:var(--navy2);
+  background:var(--navy);color:var(--cream);
   border:none;cursor:pointer;
   transition:all .2s;min-height:48px;
+  flex-shrink:0;
 }
-.welcome-enter-btn:hover{background:var(--gold2);transform:translateY(-1px)}
+.welcome-enter-btn:hover{opacity:.88;transform:translateY(-1px)}
 .welcome-enter-btn:active{transform:scale(.97)}
 
 </style>
@@ -2326,31 +2349,40 @@ body.hero-visible #ferry-chip{
 <div id="welcome-screen">
   <div class="welcome-skip-bar"><button class="welcome-skip" onclick="dismissWelcome()">Skip ›</button></div>
 
-  <img class="welcome-icon" src="icon-192.png" alt="Maritimes app icon">
-  <div class="welcome-eyebrow">Your Travel Companion</div>
-  <h1 class="welcome-title">Newfoundland<br>&amp; Nova Scotia</h1>
-  <div class="welcome-subtitle">12 days &middot; June 27 – July 8, 2026</div>
-  <p class="welcome-body">Your complete trip guide — itinerary, weather, maps, 26 restaurant menus, ferry details, and a concierge — all in one place.</p>
+  <div class="welcome-hero">
+    <div class="welcome-eyebrow">Your Travel Companion</div>
+    <h1 class="welcome-title">Newfoundland<br>&amp; Nova Scotia</h1>
+    <div class="welcome-subtitle">12 days &middot; June 27 – July 8, 2026</div>
+  </div>
 
-  <div class="welcome-divider"></div>
+  <div class="welcome-content">
+    <p class="welcome-body">Your complete trip guide — itinerary, live weather, maps, restaurant menus, ferry schedules, and a concierge — all in one place.</p>
 
-  <div class="welcome-install-row">
-    <div class="welcome-install-btn" onclick="var s=document.getElementById('install-steps');s.style.display=s.style.display==='none'?'block':'none';s.innerHTML='✅ <strong>Safari:</strong> Share ⬆ → Add to Home Screen<br>✅ <strong>Chrome:</strong> Menu ⋮ → Install app'">
-      <div class="welcome-install-icon">📲</div>
-      <div class="welcome-install-text">
-        <div class="welcome-install-title">Add to Home Screen</div>
-        <div class="welcome-install-desc">Tap for instructions</div>
+    <div class="welcome-card">
+      <div class="welcome-card-label">What’s Inside</div>
+      <div class="welcome-features">
+        <div class="welcome-feature"><span class="welcome-feature-icon">🗺</span><span class="welcome-feature-name">Interactive Map</span></div>
+        <div class="welcome-feature"><span class="welcome-feature-icon">☀️</span><span class="welcome-feature-name">Live Weather</span></div>
+        <div class="welcome-feature"><span class="welcome-feature-icon">🍽</span><span class="welcome-feature-name">26 Menus</span></div>
+        <div class="welcome-feature"><span class="welcome-feature-icon">💬</span><span class="welcome-feature-name">Concierge</span></div>
+        <div class="welcome-feature"><span class="welcome-feature-icon">⛴</span><span class="welcome-feature-name">Ferry Info</span></div>
+        <div class="welcome-feature"><span class="welcome-feature-icon">📍</span><span class="welcome-feature-name">Street Views</span></div>
       </div>
     </div>
-  </div>
-  <div class="welcome-install-steps" id="install-steps"></div>
 
-  <div class="welcome-tip">
-    <div class="welcome-tip-label">✨ Pro Tip</div>
-    <div class="welcome-tip-text">Move your email app out of your dock and put this trip icon in its place. You’re on vacation — your itinerary deserves that spot more than your inbox.</div>
-  </div>
+    <div class="welcome-install">
+      <div class="welcome-install-label">Add to Home Screen</div>
+      <div class="welcome-install-step">🍎 <span class="step-label">iPhone:</span> Tap <strong>Share</strong> ⬆ → <strong>Add to Home Screen</strong></div>
+      <div class="welcome-install-step">🤖 <span class="step-label">Android:</span> Tap <strong>⋮ Menu</strong> → <strong>Install App</strong></div>
+    </div>
 
-  <button class="welcome-enter-btn" onclick="dismissWelcome()">Start Exploring</button>
+    <div class="welcome-tip">
+      <div class="welcome-tip-label">✨ Pro Tip</div>
+      <div class="welcome-tip-text">Move your email app out of your dock and replace it with this trip icon. You’re on vacation — the itinerary deserves that prime spot more than your inbox.</div>
+    </div>
+
+    <button class="welcome-enter-btn" onclick="dismissWelcome()">Start Exploring</button>
+  </div>
 </div>
 
 <!-- WELCOME SCREEN JS -->
