@@ -6164,11 +6164,16 @@ if ('serviceWorker' in navigator) {
     var MAX_MARKERS = 15;
 
     function fetchOverpass(oq, attempt) {
+      // Add timeout to prevent indefinite hangs on mobile
+      var controller = new AbortController();
+      var timeoutId = setTimeout(function(){ controller.abort(); }, 8000);
       return fetch('https://overpass-api.de/api/interpreter', {
         method:'POST',
         headers:{'Content-Type':'application/x-www-form-urlencoded'},
-        body:'data='+encodeURIComponent(oq)
+        body:'data='+encodeURIComponent(oq),
+        signal: controller.signal
       }).then(function(r) {
+        clearTimeout(timeoutId);
         if (r.status === 429 || r.status === 504 || r.status === 503) throw new Error('rate-limited');
         if (!r.ok) throw new Error('HTTP '+r.status);
         return r.text();
@@ -6176,7 +6181,8 @@ if ('serviceWorker' in navigator) {
         if (text.charAt(0) !== '{') throw new Error('not-json');
         return JSON.parse(text);
       }).catch(function(err) {
-        if (attempt < 3) {
+        clearTimeout(timeoutId);
+        if (attempt < 2) {
           var delay = attempt * 1500 + 500;
           statusEl.textContent = 'Searching… (retry ' + attempt + ')';
           return new Promise(function(resolve) {
@@ -6200,10 +6206,9 @@ if ('serviceWorker' in navigator) {
         .slice(0, MAX_MARKERS);
       if (withDist.length === 0) {
         var gmUrl = 'https://www.google.com/maps/search/' + encodeURIComponent(query) + '/@' + lat + ',' + lng + ',16z';
-        statusEl.innerHTML = 'Opening Google Maps…';
+        statusEl.innerHTML = 'No results nearby. <a href="' + gmUrl + '" target="_blank" rel="noopener" style="color:var(--gold);text-decoration:underline">Try Google Maps</a>';
         statusEl.style.display = '';
-        window.closeSearchMap();
-        window.open(gmUrl, '_blank');
+        statusEl.style.pointerEvents = 'auto';
         return;
       }
       statusEl.style.display = 'none';
@@ -6247,10 +6252,9 @@ if ('serviceWorker' in navigator) {
       .catch(function(err) {
         console.error('Overpass search failed:', err);
         var gmUrl = 'https://www.google.com/maps/search/' + encodeURIComponent(query) + '/@' + lat + ',' + lng + ',16z';
-        statusEl.innerHTML = 'Opening Google Maps…';
+        statusEl.innerHTML = 'Search timed out. <a href="' + gmUrl + '" target="_blank" rel="noopener" style="color:var(--gold);text-decoration:underline">Open in Google Maps</a>';
         statusEl.style.display = '';
-        window.closeSearchMap();
-        window.open(gmUrl, '_blank');
+        statusEl.style.pointerEvents = 'auto';
       });
 
     // Leaflet needs multiple invalidateSize calls after container becomes visible
