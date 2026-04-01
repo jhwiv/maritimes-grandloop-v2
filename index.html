@@ -2089,17 +2089,16 @@ body.map-fullscreen #map-back-btn{display:flex}
 
 /* Hide header on hero landing page */
 #site-header.on-hero{
-  transform:translateY(-100%);
   opacity:0;
   pointer-events:none;
-  transition:transform .35s ease, opacity .25s ease;
+  transform:translateY(-8px);
 }
 /* Prevent header flash on initial load */
 #site-header.no-transition{
   transition:none !important;
 }
 #site-header{
-  transition:transform .35s ease, opacity .25s ease, box-shadow .25s ease;
+  transition:opacity .4s ease, transform .4s ease, box-shadow .25s ease;
 }
 /* hero-visible: used to hide flight/ferry bars when on hero */
 body.hero-visible #ferry-bar,
@@ -2821,7 +2820,7 @@ body.hero-visible #ferry-chip{
      DAYS 6–8 — FOGO ISLAND
      ══════════════════════════════════════════════════ -->
 <div class="location-banner" role="img" aria-label="Fogo Island">
-  <div class="location-banner-img" style="background-image:url('https://images.unsplash.com/photo-1545231027-637d2f6210f8?w=1600&h=400&fit=crop&crop=center&q=80&auto=format')"></div>
+  <div class="location-banner-img" style="background-image:url('https://images.unsplash.com/photo-1505118380757-91f5f5632de0?w=1600&h=400&fit=crop&crop=center&q=80&auto=format')"></div>
   <div class="location-banner-content">
     <div class="location-banner-flag">⭐</div>
     <div class="location-banner-city">Fogo Island</div>
@@ -4108,12 +4107,13 @@ const floatMenu = document.getElementById('float-menu');
 
   function checkHero(){
     var heroBottom = heroEl.getBoundingClientRect().bottom;
-    // Also keep header hidden while condensed section is visible
+    // Keep header hidden while condensed section is mostly visible
+    // Trigger header appearance when ~200px of condensed remain (smoother handoff)
     var condensedSection = document.getElementById('section-condensed');
-    var condensedBottom = condensedSection
-      ? condensedSection.getBoundingClientRect().bottom
+    var condensedRemaining = condensedSection
+      ? condensedSection.getBoundingClientRect().bottom - 200
       : heroBottom;
-    var onHero = heroBottom > 10 || condensedBottom > 10;
+    var onHero = heroBottom > 10 || condensedRemaining > 10;
     if(onHero){
       hdr.classList.add('on-hero');
       document.body.classList.add('hero-visible');
