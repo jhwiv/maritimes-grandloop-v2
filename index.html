@@ -77,7 +77,7 @@ img{display:block;max-width:100%}
   backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
   border-bottom:1px solid rgba(201,169,110,.18);
   transition:box-shadow .25s ease;
-  padding:6px var(--sp16) 4px;
+  padding:5px var(--sp16) 3px;
   display:flex;flex-direction:column;
   justify-content:center;
 }
@@ -85,26 +85,22 @@ img{display:block;max-width:100%}
   box-shadow:0 2px 20px rgba(0,0,0,.35);
 }
 .hdr-rows{
-  display:flex;flex-direction:column;gap:4px;
+  display:flex;flex-direction:column;gap:2px;
 }
 .hdr-row-1,.hdr-row-2,.hdr-row-3{
   display:flex;align-items:center;
-  gap:4px 6px;
-  flex-wrap:nowrap;
-  overflow-x:auto;
-  -webkit-overflow-scrolling:touch;
-  scrollbar-width:none;
+  gap:3px 4px;
+  flex-wrap:wrap;
   padding:1px 0;
 }
-.hdr-row-1::-webkit-scrollbar,.hdr-row-2::-webkit-scrollbar,.hdr-row-3::-webkit-scrollbar{display:none}
 .nav-chip{
   font-family:'DM Mono',monospace;
-  font-size:11px;letter-spacing:0.06em;
+  font-size:8.5px;letter-spacing:0.04em;
   text-transform:uppercase;
   font-weight:600;
-  padding:8px 16px;
-  min-height:22px;
-  border-radius:20px;
+  padding:4px 8px;
+  min-height:16px;
+  border-radius:12px;
   white-space:nowrap;
   color:rgba(255,255,255,.55);
   border:1px solid transparent;
@@ -130,7 +126,8 @@ img{display:block;max-width:100%}
 .nav-chip:active{transform:scale(.95);transition-duration:.05s}
 .hdr-section-label{display:none!important}
 @media(min-width:601px){
-  .nav-chip{font-size:11px;padding:8px 16px;min-height:26px;border-radius:20px}
+  .nav-chip{font-size:10px;padding:7px 14px;min-height:22px;border-radius:18px}
+  .hdr-row-1,.hdr-row-2,.hdr-row-3{gap:4px 5px}
 }
 
 /* ── FERRY ALERT BAR ───────────────────────────── */
@@ -2091,14 +2088,16 @@ body.map-fullscreen #map-back-btn{display:flex}
 #site-header.on-hero{
   opacity:0;
   pointer-events:none;
-  transform:translateY(-8px);
+}
+#site-header.fading-in{
+  pointer-events:none;
 }
 /* Prevent header flash on initial load */
 #site-header.no-transition{
   transition:none !important;
 }
 #site-header{
-  transition:opacity .4s ease, transform .4s ease, box-shadow .25s ease;
+  transition:opacity .6s cubic-bezier(.25,.46,.45,.94), box-shadow .25s ease;
 }
 /* hero-visible: used to hide flight/ferry bars when on hero */
 body.hero-visible #ferry-bar,
@@ -3858,6 +3857,13 @@ function navTo(sectionId, btn) {
   const section = document.getElementById(sectionId);
   if (!section) return;
 
+  // For condensed section, scroll to show AT A GLANCE at top (no header offset since header is hidden)
+  if (sectionId === 'section-condensed') {
+    const targetTop = section.getBoundingClientRect().top + window.scrollY - 12;
+    try { window.scrollTo({ top: targetTop, behavior: 'smooth' }); } catch(e) { window.scrollTo(0, targetTop); }
+    return;
+  }
+
   // Find the topmost banner above this section (location-banner or day-banner)
   var scrollTarget = section;
   var anchor = document.getElementById(sectionId + '-anchor');
@@ -4105,23 +4111,41 @@ const floatMenu = document.getElementById('float-menu');
   // on-hero + no-transition already set in HTML to prevent flash on load
   var firstScroll = true;
 
+  var condensedSection = document.getElementById('section-condensed');
+  var fadeZone = 350; // px over which the header fades in
+
   function checkHero(){
     var heroBottom = heroEl.getBoundingClientRect().bottom;
-    // Keep header hidden while condensed section is mostly visible
-    // Trigger header appearance when ~200px of condensed remain (smoother handoff)
-    var condensedSection = document.getElementById('section-condensed');
-    var condensedRemaining = condensedSection
-      ? condensedSection.getBoundingClientRect().bottom - 200
-      : heroBottom;
-    var onHero = heroBottom > 10 || condensedRemaining > 10;
-    if(onHero){
+
+    // While hero is visible, fully hide
+    if (heroBottom > 10) {
       hdr.classList.add('on-hero');
+      hdr.style.opacity = '0';
       document.body.classList.add('hero-visible');
-    } else {
-      if(firstScroll){ hdr.classList.remove('no-transition'); firstScroll = false; }
-      hdr.classList.remove('on-hero');
-      document.body.classList.remove('hero-visible');
+      return;
     }
+
+    // Progressive fade: header fades in over the last fadeZone px of the condensed section
+    if (condensedSection) {
+      var csBottom = condensedSection.getBoundingClientRect().bottom;
+      if (csBottom > 0) {
+        // Map csBottom from fadeZone→0 to opacity 0→1
+        var progress = Math.max(0, Math.min(1, 1 - (csBottom / fadeZone)));
+        if (firstScroll) { hdr.classList.remove('no-transition'); firstScroll = false; }
+        hdr.classList.remove('on-hero');
+        hdr.style.opacity = String(progress);
+        hdr.classList.toggle('fading-in', progress < 0.95);
+        document.body.classList.remove('hero-visible');
+        return;
+      }
+    }
+
+    // Fully visible
+    if (firstScroll) { hdr.classList.remove('no-transition'); firstScroll = false; }
+    hdr.classList.remove('on-hero');
+    hdr.classList.remove('fading-in');
+    hdr.style.opacity = '1';
+    document.body.classList.remove('hero-visible');
   }
 
   window.addEventListener('scroll', checkHero, {passive:true});
