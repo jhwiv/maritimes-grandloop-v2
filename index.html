@@ -644,7 +644,8 @@ img{display:block;max-width:100%}
 /* ── LODGING CARD ──────────────────────────────── */
 .lodging-card{
   margin:0 var(--sp24) var(--sp16);
-  background:var(--navy);
+  background:var(--cream);
+  border:1px solid var(--divider);
   border-radius:var(--r9);
   padding:var(--sp16);
   display:flex;gap:var(--sp12);align-items:flex-start;
@@ -654,17 +655,17 @@ img{display:block;max-width:100%}
 .lodging-label{
   font-family:'DM Mono',monospace;font-size:8px;
   letter-spacing:.2em;text-transform:uppercase;
-  color:rgba(201,169,110,.6);margin-bottom:var(--sp4);
+  color:var(--gold);margin-bottom:var(--sp4);
 }
 .lodging-name{
   font-family:'Playfair Display',serif;
   font-size:15px;font-weight:700;
-  color:rgba(255,255,255,.9);line-height:1.3;
+  color:var(--navy);line-height:1.3;
   margin-bottom:var(--sp4);
 }
 .lodging-addr{
   font-family:'Crimson Pro',serif;font-size:13px;
-  color:rgba(255,255,255,.5);line-height:1.5;
+  color:rgba(10,21,37,.55);line-height:1.5;
 }
 .lodging-actions{
   display:flex;gap:var(--sp8);flex-wrap:wrap;
@@ -675,12 +676,12 @@ img{display:block;max-width:100%}
   font-family:'DM Mono',monospace;font-size:8px;
   letter-spacing:.08em;text-transform:uppercase;
   padding:5px 12px;border-radius:var(--r6);
-  color:rgba(201,169,110,.8);
-  border:1px solid rgba(201,169,110,.2);
+  color:var(--gold);
+  border:1px solid rgba(201,169,110,.3);
   transition:all .2s;
   text-decoration:none;
 }
-.lodging-btn:hover{color:var(--gold2);border-color:rgba(201,169,110,.4);background:rgba(201,169,110,.08)}
+.lodging-btn:hover{color:var(--gold2);border-color:var(--gold);background:rgba(201,169,110,.08)}
 
 /* ── TIP BLOCK ─────────────────────────────────── */
 .tip-block{
@@ -723,11 +724,11 @@ img{display:block;max-width:100%}
 
 /* ── ESSENTIALS SECTION ─────────────────────────── */
 #section-essentials .content-section{
-  background:var(--navy);
+  background:var(--cream);
 }
 .essentials-header{
   padding:var(--sp24) var(--sp24) var(--sp16);
-  border-bottom:2px solid rgba(201,169,110,.2);
+  border-bottom:2px solid var(--divider);
 }
 .essentials-eyebrow{
   font-family:'DM Mono',monospace;font-size:9px;
@@ -736,7 +737,7 @@ img{display:block;max-width:100%}
 }
 .essentials-title{
   font-family:'Playfair Display',serif;
-  font-size:26px;font-weight:700;color:#fff;
+  font-size:26px;font-weight:700;color:var(--navy);
 }
 .ess-grid{
   padding:var(--sp16) var(--sp24) var(--sp24);
@@ -748,19 +749,19 @@ img{display:block;max-width:100%}
 .ess-label{
   font-family:'DM Mono',monospace;font-size:8px;
   letter-spacing:.2em;text-transform:uppercase;
-  color:rgba(201,169,110,.6);margin-bottom:var(--sp4);
+  color:var(--gold);margin-bottom:var(--sp4);
 }
 .ess-value{
   font-family:'Crimson Pro',serif;font-size:13.5px;
-  color:rgba(255,255,255,.75);line-height:1.5;
+  color:var(--navy);line-height:1.5;
 }
 .ess-badge{
   display:inline-block;
-  background:rgba(74,124,111,.3);
-  border:1px solid rgba(74,124,111,.5);
+  background:rgba(74,124,111,.12);
+  border:1px solid rgba(74,124,111,.4);
   padding:2px 8px;border-radius:3px;
   font-family:'DM Mono',monospace;font-size:8px;
-  letter-spacing:.08em;color:#A8D5C5;
+  letter-spacing:.08em;color:#2a6b5a;
   margin-top:var(--sp4);width:fit-content;
 }
 
@@ -2207,7 +2208,6 @@ body.hero-visible #ferry-chip{
 <header id="site-header" class="on-hero no-transition" role="banner">
   <div class="hdr-rows">
     <nav class="hdr-nav hdr-row-1" aria-label="Day sections">
-      <button class="nav-chip active" data-target="section-condensed">Overview</button>
       <button class="nav-chip" data-target="section-day1">Portland</button>
       <button class="nav-chip" data-target="section-day2">Digby</button>
       <button class="nav-chip" data-target="section-day3">Lunenburg</button>
@@ -2229,7 +2229,7 @@ body.hero-visible #ferry-chip{
       <button class="nav-chip" data-target="section-map">Map</button>
     </nav>
   </div>
-  <div class="hdr-section-label" id="hdr-section-label">Overview</div>
+  <div class="hdr-section-label" id="hdr-section-label">Portland</div>
 </header>
 
 <!-- ferry bar removed -->
@@ -3281,10 +3281,10 @@ body.hero-visible #ferry-chip{
      ══════════════════════════════════════════════════ -->
 <span class="section-anchor" id="section-essentials-anchor"></span>
 <section id="section-essentials" aria-label="Trip essentials">
-  <div class="content-section" style="background:var(--navy)">
+  <div class="content-section">
     <div class="essentials-header">
       <div class="essentials-eyebrow">Quick Reference</div>
-      <h2 class="essentials-title" style="color:#fff">Trip Essentials</h2>
+      <h2 class="essentials-title">Trip Essentials</h2>
     </div>
     <div class="ess-grid">
       <div class="ess-item">
@@ -3908,7 +3908,6 @@ const progressBar = document.getElementById('progress-bar');
 const hdrLabel = document.getElementById('hdr-section-label');
 
 const sections = [
-  { id: 'section-condensed',  label: 'Overview' },
   { id: 'section-day1',       label: 'Portland' },
   { id: 'section-day2',       label: 'Digby' },
   { id: 'section-day3',       label: 'Lunenburg' },
@@ -3927,7 +3926,7 @@ const sections = [
 ];
 
 let lastScroll = 0;
-let lastActiveSection = 'section-condensed';
+let lastActiveSection = 'section-day1';
 
 function onScroll() {
   const scroll = window.scrollY;
@@ -4046,7 +4045,6 @@ if (footerTopBtn) footerTopBtn.addEventListener('click', scrollToTop);
 
 // ── CONTEXTUAL FAB JUMP BUTTON ─────────────────────────
 const jumpTargets = {
-  'section-condensed': { label: 'Portland',    target: 'section-day1' },
   'section-day1':      { label: 'Digby',       target: 'section-day2' },
   'section-day2':      { label: 'Lunenburg',   target: 'section-day3' },
   'section-day3':      { label: 'Ferry',       target: 'section-day4' },
@@ -4061,7 +4059,7 @@ const jumpTargets = {
   'section-reference': { label: 'History',     target: 'section-history' },
   'section-history':   { label: 'Street Views',target: 'section-streetview' },
   'section-streetview':{ label: 'Map',         target: 'section-map' },
-  'section-map':       { label: 'Top',         target: 'section-condensed' },
+  'section-map':       { label: 'Top',         target: 'section-day1' },
 };
 let currentFabTarget = 'section-day1';
 
@@ -4110,7 +4108,12 @@ const floatMenu = document.getElementById('float-menu');
 
   function checkHero(){
     var heroBottom = heroEl.getBoundingClientRect().bottom;
-    var onHero = heroBottom > 10;
+    // Also keep header hidden while condensed section is visible
+    var condensedSection = document.getElementById('section-condensed');
+    var condensedBottom = condensedSection
+      ? condensedSection.getBoundingClientRect().bottom
+      : heroBottom;
+    var onHero = heroBottom > 10 || condensedBottom > 10;
     if(onHero){
       hdr.classList.add('on-hero');
       document.body.classList.add('hero-visible');
@@ -5419,7 +5422,7 @@ if ('serviceWorker' in navigator) {
   var chatGpsResolve = null; // resolves the first-message await
   function getActiveTabLabel() {
     var active = document.querySelector('.nav-chip.active');
-    return active ? active.textContent.trim() : 'Overview';
+    return active ? active.textContent.trim() : 'Portland';
   }
   var isSending = false;
   var isFirstMessage = true;
@@ -6240,22 +6243,16 @@ if ('serviceWorker' in navigator) {
 </script>
 
 <div id="time-pill" aria-label="Timezone comparison">
-  <div class="tp-zone" id="tp-viewer">
-    <span class="tp-flag" id="tp-viewer-flag"></span>
-    <span class="tp-time" id="tp-viewer-time"></span>
-    <span class="tp-label" id="tp-viewer-label"></span>
+  <div class="tp-zone" id="tp-east">
+    <span class="tp-flag" id="tp-east-flag">🇺🇸</span>
+    <span class="tp-time" id="tp-east-time"></span>
+    <span class="tp-label" id="tp-east-label">US EASTERN</span>
   </div>
   <div class="tp-sep" id="tp-sep-1"></div>
-  <div class="tp-zone" id="tp-away">
-    <span class="tp-flag" id="tp-away-flag">🇨🇦</span>
-    <span class="tp-time" id="tp-away-time"></span>
-    <span class="tp-label" id="tp-away-label">DESTINATION</span>
-  </div>
-  <div class="tp-sep" id="tp-sep-2"></div>
-  <div class="tp-zone" id="tp-home">
-    <span class="tp-flag" id="tp-home-flag">🇺🇸</span>
-    <span class="tp-time" id="tp-home-time"></span>
-    <span class="tp-label" id="tp-home-label">HOME</span>
+  <div class="tp-zone" id="tp-dest">
+    <span class="tp-flag" id="tp-dest-flag">🇨🇦</span>
+    <span class="tp-time" id="tp-dest-time"></span>
+    <span class="tp-label" id="tp-dest-label">ATLANTIC</span>
   </div>
 </div>
 
@@ -6611,34 +6608,31 @@ if ('serviceWorker' in navigator) {
   });
 })();
 
-// ── FLOATING TIME PILL (3-zone) ─────────────────────────
+// ── FLOATING TIME PILL (US Eastern + trip timezone) ──
 (function() {
   var pill = document.getElementById('time-pill');
   if (!pill) return;
 
-  var HOME_TZ = 'America/New_York';
-  var HOME_FLAG = '\ud83c\uddfa\ud83c\uddf8';
-  var HOME_LABEL = 'HOME';
+  var EASTERN = { tz: 'America/New_York', flag: '\ud83c\uddfa\ud83c\uddf8', label: 'US EASTERN' };
 
-  // Trip phases and their timezones
-  var PHASES = [
+  // Trip phases — only show second zone when NOT Eastern
+  var TRIP_ZONES = [
     { start: '2026-06-27', end: '2026-06-27', tz: 'America/New_York', flag: '\ud83c\uddfa\ud83c\uddf8', label: 'PORTLAND' },
-    { start: '2026-06-28', end: '2026-06-29', tz: 'America/Halifax', flag: '\ud83c\udde8\ud83c\udde6', label: 'NOVA SCOTIA' },
+    { start: '2026-06-28', end: '2026-06-29', tz: 'America/Halifax', flag: '\ud83c\udde8\ud83c\udde6', label: 'ATLANTIC' },
     { start: '2026-06-30', end: '2026-06-30', tz: 'America/Halifax', flag: '\u26f4', label: 'FERRY' },
     { start: '2026-07-01', end: '2026-07-04', tz: 'America/St_Johns', flag: '\ud83c\udde8\ud83c\udde6', label: 'NEWFOUNDLAND' },
     { start: '2026-07-05', end: '2026-07-05', tz: 'America/St_Johns', flag: '\u26f4', label: 'RETURN FERRY' },
-    { start: '2026-07-06', end: '2026-07-07', tz: 'America/Halifax', flag: '\ud83c\udde8\ud83c\udde6', label: 'NOVA SCOTIA' },
+    { start: '2026-07-06', end: '2026-07-07', tz: 'America/Halifax', flag: '\ud83c\udde8\ud83c\udde6', label: 'ATLANTIC' },
     { start: '2026-07-08', end: '2026-07-08', tz: 'America/New_York', flag: '\ud83c\uddfa\ud83c\uddf8', label: 'HOME' }
   ];
 
   function getPhase() {
-    var now = new Date();
-    var today = now.toISOString().slice(0, 10);
-    for (var i = 0; i < PHASES.length; i++) {
-      if (today >= PHASES[i].start && today <= PHASES[i].end) return PHASES[i];
+    var today = new Date().toISOString().slice(0, 10);
+    for (var i = 0; i < TRIP_ZONES.length; i++) {
+      if (today >= TRIP_ZONES[i].start && today <= TRIP_ZONES[i].end) return TRIP_ZONES[i];
     }
-    // Default: show Newfoundland as the "away" timezone
-    return { tz: 'America/St_Johns', flag: '\ud83c\udde8\ud83c\udde6', label: 'NEWFOUNDLAND' };
+    // Default before/after trip: show Atlantic
+    return { tz: 'America/Halifax', flag: '\ud83c\udde8\ud83c\udde6', label: 'ATLANTIC' };
   }
 
   function fmtTime(tz) {
@@ -6649,23 +6643,23 @@ if ('serviceWorker' in navigator) {
 
   function update() {
     var phase = getPhase();
-    var viewerTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    var viewerLabel = viewerTz.split('/').pop().replace(/_/g, ' ').toUpperCase();
+    var sep = document.getElementById('tp-sep-1');
+    var destZone = document.getElementById('tp-dest');
 
-    // Viewer zone
-    document.getElementById('tp-viewer-flag').textContent = '\ud83c\udf10';
-    document.getElementById('tp-viewer-time').textContent = fmtTime(viewerTz);
-    document.getElementById('tp-viewer-label').textContent = viewerLabel.length > 10 ? 'LOCAL' : viewerLabel;
+    // Always show US Eastern
+    document.getElementById('tp-east-time').textContent = fmtTime(EASTERN.tz);
 
-    // Destination zone
-    document.getElementById('tp-away-flag').textContent = phase.flag;
-    document.getElementById('tp-away-time').textContent = fmtTime(phase.tz);
-    document.getElementById('tp-away-label').textContent = phase.label;
-
-    // Home zone
-    document.getElementById('tp-home-flag').textContent = HOME_FLAG;
-    document.getElementById('tp-home-time').textContent = fmtTime(HOME_TZ);
-    document.getElementById('tp-home-label').textContent = HOME_LABEL;
+    // If trip is in Eastern timezone, hide the second zone
+    if (phase.tz === 'America/New_York') {
+      if (sep) sep.style.display = 'none';
+      if (destZone) destZone.style.display = 'none';
+    } else {
+      if (sep) sep.style.display = '';
+      if (destZone) destZone.style.display = '';
+      document.getElementById('tp-dest-flag').textContent = phase.flag;
+      document.getElementById('tp-dest-time').textContent = fmtTime(phase.tz);
+      document.getElementById('tp-dest-label').textContent = phase.label;
+    }
 
     pill.classList.add('visible');
   }
