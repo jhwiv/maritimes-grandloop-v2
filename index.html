@@ -2213,21 +2213,24 @@ body.hero-visible #ferry-chip{
   opacity:0;pointer-events:none;
   transition:opacity .5s ease;
 }
-#welcome-screen > *{position:relative;z-index:1}
+#welcome-screen > *:not(.welcome-skip-bar){position:relative;z-index:1}
 .welcome-skip-bar{
-  position:absolute;top:16px;right:20px;z-index:2;
-  background:rgba(0,0,0,.3);
-  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
-  padding:6px 12px;border-radius:14px;
+  position:absolute;top:env(safe-area-inset-top,14px);right:16px;z-index:2;
+  padding:14px 0;
 }
 .welcome-skip{
   font-family:'DM Mono',monospace;
   font-size:9px;letter-spacing:.12em;
   text-transform:uppercase;
-  color:rgba(255,255,255,.5);
-  background:none;border:none;cursor:pointer;
+  color:rgba(255,255,255,.7);
+  background:rgba(0,0,0,.35);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  border:1px solid rgba(255,255,255,.15);
+  border-radius:16px;
+  padding:8px 16px;
+  cursor:pointer;
 }
-.welcome-skip:hover{color:rgba(255,255,255,.8)}
+.welcome-skip:hover{color:#fff;background:rgba(0,0,0,.5)}
 .welcome-eyebrow{
   font-family:'DM Mono',monospace;
   font-size:8px;letter-spacing:.3em;
@@ -2256,7 +2259,7 @@ body.hero-visible #ferry-chip{
   backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
   border:1px solid rgba(255,255,255,.12);
   border-radius:12px;
-  padding:12px 14px;margin-bottom:12px;
+  padding:14px 16px;margin-bottom:12px;
 }
 .welcome-card-label{
   font-family:'DM Mono',monospace;
@@ -2265,38 +2268,52 @@ body.hero-visible #ferry-chip{
   color:var(--gold);margin-bottom:8px;
 }
 .welcome-features{
-  display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;
+  display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;
 }
 .welcome-feature{
-  display:flex;align-items:center;gap:5px;
-  padding:5px 6px;border-radius:6px;
+  display:flex;align-items:center;gap:6px;
+  padding:7px 8px;border-radius:8px;
+  background:rgba(255,255,255,.05);
 }
-.welcome-feature-icon{font-size:13px;flex-shrink:0}
+.welcome-feature-icon{font-size:15px;flex-shrink:0}
 .welcome-feature-name{
   font-family:'DM Mono',monospace;
-  font-size:7px;letter-spacing:.04em;
+  font-size:7.5px;letter-spacing:.04em;
   text-transform:uppercase;
   color:rgba(255,255,255,.75);font-weight:600;
 }
-.welcome-install{
-  background:rgba(255,255,255,.06);
+.welcome-install-row{
+  display:flex;gap:8px;margin-bottom:10px;
+}
+.welcome-install-btn{
+  flex:1;
+  display:flex;align-items:center;gap:8px;
+  background:rgba(255,255,255,.08);
   backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
-  border:1px solid rgba(255,255,255,.1);
+  border:1px solid rgba(255,255,255,.12);
   border-radius:10px;
-  padding:10px 14px;margin-bottom:10px;
+  padding:12px 12px;
+  cursor:pointer;
+  transition:all .2s;
+  text-decoration:none;
 }
-.welcome-install-label{
+.welcome-install-btn:hover,.welcome-install-btn:active{
+  background:rgba(255,255,255,.15);
+  border-color:rgba(255,255,255,.25);
+}
+.welcome-install-icon{font-size:22px;flex-shrink:0}
+.welcome-install-text{display:flex;flex-direction:column}
+.welcome-install-title{
   font-family:'DM Mono',monospace;
-  font-size:7px;letter-spacing:.22em;
-  text-transform:uppercase;
-  color:var(--gold);margin-bottom:5px;
+  font-size:8.5px;letter-spacing:.06em;
+  text-transform:uppercase;font-weight:600;
+  color:rgba(255,255,255,.85);
 }
-.welcome-install-step{
+.welcome-install-desc{
   font-family:'Crimson Pro',serif;
-  font-size:13px;line-height:1.5;
-  color:rgba(255,255,255,.6);
+  font-size:11.5px;color:rgba(255,255,255,.45);
+  margin-top:1px;
 }
-.welcome-install-step strong{color:rgba(255,255,255,.9)}
 .welcome-tip{
   background:rgba(201,169,110,.1);
   backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
@@ -2354,10 +2371,21 @@ body.hero-visible #ferry-chip{
     </div>
   </div>
 
-  <div class="welcome-install">
-    <div class="welcome-install-label">Add to Home Screen</div>
-    <div class="welcome-install-step">🍎 <strong>iPhone:</strong> Share ⬆ → Add to Home Screen</div>
-    <div class="welcome-install-step">🤖 <strong>Android:</strong> ⋮ Menu → Install App</div>
+  <div class="welcome-install-row">
+    <div class="welcome-install-btn" onclick="alert('In Safari:\n\n1. Tap the Share button ⬆ at the bottom of the screen\n2. Scroll down and tap Add to Home Screen\n3. Tap Add')">
+      <span class="welcome-install-icon"></span>
+      <div class="welcome-install-text">
+        <span class="welcome-install-title">iPhone</span>
+        <span class="welcome-install-desc">Add to Home Screen</span>
+      </div>
+    </div>
+    <div class="welcome-install-btn" onclick="alert('In Chrome:\n\n1. Tap the ⋮ menu (three dots) in the top right\n2. Tap Add to Home screen or Install app\n3. Tap Install')">
+      <span class="welcome-install-icon">🤖</span>
+      <div class="welcome-install-text">
+        <span class="welcome-install-title">Android</span>
+        <span class="welcome-install-desc">Install as App</span>
+      </div>
+    </div>
   </div>
 
   <div class="welcome-tip">
