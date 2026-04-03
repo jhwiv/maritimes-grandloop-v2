@@ -5717,22 +5717,14 @@ if ('serviceWorker' in navigator) {
     window.visualViewport.addEventListener('scroll', repositionChat);
   }
 
-  chatFab.addEventListener('click', function() {
-    if (isChatOpen()) { closeChat(); } else { openChat(); }
+  var _chatJustOpened = false;
+  chatFab.addEventListener('click', function(e) {
+    e.stopPropagation();
+    if (isChatOpen()) { closeChat(); } else { openChat(); _chatJustOpened = true; setTimeout(function(){ _chatJustOpened = false; }, 300); }
   });
-  chatClose.addEventListener('click', closeChat);
+  chatClose.addEventListener('click', function(e) { e.stopPropagation(); closeChat(); });
 
-  if (chatOverlay) chatOverlay.addEventListener('click', closeChat);
-
-  document.addEventListener('click', function(e) {
-    if (isChatOpen()
-      && !e.target.closest('#chat-panel')
-      && !e.target.closest('#chat-fab')
-      && !e.target.closest('#chat-fab-wrap')
-      && !e.target.closest('#chat-overlay')) {
-      closeChat();
-    }
-  });
+  if (chatOverlay) chatOverlay.addEventListener('click', function(e) { e.stopPropagation(); closeChat(); });
 
   chatInput.addEventListener('input', function() {
     this.style.height = 'auto';
