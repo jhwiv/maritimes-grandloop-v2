@@ -1686,7 +1686,11 @@ body.map-fullscreen #time-pill{display:none!important}
 body.map-fullscreen #page-wrap{padding-top:0!important;max-width:none;padding-left:0;padding-right:0}
 body.map-fullscreen #main-content{position:fixed;inset:0;z-index:9000;overflow:hidden;background:#e8e4dc}
 body.map-fullscreen #main-content > #page-wrap > section:not(#section-map),
-body.map-fullscreen #main-content > #page-wrap > span{display:none!important}
+body.map-fullscreen #main-content > #page-wrap > span,
+body.map-fullscreen #deferred-sections > section:not(#section-map),
+body.map-fullscreen #deferred-sections > span,
+body.map-fullscreen #deferred-sections > .location-banner,
+body.map-fullscreen #deferred-sections > .day-banner{display:none!important}
 body.map-fullscreen #section-map{padding:0;max-width:none;height:100vh;display:flex;flex-direction:column}
 body.map-fullscreen .map-section-hat,
 body.map-fullscreen .map-section-title,
@@ -3928,7 +3932,7 @@ function dismissWelcome() {
         <div class="sv-img-panel" data-sv-title="Cabot Trail" data-sv-url="https://www.google.com/maps?layer=c&cbll=46.7383,-60.8347&cbp=11,180,0,0,0" data-sv-img="sv-img/cabot-trail.jpg" data-sv-region="Cape Breton, NS" role="button" tabindex="0" onclick="openSvModal(this)">
           <img src="sv-img/cabot-trail.jpg" alt="Cabot Trail" loading="lazy">
           <button class="sv-gsv-btn" onclick="event.stopPropagation();openStreetViewEmbed('https://www.google.com/maps?layer=c&cbll=46.7383,-60.8347&cbp=11,180,0,0,0')" aria-label="Open in Google Street View"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" fill="var(--gold)" opacity=".85"/><circle cx="12" cy="9" r="2.5" fill="var(--navy)"/></svg><span>Street View</span></button>
-          <a class="sv-webcam-btn" href="https://www.capesmokey.ca/webcam" target="_blank" rel="noopener" onclick="event.stopPropagation()" aria-label="Open Live Webcam"><svg viewBox="0 0 24 24" fill="none"><rect x="2" y="6" width="15" height="12" rx="2" fill="var(--gold)" opacity=".85"/><path d="M22 8l-5 3.5v-1L22 8zM22 16l-5-3.5v1L22 16z" fill="var(--gold)" opacity=".85"/><polygon points="17,8.5 22,6 22,18 17,15.5" fill="var(--gold)" opacity=".85"/></svg><span>Webcam</span></a>
+          <a class="sv-webcam-btn" href="https://www.novascotiawebcams.com/webcams/baddeck-wharf" target="_blank" rel="noopener" onclick="event.stopPropagation()" aria-label="Open Live Webcam"><svg viewBox="0 0 24 24" fill="none"><rect x="2" y="6" width="15" height="12" rx="2" fill="var(--gold)" opacity=".85"/><path d="M22 8l-5 3.5v-1L22 8zM22 16l-5-3.5v1L22 16z" fill="var(--gold)" opacity=".85"/><polygon points="17,8.5 22,6 22,18 17,15.5" fill="var(--gold)" opacity=".85"/></svg><span>Webcam</span></a>
           <div class="sv-panel-hint">Tap to explore</div>
         </div>
       </article>
