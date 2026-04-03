@@ -5155,12 +5155,21 @@ window.getItineraryCity = function() {
     });
   }
 
+  // Hidden link for opening Google Maps (avoids iOS popup blocker)
+  var _gmLink = document.createElement('a');
+  _gmLink.target = '_blank';
+  _gmLink.rel = 'noopener';
+  _gmLink.style.display = 'none';
+  document.body.appendChild(_gmLink);
+
   function doSearch(query) {
     if (!query.trim()) return;
     var city = getActiveCity();
     var lat = geoGranted ? userLat : city.lat;
     var lng = geoGranted ? userLng : city.lng;
-    openSearchIframe(null, lat, lng, query.trim());
+    // Open Google Maps directly — reliable on all phones, no API dependency
+    _gmLink.href = 'https://www.google.com/maps/search/' + encodeURIComponent(query) + '/@' + lat + ',' + lng + ',15z';
+    _gmLink.click();
     closeSearch();
     input.value = '';
   }
