@@ -4339,6 +4339,7 @@ const floatMenu = document.getElementById('float-menu');
 
   // on-hero + no-transition already set in HTML to prevent flash on load
   var firstScroll = true;
+  var wasHidden = true;
 
   var condensedSection = document.getElementById('section-condensed');
 
@@ -4354,20 +4355,28 @@ const floatMenu = document.getElementById('float-menu');
     }
 
     // Header hidden while condensed section is on screen
+    var hdrH = hdr.getBoundingClientRect().height || 90;
     if (condensedSection) {
       var csBottom = condensedSection.getBoundingClientRect().bottom;
-      if (csBottom > 0) {
+      // Keep hidden until content scrolls past condensed + one header height
+      if (csBottom > -hdrH) {
         hdr.classList.add('on-hero');
         hdr.style.opacity = '0';
+        wasHidden = true;
         return;
       }
     }
 
-    // Past condensed: show header fully (instant, no partial fade)
+    // Transition: header becomes visible
     if (firstScroll) { hdr.classList.remove('no-transition'); firstScroll = false; }
     hdr.classList.remove('on-hero');
     hdr.style.opacity = '1';
     document.body.classList.remove('hero-visible');
+    // One-time scroll adjustment so content doesn't jump behind header
+    if (wasHidden) {
+      wasHidden = false;
+      window.scrollBy(0, -1); // nudge to prevent visual snap
+    }
   }
 
   window.addEventListener('scroll', checkHero, {passive:true});
