@@ -4351,9 +4351,14 @@ const floatMenu = document.getElementById('float-menu');
     }
 
     // Header hidden while condensed section is on screen
+    // Use negative threshold: keep hidden until condensed bottom is
+    // one full header-height above the viewport. This ensures the
+    // Portland banner/Day 1 content is already below where the header
+    // will appear, so nothing gets hidden behind it on mobile.
+    var hdrH = hdr.offsetHeight || 90;
     if (condensedSection) {
       var csBottom = condensedSection.getBoundingClientRect().bottom;
-      if (csBottom > 0) {
+      if (csBottom > -hdrH) {
         hdr.classList.add('on-hero');
         return;
       }
@@ -4362,15 +4367,11 @@ const floatMenu = document.getElementById('float-menu');
     // Past condensed: fade in the header
     document.body.classList.remove('hero-visible');
     if (firstScroll) {
-      // First time: remove no-transition, wait one frame, THEN remove on-hero
-      // This ensures the CSS transition is active before the opacity changes
       firstScroll = false;
       hdr.classList.remove('no-transition');
-      requestAnimationFrame(function() {
-        requestAnimationFrame(function() {
-          hdr.classList.remove('on-hero');
-        });
-      });
+      // Force a style recalc so the browser registers the transition
+      void hdr.offsetHeight;
+      hdr.classList.remove('on-hero');
       return;
     }
     hdr.classList.remove('on-hero');
