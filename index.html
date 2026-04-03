@@ -2096,10 +2096,7 @@ body.map-fullscreen #map-back-btn{display:flex}
 
 /* Hide header on hero landing page */
 #site-header.on-hero{
-  opacity:0;
-  pointer-events:none;
-}
-#site-header.fading-in{
+  opacity:0 !important;
   pointer-events:none;
 }
 /* Prevent header flash on initial load */
@@ -2107,7 +2104,8 @@ body.map-fullscreen #map-back-btn{display:flex}
   transition:none !important;
 }
 #site-header{
-  transition:opacity .6s cubic-bezier(.25,.46,.45,.94), box-shadow .25s ease;
+  opacity:1;
+  transition:opacity .8s ease;
 }
 /* hero-visible: used to hide flight/ferry bars when on hero */
 body.hero-visible #ferry-bar,
@@ -4339,7 +4337,6 @@ const floatMenu = document.getElementById('float-menu');
 
   // on-hero + no-transition already set in HTML to prevent flash on load
   var firstScroll = true;
-  var wasHidden = true;
 
   var condensedSection = document.getElementById('section-condensed');
 
@@ -4349,34 +4346,25 @@ const floatMenu = document.getElementById('float-menu');
     // While hero is visible, fully hide
     if (heroBottom > 10) {
       hdr.classList.add('on-hero');
-      hdr.style.opacity = '0';
       document.body.classList.add('hero-visible');
       return;
     }
 
     // Header hidden while condensed section is on screen
-    var hdrH = hdr.getBoundingClientRect().height || 90;
     if (condensedSection) {
       var csBottom = condensedSection.getBoundingClientRect().bottom;
-      // Keep hidden until content scrolls past condensed + one header height
-      if (csBottom > -hdrH) {
+      if (csBottom > 0) {
         hdr.classList.add('on-hero');
-        hdr.style.opacity = '0';
-        wasHidden = true;
         return;
       }
     }
 
-    // Transition: header becomes visible
+    // Past condensed: remove on-hero class, CSS transition handles the fade
     if (firstScroll) { hdr.classList.remove('no-transition'); firstScroll = false; }
-    hdr.classList.remove('on-hero');
-    hdr.style.opacity = '1';
-    document.body.classList.remove('hero-visible');
-    // One-time scroll adjustment so content doesn't jump behind header
-    if (wasHidden) {
-      wasHidden = false;
-      window.scrollBy(0, -1); // nudge to prevent visual snap
+    if (hdr.classList.contains('on-hero')) {
+      hdr.classList.remove('on-hero');
     }
+    document.body.classList.remove('hero-visible');
   }
 
   window.addEventListener('scroll', checkHero, {passive:true});
