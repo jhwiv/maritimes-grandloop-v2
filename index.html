@@ -78,10 +78,11 @@ img{display:block;max-width:100%}
   background:rgba(17,29,43,.94);
   backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
   border-bottom:1px solid rgba(201,169,110,.18);
-  transition:box-shadow .25s ease;
   padding:5px var(--sp16) 3px;
   display:flex;flex-direction:column;
   justify-content:center;
+  opacity:1;
+  transition:opacity .8s ease, box-shadow .25s ease;
 }
 #site-header.scrolled{
   box-shadow:0 2px 20px rgba(0,0,0,.35);
@@ -2096,16 +2097,11 @@ body.map-fullscreen #map-back-btn{display:flex}
 
 /* Hide header on hero landing page */
 #site-header.on-hero{
-  opacity:0 !important;
+  opacity:0;
   pointer-events:none;
 }
-/* Prevent header flash on initial load */
 #site-header.no-transition{
-  transition:none !important;
-}
-#site-header{
-  opacity:1;
-  transition:opacity .8s ease;
+  transition:none;
 }
 /* hero-visible: used to hide flight/ferry bars when on hero */
 body.hero-visible #ferry-bar,
