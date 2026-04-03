@@ -4869,42 +4869,7 @@ onScroll();
       </button>
     </div>
 
-    <!-- Map preview -->
-    <div class="search-map-wrap" id="search-map-wrap">
-      <iframe id="search-map-iframe" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src=""></iframe>
-      <span class="search-map-label" id="search-map-label">Maritimes</span>
-    </div>
-
-    <!-- Location status -->
-    <div class="search-loc-status" id="search-loc-status">
-      <span class="loc-dot"></span> Tap to allow location for nearby results
-    </div>
-
-    <!-- Explore section -->
-    <h3 class="search-explore-title" id="search-explore-title">Exploring Maritimes</h3>
-    <div class="search-explore-scroll" id="search-explore-scroll">
-      <!-- POI cards populated by JS -->
-    </div>
-    <button class="search-ask-concierge" id="search-ask-concierge">
-      💬 Ask the Trip Concierge
-    </button>
   </div>
-
-  <!-- Bottom nav -->
-  <nav class="search-bottom-nav">
-    <button class="search-nav-tab active" id="search-tab-explore">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
-      <span class="search-nav-label">Explore</span>
-    </button>
-    <button class="search-nav-tab" id="search-tab-saved">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
-      <span class="search-nav-label">Saved</span>
-    </button>
-    <button class="search-nav-tab" id="search-tab-profile">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-      <span class="search-nav-label">Profile</span>
-    </button>
-  </nav>
 </div>
 
 <script>
@@ -5057,12 +5022,12 @@ window.getItineraryCity = function() {
         + (displayLng - 0.015) + '%2C' + (displayLat - 0.008) + '%2C'
         + (displayLng + 0.015) + '%2C' + (displayLat + 0.008)
         + '&layer=mapnik&marker=' + displayLat + '%2C' + displayLng;
-      if (mapIframe.getAttribute('src') !== mapSrc) mapIframe.setAttribute('src', mapSrc);
+      if (mapIframe && mapIframe.getAttribute('src') !== mapSrc) mapIframe.setAttribute('src', mapSrc);
     }
 
     // Update POI cards
     if (exploreScroll) {
-      exploreScroll.innerHTML = '';
+      if (exploreScroll) exploreScroll.innerHTML = '';
       city.pois.forEach(function(poi) {
         var c = document.createElement('div');
         c.className = 'search-poi-card';
@@ -5079,13 +5044,13 @@ window.getItineraryCity = function() {
           openSearchIframe(null, city.lat, city.lng, poi.q);
           closeSearch();
         });
-        exploreScroll.appendChild(c);
+        if (exploreScroll) exploreScroll.appendChild(c);
       });
     }
 
     if (!geoGranted && userLat) {
-      status.innerHTML = '<span class="loc-dot"></span> Location denied — searching ' + city.name + ' center';
-      status.className = 'search-loc-status denied';
+      if(status) status.innerHTML = '<span class="loc-dot"></span> Location denied — searching ' + city.name + ' center';
+      if(status) status.className = 'search-loc-status denied';
     }
   }
 
@@ -5125,31 +5090,31 @@ window.getItineraryCity = function() {
     if (cached) {
       userLat = cached.lat; userLng = cached.lng;
       geoGranted = true;
-      status.innerHTML = '<span class="loc-dot"></span> Near your location';
-      status.className = 'search-loc-status';
+      if(status) status.innerHTML = '<span class="loc-dot"></span> Near your location';
+      if(status) status.className = 'search-loc-status';
       syncCityUI();
       return;
     }
     if (!navigator.geolocation) {
       var c = getActiveCity();
-      status.innerHTML = '<span class="loc-dot"></span> Location not available — searching ' + c.name + ' center';
-      status.className = 'search-loc-status denied';
+      if(status) status.innerHTML = '<span class="loc-dot"></span> Location not available — searching ' + c.name + ' center';
+      if(status) status.className = 'search-loc-status denied';
       userLat = c.lat; userLng = c.lng;
       return;
     }
-    status.innerHTML = '<span class="loc-dot"></span> Getting your location…';
-    status.className = 'search-loc-status';
+    if(status) status.innerHTML = '<span class="loc-dot"></span> Getting your location…';
+    if(status) status.className = 'search-loc-status';
     window._gpsCache.refresh(function(pos) {
       if (pos) {
         userLat = pos.lat; userLng = pos.lng;
         geoGranted = true;
-        status.innerHTML = '<span class="loc-dot"></span> Near your location';
-        status.className = 'search-loc-status';
+        if(status) status.innerHTML = '<span class="loc-dot"></span> Near your location';
+        if(status) status.className = 'search-loc-status';
         syncCityUI();
       } else {
         var c = getActiveCity();
-        status.innerHTML = '<span class="loc-dot"></span> Location denied — searching ' + c.name + ' center';
-        status.className = 'search-loc-status denied';
+        if(status) status.innerHTML = '<span class="loc-dot"></span> Location denied — searching ' + c.name + ' center';
+        if(status) status.className = 'search-loc-status denied';
         userLat = c.lat; userLng = c.lng;
       }
     });
@@ -5218,7 +5183,7 @@ window.getItineraryCity = function() {
   // "Ask Concierge" button — cross-link to chat
   var askConcierge = document.getElementById('search-ask-concierge');
   if (askConcierge) {
-    askConcierge.addEventListener('click', function() {
+    if (askConcierge) askConcierge.addEventListener('click', function() {
       var searchText = input.value.trim();
       closeSearch();
       var prefill = searchText
@@ -5694,6 +5659,8 @@ if ('serviceWorker' in navigator) {
     chatSuggestions.style.display = '';
     chatInput.value = '';
     chatPanel.classList.add('open');
+    chatPanel.style.display = 'flex';
+    chatPanel.style.flexDirection = 'column';
     if (chatOverlay) chatOverlay.classList.add('open');
     getChatLocation();
     // Don't auto-focus input — prevents mobile keyboard from popping up
@@ -5704,6 +5671,7 @@ if ('serviceWorker' in navigator) {
   }
   function closeChat() {
     chatPanel.classList.remove('open');
+    chatPanel.style.display = 'none';
     if (chatOverlay) chatOverlay.classList.remove('open');
     chatInput.blur();
     // Reset inline styles from keyboard repositioning
