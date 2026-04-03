@@ -4341,7 +4341,6 @@ const floatMenu = document.getElementById('float-menu');
   var firstScroll = true;
 
   var condensedSection = document.getElementById('section-condensed');
-  var fadeZone = 350; // px over which the header fades in
 
   function checkHero(){
     var heroBottom = heroEl.getBoundingClientRect().bottom;
@@ -4354,25 +4353,19 @@ const floatMenu = document.getElementById('float-menu');
       return;
     }
 
-    // Progressive fade: header fades in over the last fadeZone px of the condensed section
+    // Header hidden while condensed section is on screen
     if (condensedSection) {
       var csBottom = condensedSection.getBoundingClientRect().bottom;
       if (csBottom > 0) {
-        // Map csBottom from fadeZone→0 to opacity 0→1
-        var progress = Math.max(0, Math.min(1, 1 - (csBottom / fadeZone)));
-        if (firstScroll) { hdr.classList.remove('no-transition'); firstScroll = false; }
-        hdr.classList.remove('on-hero');
-        hdr.style.opacity = String(progress);
-        hdr.classList.toggle('fading-in', progress < 0.95);
-        document.body.classList.remove('hero-visible');
+        hdr.classList.add('on-hero');
+        hdr.style.opacity = '0';
         return;
       }
     }
 
-    // Fully visible
+    // Past condensed: show header fully (instant, no partial fade)
     if (firstScroll) { hdr.classList.remove('no-transition'); firstScroll = false; }
     hdr.classList.remove('on-hero');
-    hdr.classList.remove('fading-in');
     hdr.style.opacity = '1';
     document.body.classList.remove('hero-visible');
   }
