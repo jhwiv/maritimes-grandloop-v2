@@ -4359,12 +4359,21 @@ const floatMenu = document.getElementById('float-menu');
       }
     }
 
-    // Past condensed: remove on-hero class, CSS transition handles the fade
-    if (firstScroll) { hdr.classList.remove('no-transition'); firstScroll = false; }
-    if (hdr.classList.contains('on-hero')) {
-      hdr.classList.remove('on-hero');
-    }
+    // Past condensed: fade in the header
     document.body.classList.remove('hero-visible');
+    if (firstScroll) {
+      // First time: remove no-transition, wait one frame, THEN remove on-hero
+      // This ensures the CSS transition is active before the opacity changes
+      firstScroll = false;
+      hdr.classList.remove('no-transition');
+      requestAnimationFrame(function() {
+        requestAnimationFrame(function() {
+          hdr.classList.remove('on-hero');
+        });
+      });
+      return;
+    }
+    hdr.classList.remove('on-hero');
   }
 
   window.addEventListener('scroll', checkHero, {passive:true});
