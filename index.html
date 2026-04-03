@@ -81,8 +81,7 @@ img{display:block;max-width:100%}
   padding:5px var(--sp16) 3px;
   display:flex;flex-direction:column;
   justify-content:center;
-  opacity:1;
-  transition:opacity .8s ease, box-shadow .25s ease;
+  opacity:0;
 }
 #site-header.scrolled{
   box-shadow:0 2px 20px rgba(0,0,0,.35);
@@ -2095,14 +2094,7 @@ body.map-fullscreen #map-back-btn{display:flex}
   .wx-modal-overlay .phone-mock{width:360px;height:720px}
 }
 
-/* Hide header on hero landing page */
-#site-header.on-hero{
-  opacity:0;
-  pointer-events:none;
-}
-#site-header.no-transition{
-  transition:none;
-}
+/* Header visibility controlled entirely by JS — no CSS transitions */
 /* hero-visible: used to hide flight/ferry bars when on hero */
 body.hero-visible #ferry-bar,
 body.hero-visible #ferry-chip{
@@ -2434,7 +2426,7 @@ function dismissWelcome() {
 <div id="progress-bar" role="progressbar" aria-label="Reading progress"></div>
 
 <!-- ── SITE HEADER ────────────────────────────────── -->
-<header id="site-header" class="on-hero no-transition" role="banner">
+<header id="site-header" role="banner">
   <div class="hdr-rows">
     <nav class="hdr-nav hdr-row-1" aria-label="Day sections">
       <button class="nav-chip" data-target="section-day1">Portland</button>
@@ -4332,45 +4324,67 @@ const floatMenu = document.getElementById('float-menu');
   if(!hdr || !heroEl) return;
 
   // on-hero + no-transition already set in HTML to prevent flash on load
-  var firstScroll = true;
-
   var condensedSection = document.getElementById('section-condensed');
+  var headerVisible = false;
+  var fadeAnim = null;
+  var currentOpacity = 0;
+  hdr.style.opacity = '0';
+  hdr.style.pointerEvents = 'none';
 
-  function checkHero(){
+  function setHeaderOpacity(v) {
+    currentOpacity = v;
+    hdr.style.opacity = String(v);
+    hdr.style.pointerEvents = v > 0.5 ? '' : 'none';
+  }
+
+  function fadeHeaderIn() {
+    if (fadeAnim) cancelAnimationFrame(fadeAnim);
+    var start = performance.now();
+    var from = currentOpacity;
+    var duration = 800 * (1 - from); // proportional to remaining
+    function tick(now) {
+      var elapsed = now - start;
+      var progress = Math.min(elapsed / duration, 1);
+      // ease-out cubic
+      var eased = 1 - Math.pow(1 - progress, 3);
+      setHeaderOpacity(from + (1 - from) * eased);
+      if (progress < 1) fadeAnim = requestAnimationFrame(tick);
+      else fadeAnim = null;
+    }
+    fadeAnim = requestAnimationFrame(tick);
+  }
+
+  function fadeHeaderOut() {
+    if (fadeAnim) cancelAnimationFrame(fadeAnim);
+    setHeaderOpacity(0);
+    fadeAnim = null;
+  }
+
+  function shouldShowHeader() {
     var heroBottom = heroEl.getBoundingClientRect().bottom;
-
-    // While hero is visible, fully hide
-    if (heroBottom > 10) {
-      hdr.classList.add('on-hero');
-      document.body.classList.add('hero-visible');
-      return;
-    }
-
-    // Header hidden while condensed section is on screen
-    // Use negative threshold: keep hidden until condensed bottom is
-    // one full header-height above the viewport. This ensures the
-    // Portland banner/Day 1 content is already below where the header
-    // will appear, so nothing gets hidden behind it on mobile.
-    var hdrH = hdr.offsetHeight || 90;
+    if (heroBottom > 10) return false;
     if (condensedSection) {
+      var hdrH = hdr.offsetHeight || 90;
       var csBottom = condensedSection.getBoundingClientRect().bottom;
-      if (csBottom > -hdrH) {
-        hdr.classList.add('on-hero');
-        return;
-      }
+      if (csBottom > -hdrH) return false;
     }
+    return true;
+  }
 
-    // Past condensed: fade in the header
-    document.body.classList.remove('hero-visible');
-    if (firstScroll) {
-      firstScroll = false;
-      hdr.classList.remove('no-transition');
-      // Force a style recalc so the browser registers the transition
-      void hdr.offsetHeight;
-      hdr.classList.remove('on-hero');
-      return;
+  function checkHero() {
+    var show = shouldShowHeader();
+    if (show && !headerVisible) {
+      headerVisible = true;
+      hdr.classList.add('scrolled');
+      document.body.classList.remove('hero-visible');
+      fadeHeaderIn();
+    } else if (!show && headerVisible) {
+      headerVisible = false;
+      document.body.classList.add('hero-visible');
+      fadeHeaderOut();
+    } else if (!show) {
+      document.body.classList.add('hero-visible');
     }
-    hdr.classList.remove('on-hero');
   }
 
   window.addEventListener('scroll', checkHero, {passive:true});
