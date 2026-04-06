@@ -2401,6 +2401,10 @@ body.hero-visible #ferry-chip{
 (function(){
   var ws = document.getElementById('welcome-screen');
   if (!ws) return;
+  // ?direct=1 URL param bypasses welcome screen (used by Alterra Digital lightbox)
+  if (location.search.indexOf('direct=1') !== -1) {
+    localStorage.setItem('maritimes-welcomed', '1');
+  }
   // Show welcome screen only on first visit
   if (localStorage.getItem('maritimes-welcomed')) {
     ws.style.display = 'none';
