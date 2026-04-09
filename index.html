@@ -887,6 +887,64 @@ table.rtbl tr:nth-child(even) td{background:rgba(240,237,230,.5)}
 .acc-item:last-child{border-bottom:none}
 .acc-item b{color:rgba(255,255,255,.86)}
 
+/* ── PLAN B ─────────────────────────────────────── */
+:root{--amber:#E8941C;--amber-dim:rgba(232,148,28,.15);--amber-mid:rgba(232,148,28,.55)}
+.nav-chip-planb{border-color:var(--amber-mid)!important;color:var(--amber)!important}
+.nav-chip-planb.active{background:var(--amber)!important;color:var(--navy2)!important;border-color:var(--amber)!important}
+.pb-tag{
+  display:inline-block;font-family:'DM Mono',monospace;font-size:8px;
+  letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;
+  border-radius:3px;margin-right:8px;vertical-align:middle;
+}
+.pb-tag-ferry{background:rgba(100,160,220,.18);color:#6BA3D6;border:1px solid rgba(100,160,220,.25)}
+.pb-tag-border{background:rgba(130,200,130,.12);color:#7BC47B;border:1px solid rgba(130,200,130,.2)}
+.pb-tag-cut{background:var(--amber-dim);color:var(--amber);border:1px solid rgba(232,148,28,.25)}
+.pb-tag-emergency{background:rgba(220,80,80,.12);color:#E07070;border:1px solid rgba(220,80,80,.2)}
+.pb-option-label{
+  font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--amber);margin:14px 0 4px;
+  padding-bottom:4px;border-bottom:1px solid rgba(232,148,28,.2);
+}
+.pb-overnight-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
+  gap:8px;margin:10px 0 6px;
+}
+.pb-overnight-card{
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);
+  border-radius:6px;padding:10px 12px;
+}
+.pb-overnight-name{
+  font-family:'Playfair Display',serif;font-size:12px;
+  color:rgba(255,255,255,.8);font-weight:700;margin-bottom:3px;
+}
+.pb-overnight-detail{
+  font-family:'Crimson Pro',serif;font-size:12px;
+  color:rgba(255,255,255,.45);line-height:1.45;
+}
+.pb-note{
+  background:var(--amber-dim);border-left:2px solid var(--amber);
+  padding:8px 10px!important;border-radius:0 4px 4px 0;
+  color:rgba(255,255,255,.7)!important;font-style:italic;
+}
+.pb-cut-list{display:flex;flex-direction:column;gap:8px;margin:10px 0 4px}
+.pb-cut-row{
+  display:flex;gap:12px;align-items:flex-start;
+  padding:10px 12px;background:rgba(255,255,255,.03);
+  border:1px solid rgba(255,255,255,.06);border-radius:6px;
+}
+.pb-cut-row-major{border-color:rgba(232,148,28,.2);background:var(--amber-dim)}
+.pb-cut-badge{
+  flex-shrink:0;font-family:'DM Mono',monospace;font-size:8px;
+  letter-spacing:.08em;text-transform:uppercase;
+  color:rgba(255,255,255,.4);padding-top:2px;min-width:40px;
+}
+.pb-cut-badge-major{color:var(--amber)}
+.pb-cut-desc{
+  font-family:'Crimson Pro',serif;font-size:13.5px;
+  color:rgba(255,255,255,.62);line-height:1.6;
+}
+.pb-cut-desc b{color:rgba(255,255,255,.86)}
+
 /* ── FOOTER ─────────────────────────────────────── */
 #site-footer{
   background:var(--navy);
@@ -2452,6 +2510,7 @@ function dismissWelcome() {
       <button class="nav-chip" data-target="section-history">History</button>
       <button class="nav-chip" data-target="section-streetview">Street Views</button>
       <button class="nav-chip" data-target="section-map">Map</button>
+      <button class="nav-chip nav-chip-planb" data-target="section-planb">Plan B</button>
     </nav>
   </div>
   <div class="hdr-section-label" id="hdr-section-label">Portland</div>
@@ -3983,6 +4042,219 @@ function dismissWelcome() {
   </div>
 </section>
 
+<!-- ══════════════════════════════════════════════════════
+     PLAN B
+     ══════════════════════════════════════════════════════ -->
+<span class="section-anchor" id="section-planb-anchor"></span>
+<section id="section-planb" aria-label="Contingency plans">
+  <div style="background:var(--navy2);padding:var(--sp24)">
+
+    <!-- Header -->
+    <div style="text-align:center;margin-bottom:var(--sp32)">
+      <div class="surv-eyebrow">Contingency Planning</div>
+      <div style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:#fff;line-height:1.1;margin:8px 0 12px">Plan B</div>
+      <div style="width:40px;height:2px;background:var(--amber);margin:0 auto 16px"></div>
+      <div style="font-family:'Crimson Pro',serif;font-size:15px;color:rgba(255,255,255,.65);max-width:500px;margin:0 auto;line-height:1.65">
+        Three ferries, two border crossings, tight timing. Here&rsquo;s exactly what to do if things go sideways.
+      </div>
+    </div>
+
+    <div class="surv-body">
+
+      <!-- 1. FUNDY ROSE CANCELLED -->
+      <div class="accordion" id="acc-pb-fundy">
+        <button class="accordion-hdr" aria-expanded="false" aria-controls="acc-pb-fundy-body" onclick="toggleAcc(this)">
+          <span class="pb-tag pb-tag-ferry">⛴ Ferry</span> Fundy Rose Cancelled &mdash; Day 2 <span class="acc-chevron">▾</span>
+        </button>
+        <div class="accordion-body" id="acc-pb-fundy-body" role="region">
+          <div class="acc-item"><b>Call immediately:</b> <a href="tel:+18777627245" style="color:var(--amber)">1-877-762-7245</a> &mdash; ask about next sailing and priority rebooking for existing reservations.</div>
+
+          <div class="pb-option-label">Option A &mdash; Wait for next sailing (same day or next morning)</div>
+          <div class="acc-item">The Fundy Rose typically runs daily. If cancelled for weather, next sailing is usually the following morning. Stay an extra night in Saint John and apply the “What to Cut” section below to recover the lost day.</div>
+          <div class="pb-overnight-grid">
+            <div class="pb-overnight-card">
+              <div class="pb-overnight-name">Delta Hotels Saint John</div>
+              <div class="pb-overnight-detail">39 King St &middot; <a href="tel:+15066486481" style="color:var(--amber)">506-648-6481</a></div>
+            </div>
+            <div class="pb-overnight-card">
+              <div class="pb-overnight-name">Hilton Saint John</div>
+              <div class="pb-overnight-detail">1 Market Sq &middot; <a href="tel:+15066934184" style="color:var(--amber)">506-693-8484</a></div>
+            </div>
+            <div class="pb-overnight-card">
+              <div class="pb-overnight-name">Four Points Sheraton</div>
+              <div class="pb-overnight-detail">111 Fundy Quay &middot; <a href="tel:+15064958888" style="color:var(--amber)">506-495-8888</a></div>
+            </div>
+          </div>
+
+          <div class="pb-option-label">Option B &mdash; Drive around the bay (no schedule impact)</div>
+          <div class="acc-item">Saint John &rarr; Sussex &rarr; Amherst &rarr; Truro &rarr; Digby. Roughly 3.5 additional hours of driving versus the ferry. Long day, but you still make your Digby overnight as planned.</div>
+          <div class="acc-item pb-note">Best choice if cancellation is announced early &mdash; it keeps every downstream night intact and requires no rebooking.</div>
+        </div>
+      </div>
+
+      <!-- 2. MARINE ATLANTIC CANCELLED -->
+      <div class="accordion" id="acc-pb-marineatlantic">
+        <button class="accordion-hdr" aria-expanded="false" aria-controls="acc-pb-marineatlantic-body" onclick="toggleAcc(this)">
+          <span class="pb-tag pb-tag-ferry">⛴ Ferry</span> Marine Atlantic Cancelled &mdash; Days 4 or 9 <span class="acc-chevron">▾</span>
+        </button>
+        <div class="accordion-body" id="acc-pb-marineatlantic-body" role="region">
+          <div class="acc-item"><b>Call immediately:</b> <a href="tel:+18003417981" style="color:var(--amber)">1-800-341-7981</a> &mdash; reservation holders get priority on next available sailing. Check sailing status at <a href="https://www.marineatlantic.ca" target="_blank" style="color:var(--amber)">marineatlantic.ca</a>.</div>
+
+          <div class="pb-option-label">Option A &mdash; Wait in North Sydney (up to 24 hours)</div>
+          <div class="acc-item">Marine Atlantic typically resumes within 24 hours of a weather cancellation. A one-day hold may allow you to keep Fogo Island intact &mdash; apply the cuts below to recover the lost day in the back half.</div>
+          <div class="pb-overnight-grid">
+            <div class="pb-overnight-card">
+              <div class="pb-overnight-name">Cambridge Suites Sydney</div>
+              <div class="pb-overnight-detail">380 Esplanade &middot; <a href="tel:+19025625050" style="color:var(--amber)">902-562-5050</a></div>
+            </div>
+            <div class="pb-overnight-card">
+              <div class="pb-overnight-name">Holiday Inn Express Sydney</div>
+              <div class="pb-overnight-detail">480 Kings Rd &middot; <a href="tel:+19025620200" style="color:var(--amber)">902-562-0200</a></div>
+            </div>
+            <div class="pb-overnight-card">
+              <div class="pb-overnight-name">Comfort Inn Sydney</div>
+              <div class="pb-overnight-detail">368 Kings Rd &middot; <a href="tel:+19025623600" style="color:var(--amber)">902-562-3600</a></div>
+            </div>
+          </div>
+
+          <div class="pb-option-label">Option B &mdash; Pivot to Cape Breton + PEI (2+ day cancellation)</div>
+          <div class="acc-item">If Newfoundland is genuinely off the table, pivot to an outstanding alternate route &mdash; the Cabot Trail and Prince Edward Island.</div>
+          <div class="acc-item">
+            <b>Day 4:</b> North Sydney &rarr; Cabot Trail scenic loop &rarr; Baddeck overnight (Alexander Graham Bell Museum)<br>
+            <b>Day 5:</b> Baddeck &rarr; PEI via Confederation Bridge &rarr; Charlottetown overnight<br>
+            <b>Days 6&ndash;7:</b> Charlottetown &mdash; red sand beaches, Anne of Green Gables sites, lobster suppers<br>
+            <b>Day 8:</b> Charlottetown &rarr; Moncton &rarr; Hopewell Rocks &rarr; Fredericton overnight<br>
+            <b>Day 9+:</b> Resume standard return south to Portland
+          </div>
+          <div class="acc-item pb-note">Contact Fogo Island Inn immediately at <a href="tel:+17096589444" style="color:var(--amber)">709-658-9444</a>. Force majeure circumstances (ferry cancellation) may qualify for a full credit or rebooking &mdash; do not wait to call.</div>
+        </div>
+      </div>
+
+      <!-- 3. FOGO ISLAND FERRY DELAYED -->
+      <div class="accordion" id="acc-pb-fogo">
+        <button class="accordion-hdr" aria-expanded="false" aria-controls="acc-pb-fogo-body" onclick="toggleAcc(this)">
+          <span class="pb-tag pb-tag-ferry">⛴ Ferry</span> Fogo Island Ferry Delayed &mdash; Day 6 or 9 <span class="acc-chevron">▾</span>
+        </button>
+        <div class="accordion-body" id="acc-pb-fogo-body" role="region">
+          <div class="acc-item"><b>Call:</b> <a href="tel:+18005636353" style="color:var(--amber)">1-800-563-6353</a> &middot; The Fogo Island Inn concierge also monitors ferry status and will advise &mdash; they handle weather delays routinely for guests.</div>
+          <div class="acc-item">The ferry resumes when sea conditions allow, typically within a few hours. The inn holds your room automatically. Do not panic &mdash; this is a normal part of island life.</div>
+
+          <div class="pb-option-label">Waiting at Farewell (outbound, Day 6)</div>
+          <div class="acc-item">Very limited facilities at the terminal. If delays extend overnight, <b>Gander</b> is the nearest sizable town with full hotel options &mdash; 1.5 hrs back east on the TCH.</div>
+          <div class="pb-overnight-grid">
+            <div class="pb-overnight-card">
+              <div class="pb-overnight-name">Airport Hotel Gander</div>
+              <div class="pb-overnight-detail">100 Trans-Canada Hwy &middot; <a href="tel:+17092563681" style="color:var(--amber)">709-256-3681</a></div>
+            </div>
+            <div class="pb-overnight-card">
+              <div class="pb-overnight-name">Comfort Inn Gander</div>
+              <div class="pb-overnight-detail">112 Trans-Canada Hwy &middot; <a href="tel:+17092563005" style="color:var(--amber)">709-256-3005</a></div>
+            </div>
+          </div>
+
+          <div class="pb-option-label">Delayed leaving Fogo Island (Day 9)</div>
+          <div class="acc-item">Stay an extra night at the Inn (request extension at check-in &mdash; subject to availability) or at a B&amp;B in Joe Batt&rsquo;s Arm. This pushes the Port aux Basques overnight ferry &mdash; rebook Marine Atlantic immediately: <a href="tel:+18003417981" style="color:var(--amber)">1-800-341-7981</a>. Then apply the cuts below.</div>
+        </div>
+      </div>
+
+      <!-- 4. ALTERNATIVE BORDER CROSSINGS -->
+      <div class="accordion" id="acc-pb-border">
+        <button class="accordion-hdr" aria-expanded="false" aria-controls="acc-pb-border-body" onclick="toggleAcc(this)">
+          <span class="pb-tag pb-tag-border">🛂 Border</span> Alternative Border Crossings <span class="acc-chevron">▾</span>
+        </button>
+        <div class="accordion-body" id="acc-pb-border-body" role="region">
+          <div class="acc-item"><b>Primary (outbound &amp; return):</b> Calais, ME / St. Stephen, NB &mdash; most direct from Portland on the Route 1 corridor. Default choice both ways.</div>
+
+          <div class="pb-option-label">Alternative &mdash; Houlton, ME / Woodstock, NB (I-95)</div>
+          <div class="acc-item">Located 45 minutes north of Calais on I-95. Frequently shorter wait times on summer weekends. Adds roughly 40 km but stays on the highway the whole way. Better choice if Calais is backed up or if construction is affecting Route 1.</div>
+
+          <div class="pb-option-label">Return from Fredericton (Day 12)</div>
+          <div class="acc-item"><b>Houlton/Woodstock is the preferred crossing on Day 12.</b> Driving from Fredericton south, the Trans-Canada Highway (NB-2) feeds directly into I-95 at Houlton &mdash; it’s more direct than backtracking to Calais. Use Calais only if doing the coastal Route 1 detour through Eastport.</div>
+
+          <div class="acc-item pb-note">US passport required at both crossings. ArriveCAN is no longer required (discontinued June 2023). Declare all food, alcohol, and gifts. Moose-related vehicle damage must be declared as well if applicable.</div>
+        </div>
+      </div>
+
+      <!-- 5. WHAT TO CUT IF ONE FULL DAY LOST -->
+      <div class="accordion" id="acc-pb-cuts">
+        <button class="accordion-hdr" aria-expanded="false" aria-controls="acc-pb-cuts-body" onclick="toggleAcc(this)">
+          <span class="pb-tag pb-tag-cut">✂ Schedule</span> What to Cut if One Full Day Is Lost <span class="acc-chevron">▾</span>
+        </button>
+        <div class="accordion-body" id="acc-pb-cuts-body" role="region">
+          <div class="acc-item">Apply these cuts in order &mdash; sacrifice the least consequential stops first before touching any overnight.</div>
+          <div class="pb-cut-list">
+            <div class="pb-cut-row">
+              <div class="pb-cut-badge">First</div>
+              <div class="pb-cut-desc"><b>Skip New River Beach (Day 2)</b> &mdash; saves ~1 hr. Drive straight to Saint John from the border without stopping.</div>
+            </div>
+            <div class="pb-cut-row">
+              <div class="pb-cut-badge">Second</div>
+              <div class="pb-cut-desc"><b>Skip Mahone Bay &amp; Chester (Day 4)</b> &mdash; saves ~1.5 hrs. Drive direct from Lunenburg to Halifax without village detours.</div>
+            </div>
+            <div class="pb-cut-row">
+              <div class="pb-cut-badge">Third</div>
+              <div class="pb-cut-desc"><b>Skip Hopewell Rocks (Day 11)</b> &mdash; saves ~2 hrs. Drive direct Pictou &rarr; Fredericton via Amherst and Moncton without stopping.</div>
+            </div>
+            <div class="pb-cut-row">
+              <div class="pb-cut-badge">Fourth</div>
+              <div class="pb-cut-desc"><b>Skip Hartland Bridge &amp; Freeport stop (Day 12)</b> &mdash; saves ~1 hr. Highway straight through to Portland.</div>
+            </div>
+            <div class="pb-cut-row pb-cut-row-major">
+              <div class="pb-cut-badge pb-cut-badge-major">Big cut</div>
+              <div class="pb-cut-desc"><b>Collapse the Pictou overnight (Days 10&ndash;11)</b> &mdash; Drive through Pictou without stopping; overnight in Truro or Amherst instead (~1.5 hrs closer to Fredericton). Gives you a full Day 11 in Fredericton. Net savings: ~3 hrs.</div>
+            </div>
+            <div class="pb-cut-row pb-cut-row-major">
+              <div class="pb-cut-badge pb-cut-badge-major">Biggest</div>
+              <div class="pb-cut-desc"><b>Skip Twillingate overnight (Day 5)</b> &mdash; Drive from Port aux Basques toward Farewell and overnight in Gander instead (~3 hrs closer to the Fogo ferry). Loses the iceberg views but keeps Fogo Island completely intact.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6. CAR BREAKDOWN + MEDICAL -->
+      <div class="accordion" id="acc-pb-emergency">
+        <button class="accordion-hdr" aria-expanded="false" aria-controls="acc-pb-emergency-body" onclick="toggleAcc(this)">
+          <span class="pb-tag pb-tag-emergency">🚑 Emergency</span> Car Breakdown &amp; Medical <span class="acc-chevron">▾</span>
+        </button>
+        <div class="accordion-body" id="acc-pb-emergency-body" role="region">
+          <div class="acc-item"><b>Roadside (Canada):</b> Dial <b>*16</b> from any mobile &mdash; connects to provincial road authority. CAA members: <a href="tel:+18004226141" style="color:var(--amber)">1-800-422-6141</a>.</div>
+          <div class="acc-item"><b>Rental / insurance:</b> If the vehicle is unrepairable, Enterprise and Budget both have locations in Sydney (Cape Breton), Gander (NL), and all major centres. Call your insurer immediately &mdash; don&rsquo;t wait until you&rsquo;re back.</div>
+          <div class="acc-item"><b>Cell coverage:</b> Download offline Google Maps for NS, NB, and NL before leaving Portland. Coverage is patchy across rural Newfoundland &mdash; especially between Port aux Basques and Twillingate.</div>
+
+          <div class="pb-option-label">Nearest ER by destination</div>
+          <div class="pb-overnight-grid">
+            <div class="pb-overnight-card">
+              <div class="pb-overnight-name">Saint John, NB</div>
+              <div class="pb-overnight-detail">Saint John Regional Hospital &middot; <a href="tel:+15066486000" style="color:var(--amber)">506-648-6000</a></div>
+            </div>
+            <div class="pb-overnight-card">
+              <div class="pb-overnight-name">Lunenburg / South Shore</div>
+              <div class="pb-overnight-detail">South Shore Regional (Bridgewater) &middot; <a href="tel:+19025434603" style="color:var(--amber)">902-543-4603</a></div>
+            </div>
+            <div class="pb-overnight-card">
+              <div class="pb-overnight-name">North Sydney / Cape Breton</div>
+              <div class="pb-overnight-detail">Cape Breton Regional Hospital &middot; <a href="tel:+19025678000" style="color:var(--amber)">902-567-8000</a></div>
+            </div>
+            <div class="pb-overnight-card">
+              <div class="pb-overnight-name">Twillingate, NL</div>
+              <div class="pb-overnight-detail">Notre Dame Bay Memorial &middot; <a href="tel:+17096842372" style="color:var(--amber)">709-884-2372</a></div>
+            </div>
+            <div class="pb-overnight-card">
+              <div class="pb-overnight-name">Fogo Island, NL</div>
+              <div class="pb-overnight-detail">James Paton Memorial, Gander &middot; <a href="tel:+17092562500" style="color:var(--amber)">709-256-2500</a> &mdash; 1.5 hrs by ferry + road</div>
+            </div>
+            <div class="pb-overnight-card">
+              <div class="pb-overnight-name">Fredericton, NB</div>
+              <div class="pb-overnight-detail">Dr. Everett Chalmers Regional &middot; <a href="tel:+15064525400" style="color:var(--amber)">506-452-5400</a></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /surv-body -->
+  </div>
+</section>
+
 </div><!-- /page-wrap -->
 </div><!-- /deferred-sections -->
 </main>
@@ -4147,6 +4419,7 @@ const sections = [
   { id: 'section-history',    label: 'History' },
   { id: 'section-streetview', label: 'Street Views' },
   { id: 'section-map',        label: 'Map' },
+  { id: 'section-planb',      label: 'Plan B' },
 ];
 
 let lastScroll = 0;
