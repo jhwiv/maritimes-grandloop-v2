@@ -937,8 +937,7 @@ table.rtbl tr:nth-child(even) td{background:rgba(240,237,230,.5)}
 
 /* ── PLAN B ─────────────────────────────────────── */
 :root{--amber:#E8941C;--amber-dim:rgba(232,148,28,.15);--amber-mid:rgba(232,148,28,.55)}
-.nav-chip-planb{border-color:var(--amber-mid)!important;color:var(--amber)!important}
-.nav-chip-planb.active{background:var(--amber)!important;color:var(--navy2)!important;border-color:var(--amber)!important}
+/* Plan B chip — no special highlight, inherits default nav-chip style */
 
 /* ── NAV DRAWER ─────────────────────────────────── */
 #nav-drawer-backdrop{
@@ -985,7 +984,7 @@ table.rtbl tr:nth-child(even) td{background:rgba(240,237,230,.5)}
 }
 .nav-drawer-chips{display:flex;flex-wrap:wrap;gap:7px}
 .nav-drawer-chips .nav-chip{font-size:11px}
-.nav-drawer-chips .nav-chip-planb{border-color:var(--amber-mid)!important;color:var(--amber)!important}
+/* nav-drawer Plan B — inherits default chip style */
 .pb-tag{
   display:inline-block;font-family:'DM Mono',monospace;font-size:8px;
   letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;
