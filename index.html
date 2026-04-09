@@ -703,6 +703,42 @@ img{display:block;max-width:100%}
 .tip-block.alert .tip-txt{color:var(--body)}
 .tip-block.alert strong{color:var(--red)}
 
+/* ── CONNECTIVITY ALERT ─────────────────────────── */
+.conn-alert{
+  margin:0 var(--sp24) var(--sp24);
+  background:rgba(232,148,28,.07);
+  border:1px solid rgba(232,148,28,.3);
+  border-left:3px solid #E8941C;
+  border-radius:var(--r9);
+  padding:var(--sp16) 20px;
+}
+.conn-alert-hdr{
+  display:flex;align-items:center;gap:8px;margin-bottom:10px;
+}
+.conn-alert-icon{font-size:18px;flex-shrink:0;line-height:1}
+.conn-alert-eyebrow{
+  font-family:'DM Mono',monospace;font-size:8px;
+  letter-spacing:.18em;text-transform:uppercase;
+  color:#E8941C;font-weight:600;
+}
+.conn-alert-title{
+  font-size:15px;font-weight:700;color:var(--body);
+  margin-bottom:8px;line-height:1.35;
+}
+.conn-alert-body{
+  font-family:'Crimson Pro',serif;font-size:13.5px;
+  color:rgba(255,255,255,.72);line-height:1.65;margin-bottom:12px;
+}
+.conn-alert-chips{display:flex;flex-wrap:wrap;gap:8px}
+@keyframes chip-pulse{0%,100%{box-shadow:0 0 0 0 rgba(232,148,28,.45)}50%{box-shadow:0 0 0 5px rgba(232,148,28,0)}}
+.meta-chip-maps{
+  background:rgba(232,148,28,.12)!important;
+  border-color:rgba(232,148,28,.5)!important;
+  color:#E8941C!important;
+  animation:chip-pulse 2.4s ease infinite;
+}
+.meta-chip-maps:hover{animation:none;background:rgba(232,148,28,.22)!important}
+
 /* ── EXTRAS STRIP ───────────────────────────────── */
 .extras-strip{
   margin:0 var(--sp24) var(--sp24);
@@ -2724,6 +2760,18 @@ function dismissWelcome() {
       <p class="extras-text"><strong>Eventide Oyster Co.</strong> <button class="btn-menu" onclick="openMenuModal('eventide')">📋 Menu</button> — acclaimed oyster bar with creative New England seafood; the brown-butter lobster roll is legendary. <strong>Scales</strong> <button class="btn-menu" onclick="openMenuModal('scales')">📋 Menu</button> — waterfront fine dining on the working wharf with outstanding lobster and local fish. <strong>Street &amp; Co.</strong> <button class="btn-menu" onclick="openMenuModal('street-co')">📋 Menu</button> — intimate Old Port institution known for its perfectly grilled seafood. <strong>Duckfat</strong> <button class="btn-menu" onclick="openMenuModal('duckfat')">📋 Menu</button> — casual favourite for Belgian-style fries and craft panini. <strong>Highroller Lobster Co.</strong> <button class="btn-menu" onclick="openMenuModal('highroller')">📋 Menu</button> — creative lobster rolls and laid-back harbour vibes.</p>
     </div>
 
+    <div class="conn-alert">
+      <div class="conn-alert-hdr">
+        <span class="conn-alert-icon">📵</span>
+        <span class="conn-alert-eyebrow">Do This Tonight &middot; Before You Leave</span>
+      </div>
+      <div class="conn-alert-title">Download Offline Maps in Portland</div>
+      <div class="conn-alert-body">Cell service drops off in northern Maine, rural New Brunswick, and across most of Newfoundland. Once you leave Bangor heading north, you&rsquo;re increasingly on your own. Download offline maps tonight while you have hotel WiFi &mdash; your GPS will keep working even with zero bars.</div>
+      <div class="conn-alert-chips">
+        <span class="meta-chip meta-chip-maps" data-popup data-popup-title="Download Google Maps Offline" data-popup-body="How to download: Open Google Maps and tap your profile photo (top right) &rarr; Offline maps &rarr; Select your own map. Pan and zoom the blue rectangle to cover Newfoundland, then tap Download. This is 1&ndash;2 GB &mdash; use hotel Wi-Fi. Label it &ldquo;Newfoundland.&rdquo; Repeat the same process for Nova Scotia + New Brunswick together (~400 MB). Label it &ldquo;Maritimes.&rdquo; How to use it: Once saved, Google Maps gives you full turn-by-turn GPS navigation with zero cell signal &mdash; no roaming, no data needed. Just open the app as normal and it routes using the saved map. Downloaded regions stay active for 30 days." data-popup-tip="Download tonight on hotel WiFi. The Newfoundland map is 1&ndash;2 GB &mdash; don&rsquo;t attempt it on cellular. If you use Apple Maps, the same offline download feature is available under Maps &rarr; Downloaded Maps.">📥 Download Google Maps Offline</span>
+      </div>
+    </div>
+
     <div class="lodging-card">
       <div class="lodging-icon">🏨</div>
       <div class="lodging-info">
@@ -2778,6 +2826,7 @@ function dismissWelcome() {
           <span class="meta-chip" data-popup data-popup-title="Portland → Saint John" data-popup-body="The longest single-day drive on the trip. I-95 north through Maine, crossing into New Brunswick at Houlton or Calais. Budget time for the border crossing — 10-30 min typical." data-popup-tip="Fill up gas before the border. Canadian prices are per litre and significantly higher.">🚗 ~295 mi</span>
           <span class="meta-chip" data-popup data-popup-title="Drive Time: ~6 Hours" data-popup-body="Portland to Saint John without stops. Add 30-60 min for the border crossing and any rest stops. The drive through northern Maine is scenic but remote — limited services." data-popup-tip="Download offline maps before the rural Maine stretch. Cell coverage is patchy.">⏱ ~6 hours</span>
           <span class="meta-chip" data-popup data-popup-title="US–Canada Border Crossing" data-popup-body="You&#39;ll cross at either Houlton/Woodstock or Calais/St. Stephen. Passports required. Declare any food items. Wait times vary but are usually under 30 minutes." data-popup-tip="Have passports easily accessible. ArriveCAN is no longer required as of 2024.">🛂 US–Canada Border</span>
+          <span class="meta-chip" data-popup data-popup-title="Cell Coverage: Northern Maine" data-popup-body="Once you leave Bangor on I-95 heading north, coverage thins quickly. Expect dead zones between Lincoln and Houlton and along the St. John River valley. Cross into New Brunswick and coverage picks up, but rural sections between St. Stephen and Saint John are still patchy. If your maps aren&rsquo;t already downloaded, do it before leaving Portland &mdash; not at a rest stop." data-popup-tip="US carriers (AT&amp;T, Verizon, T-Mobile) have reasonable coverage in southern Maine but struggle north of Bangor. Canadian coverage resumes at the border but roaming rates apply.">📵 Spotty Signal: Northern ME</span>
         </div>
         <div class="stop-actions">
           <a class="btn-primary" href="https://maps.google.com/maps/dir/Portland+ME/Saint+John+NB" target="_blank" rel="noopener">🗺 Route</a>
@@ -3041,6 +3090,7 @@ function dismissWelcome() {
         <div class="stop-meta">
           <span class="meta-chip" data-popup data-popup-title="Port aux Basques → Twillingate" data-popup-body="The longest driving day in Newfoundland. Trans-Canada Highway to Corner Brook, then Deer Lake, then the Road to the Isles to Twillingate. The landscape shifts from coastal mountains to boreal forest to the dramatic northern coast." data-popup-tip="Break it up: coffee in Corner Brook, lunch in Deer Lake, arrive Twillingate by late afternoon.">🚗 ~360 mi to Twillingate</span>
           <span class="meta-chip" data-popup data-popup-title="Drive Time: ~7.5 Hours" data-popup-body="Non-stop driving time. With meal stops and fuel, plan for 9+ hours door-to-door. The Trans-Canada is well-maintained but single-lane in many sections. Watch for moose — seriously." data-popup-tip="Moose are most active at dawn and dusk. They&#39;re dark-coloured and nearly invisible at night. Don&#39;t drive after dark if you can avoid it.">⏱ ~7.5 hours driving</span>
+          <span class="meta-chip meta-chip-maps" data-popup data-popup-title="Download Google Maps — Do This Now" data-popup-body="Offline maps are essential for this drive. Cell coverage on the Trans-Canada through Newfoundland is minimal to non-existent between Port aux Basques and Gander &mdash; a 4+ hour stretch. The Road to the Isles to Twillingate is almost entirely without signal. How to download: In Google Maps, tap your profile photo &rarr; Offline maps &rarr; Select your own map. Cover all of Newfoundland and tap Download (1&ndash;2 GB). Once saved, your GPS navigates turn-by-turn with zero bars. Open the app as you normally would &mdash; it routes from the offline data automatically." data-popup-tip="If you downloaded offline maps in Portland, you&rsquo;re set. If not, do it now on the ferry&rsquo;s Wi-Fi before disembarking &mdash; you won&rsquo;t have another chance until Gander.">📵 Download Maps — Critical</span>
         </div>
         <div class="stop-actions">
           <a class="btn-primary" href="https://maps.google.com/maps/dir/Port+aux+Basques+NL/Twillingate+NL" target="_blank" rel="noopener">🗺 Route</a>
@@ -3180,6 +3230,7 @@ function dismissWelcome() {
           <span class="meta-chip" data-popup data-popup-title="Fogo Island Arts — Artist Studios" data-popup-body="Four striking contemporary studios dot the coastline, designed by Todd Saunders for the Fogo Island Arts residency program. International artists live and work in these spaces, drawing inspiration from the landscape, weather, and community." data-popup-tip="Long Studio and Tower Studio are the most photogenic. Visit early morning for the best light.">🎨 Artist Studios</span>
           <span class="meta-chip" data-popup data-popup-title="Icebergs at Fogo Island" data-popup-body="Fogo Island sits right in Iceberg Alley. In June and early July, bergs from the Arctic drift past — some massive, some ethereal blue. The inn has an &#39;iceberg spotter&#39; who tracks their position and can direct you to the best viewing points." data-popup-tip="Ask the front desk for the latest iceberg report. They move daily and conditions change fast.">🧊 Icebergs</span>
           <span class="meta-chip" data-popup data-popup-title="Whales at Fogo Island" data-popup-body="Humpback whales are regular visitors to Fogo&#39;s waters, following the capelin and krill. You can sometimes spot them from shore — the inn&#39;s rooftop hot tubs offer an unexpected whale-watching perch." data-popup-tip="Ask the community host about local boat tour operators for closer encounters.">🐋 Whales</span>
+          <span class="meta-chip" data-popup data-popup-title="Cell Service: Fogo Island" data-popup-body="Fogo Island has very limited cell coverage &mdash; treat these three days as a full digital detox. The inn provides Wi-Fi in common areas. Download everything you need (offline maps, entertainment, reservations) before boarding the ferry at Farewell. Navigation within the island is straightforward &mdash; it&rsquo;s small enough that you won&rsquo;t need GPS once you arrive." data-popup-tip="This is a feature, not a bug. Fogo Island is one of the few places left where you can genuinely disconnect. Lean into it.">📵 Very Limited Cell on Island</span>
         </div>
       </article>
     </div>
@@ -3189,9 +3240,17 @@ function dismissWelcome() {
       <p class="extras-text">Brimstone Head (one of the "four corners of the earth"). Long Studio and Tower Studio on the coastal trails. Fogo Island Workshops (handmade furniture). Shoal Bay trail. Joe Batt's Point. Oliver's Cove.</p>
     </div>
 
+    <div class="conn-alert">
+      <div class="conn-alert-hdr">
+        <span class="conn-alert-icon">📵</span>
+        <span class="conn-alert-eyebrow">Heads Up &middot; Days 6&ndash;8</span>
+      </div>
+      <div class="conn-alert-title">Fogo Island: Expect No Cell Service</div>
+      <div class="conn-alert-body">Fogo Island has virtually no cell coverage. Make sure offline maps are saved, reservations are screenshot or printed, and entertainment is downloaded before you board the ferry. The inn has Wi-Fi in common areas. Treat it as an intentional digital detox &mdash; the best thing about Fogo is that it demands your full attention.</div>
+    </div>
     <div class="tip-block">
       <div class="tip-orn">✦</div>
-      <div class="tip-txt">The Fogo Island Inn includes meals — breakfast, lunch, and dinner. <button class="btn-menu" onclick="openMenuModal('fogo-inn')">📋 Menu</button> Ask the community host about guided experiences, boat tours, and berry picking. Cell service is limited; embrace the disconnect.</div>
+      <div class="tip-txt">The Fogo Island Inn includes meals &mdash; breakfast, lunch, and dinner. <button class="btn-menu" onclick="openMenuModal('fogo-inn')">📋 Menu</button> Ask the community host about guided experiences, boat tours, and berry picking.</div>
     </div>
 
     <div class="lodging-card">
@@ -3256,6 +3315,7 @@ function dismissWelcome() {
         <div class="stop-meta">
           <span class="meta-chip" data-popup data-popup-title="Farewell → Port aux Basques" data-popup-body="The long drive back across Newfoundland, retracing the Trans-Canada Highway. Same route as Day 5 in reverse, but with different light and perspective." data-popup-tip="Stock up on gas and snacks on Fogo — services are limited until Gander (2+ hours).">🚗 ~390 mi</span>
           <span class="meta-chip" data-popup data-popup-title="Drive Time: ~8 Hours" data-popup-body="Non-stop driving time across Newfoundland. With meal stops and fuel, plan for 9+ hours. Watch for moose, especially at dawn and dusk." data-popup-tip="Same route as Day 5 in reverse. Corner Brook and Deer Lake are the best rest stops.">⏱ ~8 hours</span>
+          <span class="meta-chip" data-popup data-popup-title="Cell Coverage: Rural Newfoundland" data-popup-body="Same dead zones as Day 5, in reverse. Coverage is minimal to non-existent from Farewell all the way to Gander (~3.5 hours). It picks up slightly around Grand Falls-Windsor before dropping again. The stretch from Deer Lake to Port aux Basques has very limited service. Your offline maps are essential &mdash; open the Google Maps app as usual and it routes from the downloaded data automatically." data-popup-tip="Stock up on fuel and snacks before leaving the Fogo terminal area &mdash; the first reliable services are in Gander, 3.5 hours out, and you won&rsquo;t be able to search for anything en route.">📵 No Cell — Rural NL</span>
         </div>
         <div class="stop-actions">
           <a class="btn-primary" href="https://maps.google.com/maps/dir/Farewell+NL/Port+aux+Basques+NL" target="_blank" rel="noopener">🗺 Route</a>
@@ -3700,7 +3760,7 @@ function dismissWelcome() {
           <div class="acc-item"><b>Distances in kilometres, speed in km/h.</b> Highway limits are typically 100–110 km/h.</div>
           <div class="acc-item"><b>Gas is sold in litres.</b> Expect CAD $1.60–$1.90/litre. Fill up when you can — gas stations are sparse in rural NL.</div>
           <div class="acc-item"><b>Moose warning in Newfoundland is real.</b> Do not drive at dusk or dawn on the TCH. A moose collision at highway speed is fatal. Locals take this seriously.</div>
-          <div class="acc-item"><b>Cell service is patchy</b> in rural NL and NS. Download offline maps before leaving.</div>
+          <div class="acc-item"><b>Cell service is patchy to non-existent</b> in rural Newfoundland and parts of Nova Scotia and Maine. The worst stretches: northern Maine (Bangor to border), Trans-Canada NL between Port aux Basques and Gander, Road to the Isles to Twillingate, and all of Fogo Island. <b>Download offline maps before leaving Portland</b> &mdash; open Google Maps, tap your profile photo &rarr; Offline maps &rarr; Select your own map, and download Newfoundland (~1&ndash;2 GB) and the Maritimes (~400 MB). Once saved, GPS navigation works with zero signal.</div>
         </div>
       </div>
 
