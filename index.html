@@ -873,11 +873,18 @@ table.rtbl tr:nth-child(even) td{background:rgba(240,237,230,.5)}
 }
 .accordion.open .acc-chevron{transform:rotate(180deg)}
 .accordion-body{
-  display:none;
-  padding:var(--sp4) var(--sp16) var(--sp16);
+  display:block;
+  max-height:0;
+  overflow:hidden;
+  padding:0 var(--sp16);
   border-top:1px solid rgba(255,255,255,.05);
+  transition:max-height .28s ease, padding .28s ease;
+  will-change:max-height;
 }
-.accordion.open .accordion-body{display:block}
+.accordion.open .accordion-body{
+  max-height:1600px;
+  padding:var(--sp4) var(--sp16) var(--sp16);
+}
 .acc-item{
   font-family:'Crimson Pro',serif;font-size:13.5px;
   color:rgba(255,255,255,.62);line-height:1.65;
@@ -4424,51 +4431,50 @@ const sections = [
 
 let lastScroll = 0;
 let lastActiveSection = 'section-day1';
+let scrollRafPending = false;
 
 function onScroll() {
-  const scroll = window.scrollY;
-  const docH = document.documentElement.scrollHeight - window.innerHeight;
+  if (scrollRafPending) return;
+  scrollRafPending = true;
+  requestAnimationFrame(function() {
+    scrollRafPending = false;
+    const scroll = window.scrollY;
+    const docH = document.documentElement.scrollHeight - window.innerHeight;
 
-  // Header shadow
-  if (scroll > 40) header.classList.add('scrolled');
-  else header.classList.remove('scrolled');
+    // Header shadow
+    if (scroll > 40) header.classList.add('scrolled');
+    else header.classList.remove('scrolled');
 
-  // Ferry bar removed — no auto-hide needed
+    // Progress bar
+    const pct = docH > 0 ? Math.min(100, (scroll / docH) * 100) : 0;
+    progressBar.style.width = pct + '%';
 
-
-
-  // Progress bar
-  const pct = docH > 0 ? Math.min(100, (scroll / docH) * 100) : 0;
-  progressBar.style.width = pct + '%';
-
-  // Scroll spy
-  let activeSection = 'hero';
-  const hdrH = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--hdr')) || 56;
-  sections.forEach(s => {
-    const el = document.getElementById(s.id);
-    if (el && el.getBoundingClientRect().top <= hdrH + 40) {
-      activeSection = s.id;
-    }
-  });
-
-  if (activeSection !== lastActiveSection && !navTapLock) {
-    lastActiveSection = activeSection;
-    document.querySelectorAll('.nav-chip').forEach(chip => {
-      const isActive = chip.dataset.target === activeSection;
-      chip.classList.toggle('active', isActive);
-      if (isActive && hdrLabel) {
-        hdrLabel.textContent = chip.textContent;
-      }
-      // Multi-row layout: no scroll needed for chip visibility
+    // Scroll spy — use offsetTop to avoid forced reflow
+    const hdrH = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--hdr')) || 56;
+    const scrollTop = scroll + hdrH + 40;
+    let activeSection = 'hero';
+    sections.forEach(s => {
+      const el = document.getElementById(s.id);
+      if (el && el.offsetTop <= scrollTop) activeSection = s.id;
     });
-    // Update contextual FAB jump target
-    if (typeof updateFabJump === 'function') updateFabJump(activeSection);
-  }
 
-  // Float menu visibility
-  if (typeof updateFloatMenu === 'function') updateFloatMenu(scroll);
+    if (activeSection !== lastActiveSection && !navTapLock) {
+      lastActiveSection = activeSection;
+      document.querySelectorAll('.nav-chip').forEach(chip => {
+        const isActive = chip.dataset.target === activeSection;
+        chip.classList.toggle('active', isActive);
+        if (isActive && hdrLabel) {
+          hdrLabel.textContent = chip.textContent;
+        }
+      });
+      if (typeof updateFabJump === 'function') updateFabJump(activeSection);
+    }
 
-  lastScroll = scroll;
+    // Float menu visibility
+    if (typeof updateFloatMenu === 'function') updateFloatMenu(scroll);
+
+    lastScroll = scroll;
+  });
 }
 
 window.addEventListener('scroll', onScroll, { passive: true });
