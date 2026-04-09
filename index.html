@@ -3,7 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<!-- Cloudflare Pages handles caching via edge headers -->
+<!-- Cache control: always fetch fresh HTML -->
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta name="build-version" content="20260409_0749">
 <meta name="theme-color" content="#111D2B">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -7870,5 +7874,28 @@ requestAnimationFrame(function(){
   if (d) d.classList.add('loaded');
 });
 </script>
+<script>
+// ── AUTO-UPDATE CHECK ──────────────────────────────────
+// Fetches the page with no-cache and compares build-version.
+// If a newer deploy is live, silently reloads so all users
+// always see the latest version without a manual hard-refresh.
+(function(){
+  var BUILD = '20260409_0749';
+  function checkForUpdate(){
+    fetch(location.pathname + '?_bust=' + Date.now(), {cache:'no-store', method:'HEAD'})
+      .then(function(r){ return fetch(location.pathname + '?_bust=' + Date.now(), {cache:'no-store'}); })
+      .then(function(r){ return r.text(); })
+      .then(function(html){
+        var m = html.match(/name="build-version"\s+content="([^"]+)"/);
+        if(m && m[1] && m[1] !== BUILD){ location.reload(true); }
+      })
+      .catch(function(){});
+  }
+  // Check 20 s after load, then every 3 minutes
+  setTimeout(checkForUpdate, 20000);
+  setInterval(checkForUpdate, 180000);
+})();
+</script>
+
 </body>
 </html>
