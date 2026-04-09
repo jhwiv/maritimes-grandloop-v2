@@ -934,6 +934,53 @@ table.rtbl tr:nth-child(even) td{background:rgba(240,237,230,.5)}
 :root{--amber:#E8941C;--amber-dim:rgba(232,148,28,.15);--amber-mid:rgba(232,148,28,.55)}
 .nav-chip-planb{border-color:var(--amber-mid)!important;color:var(--amber)!important}
 .nav-chip-planb.active{background:var(--amber)!important;color:var(--navy2)!important;border-color:var(--amber)!important}
+
+/* ── NAV DRAWER ─────────────────────────────────── */
+#nav-drawer-backdrop{
+  position:fixed;inset:0;z-index:8500;
+  background:rgba(0,0,0,.6);
+  opacity:0;pointer-events:none;
+  transition:opacity .25s ease;
+}
+#nav-drawer-backdrop.open{opacity:1;pointer-events:all}
+#nav-drawer{
+  position:fixed;top:0;left:0;right:0;z-index:8600;
+  background:var(--navy);
+  border-radius:0 0 22px 22px;
+  padding:20px 20px 30px;
+  transform:translateY(-110%);
+  transition:transform .3s cubic-bezier(.4,0,.2,1);
+  box-shadow:0 10px 48px rgba(0,0,0,.65);
+  max-height:92vh;overflow-y:auto;
+}
+#nav-drawer.open{transform:translateY(0)}
+.nav-drawer-hdr{
+  display:flex;align-items:center;justify-content:space-between;
+  padding-bottom:14px;margin-bottom:18px;
+  border-bottom:1px solid rgba(255,255,255,.09);
+}
+.nav-drawer-eyebrow{
+  font-family:'DM Mono',monospace;font-size:8.5px;
+  letter-spacing:.22em;text-transform:uppercase;color:var(--gold);
+}
+.nav-drawer-close{
+  background:none;border:none;cursor:pointer;padding:0;
+  width:32px;height:32px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;color:rgba(255,255,255,.45);
+  transition:background .15s,color .15s;
+}
+.nav-drawer-close:hover{background:rgba(255,255,255,.1);color:#fff}
+.nav-drawer-group{margin-bottom:20px}
+.nav-drawer-group:last-child{margin-bottom:0}
+.nav-drawer-group-label{
+  font-family:'DM Mono',monospace;font-size:7.5px;
+  letter-spacing:.18em;text-transform:uppercase;
+  color:rgba(255,255,255,.3);margin-bottom:9px;
+}
+.nav-drawer-chips{display:flex;flex-wrap:wrap;gap:7px}
+.nav-drawer-chips .nav-chip{font-size:11px}
+.nav-drawer-chips .nav-chip-planb{border-color:var(--amber-mid)!important;color:var(--amber)!important}
 .pb-tag{
   display:inline-block;font-family:'DM Mono',monospace;font-size:8px;
   letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;
@@ -2558,6 +2605,46 @@ function dismissWelcome() {
   </div>
   <div class="hdr-section-label" id="hdr-section-label">Portland</div>
 </header>
+
+<!-- ── NAVIGATION DRAWER ────────────────────────── -->
+<div id="nav-drawer-backdrop" aria-hidden="true"></div>
+<div id="nav-drawer" role="dialog" aria-modal="true" aria-label="Site navigation">
+  <div class="nav-drawer-hdr">
+    <span class="nav-drawer-eyebrow">Jump to Section</span>
+    <button class="nav-drawer-close" id="nav-drawer-close" aria-label="Close navigation">&#x2715;</button>
+  </div>
+  <div class="nav-drawer-group">
+    <div class="nav-drawer-group-label">Outbound &middot; Days 1&ndash;8</div>
+    <div class="nav-drawer-chips">
+      <button class="nav-chip" data-target="section-day1" data-drawer>Portland</button>
+      <button class="nav-chip" data-target="section-day2" data-drawer>Digby</button>
+      <button class="nav-chip" data-target="section-day3" data-drawer>Lunenburg</button>
+      <button class="nav-chip" data-target="section-day4" data-drawer>Ferry Night</button>
+      <button class="nav-chip" data-target="section-day5" data-drawer>Twillingate</button>
+      <button class="nav-chip" data-target="section-fogo" data-drawer>Fogo Island</button>
+    </div>
+  </div>
+  <div class="nav-drawer-group">
+    <div class="nav-drawer-group-label">Return &middot; Days 9&ndash;12</div>
+    <div class="nav-drawer-chips">
+      <button class="nav-chip" data-target="section-day9" data-drawer>NL Return</button>
+      <button class="nav-chip" data-target="section-day10" data-drawer>Pictou</button>
+      <button class="nav-chip" data-target="section-day11" data-drawer>Fredericton</button>
+      <button class="nav-chip" data-target="section-day12" data-drawer>Home</button>
+    </div>
+  </div>
+  <div class="nav-drawer-group">
+    <div class="nav-drawer-group-label">Reference</div>
+    <div class="nav-drawer-chips">
+      <button class="nav-chip" data-target="section-essentials" data-drawer>Info</button>
+      <button class="nav-chip" data-target="section-reference" data-drawer>Reference</button>
+      <button class="nav-chip" data-target="section-history" data-drawer>History</button>
+      <button class="nav-chip" data-target="section-streetview" data-drawer>Street Views</button>
+      <button class="nav-chip" data-target="section-map" data-drawer>Map</button>
+      <button class="nav-chip nav-chip-planb" data-target="section-planb" data-drawer>Plan B</button>
+    </div>
+  </div>
+</div>
 
 <!-- ferry bar removed -->
 
@@ -4716,14 +4803,45 @@ const floatMenu = document.getElementById('float-menu');
   checkHero();
 })();
 
-// ── HERO HAMBURGER → scroll past hero ─────────────────
+// ── HERO HAMBURGER → nav drawer ────────────────────────
 (function(){
-  var hb = document.getElementById('hero-hamburger-btn');
-  if(hb) hb.addEventListener('click', function(){
-    var heroEl = document.getElementById('hero');
-    if(heroEl){
-      window.scrollTo({top: heroEl.offsetHeight + 1, behavior:'smooth'});
-    }
+  var hb       = document.getElementById('hero-hamburger-btn');
+  var drawer   = document.getElementById('nav-drawer');
+  var backdrop = document.getElementById('nav-drawer-backdrop');
+  var closeBtn = document.getElementById('nav-drawer-close');
+
+  function openDrawer(){
+    if(!drawer) return;
+    drawer.classList.add('open');
+    backdrop.classList.add('open');
+    if(hb) hb.setAttribute('aria-expanded','true');
+  }
+  function closeDrawer(){
+    if(!drawer) return;
+    drawer.classList.remove('open');
+    backdrop.classList.remove('open');
+    if(hb) hb.setAttribute('aria-expanded','false');
+  }
+
+  if(hb)       hb.addEventListener('click', openDrawer);
+  if(closeBtn) closeBtn.addEventListener('click', closeDrawer);
+  if(backdrop) backdrop.addEventListener('click', closeDrawer);
+
+  // Close + navigate when a drawer chip is tapped
+  if(drawer){
+    drawer.addEventListener('click', function(e){
+      var chip = e.target.closest('[data-drawer]');
+      if(!chip) return;
+      var target = chip.getAttribute('data-target');
+      closeDrawer();
+      // small delay so drawer slides away before navTo scrolls
+      setTimeout(function(){ navTo(target, null); }, 60);
+    });
+  }
+
+  // Close on Escape key
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape') closeDrawer();
   });
 })();
 
