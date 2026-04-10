@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="build-version" content="20260409_0749">
+<meta name="build-version" content="20260410_1538">
 <meta name="theme-color" content="#111D2B">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -1038,6 +1038,41 @@ table.rtbl tr:nth-child(even) td{background:rgba(240,237,230,.5)}
   color:rgba(255,255,255,.62);line-height:1.6;
 }
 .pb-cut-desc b{color:rgba(255,255,255,.86)}
+
+/* ── LIGHT-THEME OVERRIDES (cream bg sections) ──── */
+.light-theme{background:var(--cream)!important}
+.light-theme .surv-title{color:var(--navy2)}
+.light-theme .surv-eyebrow{color:#7C4A1E}
+.light-theme .surv-header{border-bottom-color:rgba(0,0,0,.08)}
+.light-theme .surv-rule{background:#A0522D}
+.light-theme .emerg-card{background:rgba(160,82,45,.08);border-color:rgba(160,82,45,.22)}
+.light-theme .emerg-num{color:#8B4513}
+.light-theme .emerg-lbl{color:rgba(17,29,43,.5)}
+.light-theme .accordion{background:rgba(0,0,0,.035);border-color:rgba(0,0,0,.09)}
+.light-theme .accordion-hdr{color:rgba(27,40,56,.72)}
+.light-theme .accordion-hdr:hover{background:rgba(0,0,0,.05)}
+.light-theme .accordion-body{border-top-color:rgba(0,0,0,.07)}
+.light-theme .acc-item{color:rgba(17,29,43,.68);border-bottom-color:rgba(0,0,0,.06)}
+.light-theme .acc-item b{color:var(--navy2)}
+.light-theme .acc-chevron{color:rgba(17,29,43,.35)}
+.light-theme .section-eyebrow{color:#7C4A1E}
+.light-theme .section-title{color:var(--navy2)!important}
+.light-theme .pb-overnight-card{background:rgba(0,0,0,.035);border-color:rgba(0,0,0,.09)}
+.light-theme .pb-overnight-name{color:var(--navy2)}
+.light-theme .pb-overnight-detail{color:rgba(17,29,43,.55)}
+.light-theme .pb-option-label{color:#7C4A1E;border-bottom-color:rgba(124,74,30,.22)}
+.light-theme .pb-note{background:rgba(232,148,28,.08);color:rgba(17,29,43,.68)!important}
+.light-theme .pb-cut-row{background:rgba(0,0,0,.03);border-color:rgba(0,0,0,.07)}
+.light-theme .pb-cut-row-major{background:rgba(232,148,28,.08);border-color:rgba(232,148,28,.18)}
+.light-theme .pb-cut-badge{color:rgba(17,29,43,.45)}
+.light-theme .pb-cut-badge-major{color:#92400E}
+.light-theme .pb-cut-desc{color:rgba(17,29,43,.68)}
+.light-theme .pb-cut-desc b{color:var(--navy2)}
+.light-theme .pb-tag-ferry{background:rgba(37,99,235,.08);color:#1D4ED8;border-color:rgba(37,99,235,.22)}
+.light-theme .pb-tag-cut{background:rgba(146,64,14,.08);color:#92400E;border-color:rgba(146,64,14,.22)}
+.light-theme .pb-tag-emergency{background:rgba(220,38,38,.07);color:#DC2626;border-color:rgba(220,38,38,.18)}
+.light-theme .pb-tag-border{background:rgba(22,101,52,.08);color:#166534;border-color:rgba(22,101,52,.2)}
+.light-theme a[style]{color:#92400E!important}
 
 /* ── FOOTER ─────────────────────────────────────── */
 #site-footer{
@@ -3817,7 +3852,7 @@ function dismissWelcome() {
   </div>
 
   <!-- Survival Section -->
-  <div style="padding:var(--sp24);background:var(--navy2);border-top:1px solid rgba(255,255,255,.06)">
+  <div class="light-theme" style="padding:var(--sp24);border-top:1px solid rgba(0,0,0,.06)">
     <div style="text-align:center;margin-bottom:var(--sp24)">
       <div class="surv-eyebrow">Maritimes · Summer 2026</div>
       <div class="surv-title">Survival Guide</div>
@@ -3899,10 +3934,10 @@ function dismissWelcome() {
      ══════════════════════════════════════════════════ -->
 <span class="section-anchor" id="section-history-anchor"></span>
 <section id="section-history" aria-label="Destination history">
-  <div class="content-section" style="background:var(--navy2);padding:var(--sp24)">
+  <div class="content-section light-theme" style="padding:var(--sp24)">
     <div class="section-header">
       <div class="section-eyebrow">Background</div>
-      <h2 class="section-title" style="color:#fff">History</h2>
+      <h2 class="section-title">History</h2>
     </div>
 
     <div class="accordion" id="acc-hist-portland">
@@ -4205,14 +4240,14 @@ function dismissWelcome() {
      ══════════════════════════════════════════════════════ -->
 <span class="section-anchor" id="section-planb-anchor"></span>
 <section id="section-planb" aria-label="Contingency plans">
-  <div style="background:var(--navy2);padding:var(--sp24)">
+  <div class="content-section light-theme" style="padding:var(--sp24)">
 
     <!-- Header -->
     <div style="text-align:center;margin-bottom:var(--sp32)">
       <div class="surv-eyebrow">Contingency Planning</div>
-      <div style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:#fff;line-height:1.1;margin:8px 0 12px">Plan B</div>
+      <div style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:var(--navy2);line-height:1.1;margin:8px 0 12px">Plan B</div>
       <div style="width:40px;height:2px;background:var(--amber);margin:0 auto 16px"></div>
-      <div style="font-family:'Crimson Pro',serif;font-size:15px;color:rgba(255,255,255,.65);max-width:500px;margin:0 auto;line-height:1.65">
+      <div style="font-family:'Crimson Pro',serif;font-size:15px;color:rgba(17,29,43,.6);max-width:500px;margin:0 auto;line-height:1.65">
         Three ferries, two border crossings, tight timing. Here&rsquo;s exactly what to do if things go sideways.
       </div>
     </div>
@@ -7879,7 +7914,7 @@ requestAnimationFrame(function(){
 // If a newer deploy is live, silently reloads so all users
 // always see the latest version without a manual hard-refresh.
 (function(){
-  var BUILD = '20260409_0749';
+  var BUILD = '20260410_1538';
   function checkForUpdate(){
     fetch(location.pathname + '?_bust=' + Date.now(), {cache:'no-store', method:'HEAD'})
       .then(function(r){ return fetch(location.pathname + '?_bust=' + Date.now(), {cache:'no-store'}); })
