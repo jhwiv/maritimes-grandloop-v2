@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="build-version" content="20260410_1538">
+<meta name="build-version" content="20260411_1457">
 <meta name="theme-color" content="#111D2B">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -1049,11 +1049,11 @@ table.rtbl tr:nth-child(even) td{background:rgba(240,237,230,.5)}
 .light-theme .emerg-num{color:#8B4513}
 .light-theme .emerg-lbl{color:rgba(17,29,43,.5)}
 .light-theme .accordion{background:rgba(0,0,0,.035);border-color:rgba(0,0,0,.09)}
-.light-theme .accordion-hdr{color:rgba(27,40,56,.72)}
+.light-theme .accordion-hdr{color:rgba(27,40,56,.85)}
 .light-theme .accordion-hdr:hover{background:rgba(0,0,0,.05)}
-.light-theme .accordion-body{border-top-color:rgba(0,0,0,.07)}
-.light-theme .acc-item{color:rgba(17,29,43,.68);border-bottom-color:rgba(0,0,0,.06)}
-.light-theme .acc-item b{color:var(--navy2)}
+.light-theme .accordion-body{border-top-color:rgba(0,0,0,.07);color:rgba(17,29,43,.82)}
+.light-theme .acc-item{color:rgba(17,29,43,.82)!important;border-bottom-color:rgba(0,0,0,.06)}
+.light-theme .acc-item b{color:var(--navy2)!important}
 .light-theme .acc-chevron{color:rgba(17,29,43,.35)}
 .light-theme .section-eyebrow{color:#7C4A1E}
 .light-theme .section-title{color:var(--navy2)!important}
@@ -3945,7 +3945,7 @@ function dismissWelcome() {
         Portland, Maine <span class="acc-chevron">▾</span>
       </button>
       <div class="accordion-body" id="acc-hist-portland-body" role="region">
-        <div class="acc-item" style="font-family:'Crimson Pro',serif;font-size:14px;line-height:1.7;color:rgba(255,255,255,.88)">
+        <div class="acc-item" style="font-family:'Crimson Pro',serif;font-size:14px;line-height:1.7">
           Portland's Old Port district, where you'll start the trip, was once the busiest port north of Boston. Founded in 1632, the city was burned to the ground four times — by Native Americans in 1676, the French in 1690 and 1775, and the British in 1775 during the bombardment that destroyed 75% of the town. The Old Port's distinctive brick and granite buildings date to the rebuilding after the Great Fire of 1866, when fireworks on July 4th ignited a blaze that destroyed 1,800 buildings in ten hours. Henry Wadsworth Longfellow grew up here. Portland's food scene became nationally recognized in the 2010s — its per-capita restaurant count rivals San Francisco.
         </div>
       </div>
@@ -3956,7 +3956,7 @@ function dismissWelcome() {
         Lunenburg &amp; the Bluenose <span class="acc-chevron">▾</span>
       </button>
       <div class="accordion-body" id="acc-hist-lunenburg-body" role="region">
-        <div class="acc-item" style="font-family:'Crimson Pro',serif;font-size:14px;line-height:1.7;color:rgba(255,255,255,.88)">
+        <div class="acc-item" style="font-family:'Crimson Pro',serif;font-size:14px;line-height:1.7">
           Lunenburg was founded in 1753 by Protestant settlers from Germany, Switzerland, and France — the British Crown's deliberate counterbalance to the French-speaking Acadians. The town became a UNESCO World Heritage Site in 1995 for its remarkably preserved colonial architecture and its unbroken grid layout from the original 1753 survey. In 1921, the Smith and Rhuland shipyard here built the Bluenose — the legendary racing schooner that won the International Fishermen's Trophy every year it raced and became so iconic it was placed on the Canadian dime in 1937, where it remains today. The Bluenose II, a replica launched in 1963, still calls Lunenburg home.
         </div>
       </div>
@@ -3967,7 +3967,7 @@ function dismissWelcome() {
         Digby &amp; the Bay of Fundy <span class="acc-chevron">▾</span>
       </button>
       <div class="accordion-body" id="acc-hist-digby-body" role="region">
-        <div class="acc-item" style="font-family:'Crimson Pro',serif;font-size:14px;line-height:1.7;color:rgba(255,255,255,.88)">
+        <div class="acc-item" style="font-family:'Crimson Pro',serif;font-size:14px;line-height:1.7">
           Digby sits on the Annapolis Basin at the mouth of the Bay of Fundy, which holds the world's highest tides — up to 16 metres (53 feet). The bay's extreme tidal range creates one of the planet's most productive marine ecosystems. Digby has been the scallop capital of the world since the early 1900s, with its fleet harvesting the prized Digby scallops from the bay's rich waters. The town is named after Admiral Robert Digby, who transported 1,500 United Empire Loyalists here from New England after the American Revolution in 1783.
         </div>
       </div>
@@ -3978,7 +3978,7 @@ function dismissWelcome() {
         Pictou &amp; the Ship Hector <span class="acc-chevron">▾</span>
       </button>
       <div class="accordion-body" id="acc-hist-pictou-body" role="region">
-        <div class="acc-item" style="font-family:'Crimson Pro',serif;font-size:14px;line-height:1.7;color:rgba(255,255,255,.88)">
+        <div class="acc-item" style="font-family:'Crimson Pro',serif;font-size:14px;line-height:1.7">
           Pictou is the "Birthplace of New Scotland." In September 1773, the ship Hector arrived carrying 189 Scottish Highlanders — the first major wave of Scottish immigration to Nova Scotia. The crossing took 11 harrowing weeks. Eighteen passengers, mostly children, died of smallpox and dysentery en route. The survivors founded a community that shaped the province's culture, music, and identity. Their descendants spread across Nova Scotia and beyond. The Ship Hector Heritage Quay preserves a full-size replica of the vessel. Every September, the Hector Festival celebrates this founding with Highland games, piping, and ceilidhs.
         </div>
       </div>
@@ -3989,7 +3989,7 @@ function dismissWelcome() {
         Newfoundland <span class="acc-chevron">▾</span>
       </button>
       <div class="accordion-body" id="acc-hist-newfoundland-body" role="region">
-        <div class="acc-item" style="font-family:'Crimson Pro',serif;font-size:14px;line-height:1.7;color:rgba(255,255,255,.88)">
+        <div class="acc-item" style="font-family:'Crimson Pro',serif;font-size:14px;line-height:1.7">
           Newfoundland has one of the longest histories of European contact in the Americas. Norse Vikings established a settlement at L'Anse aux Meadows around 1000 AD — the only confirmed Viking site in North America. John Cabot arrived in 1497, and the Grand Banks cod fishery drew English, French, Portuguese, and Basque fishermen for centuries. The cod was so abundant that early explorers reported you could lower a basket and pull it up full of fish. Newfoundland was Britain's oldest colony but fiercely independent — it was a self-governing Dominion until financial collapse during the Great Depression forced it to revert to British rule in 1934. It did not join Canada until 1949, after a razor-thin 52% referendum, making it the country's youngest province.
         </div>
       </div>
@@ -4000,7 +4000,7 @@ function dismissWelcome() {
         Fogo Island &amp; the Inn <span class="acc-chevron">▾</span>
       </button>
       <div class="accordion-body" id="acc-hist-fogo-body" role="region">
-        <div class="acc-item" style="font-family:'Crimson Pro',serif;font-size:14px;line-height:1.7;color:rgba(255,255,255,.88)">
+        <div class="acc-item" style="font-family:'Crimson Pro',serif;font-size:14px;line-height:1.7">
           Fogo Island has been inhabited for over 5,000 years. The island's name likely comes from the Portuguese fogo ("fire"), after the fires early explorers saw on shore. For centuries it was a remote fishing outport, its 11 communities sustained entirely by cod. When the Canadian government declared a cod moratorium in 1992, it devastated the island's economy and triggered an exodus. The revival began with Zita Cobb, a Fogo native who left at 16, made a fortune as CFO of a fibre optics company, and returned home with a vision. She founded the Shorefast Foundation and built the Fogo Island Inn in 2013 — a striking modernist hotel on stilts at the edge of the North Atlantic, designed by Todd Saunders. Every room faces the sea. All profits return to the community. The inn has become one of the world's most celebrated hotels, putting this remote island of 2,200 people on the global map.
         </div>
       </div>
@@ -4011,7 +4011,7 @@ function dismissWelcome() {
         Twillingate &amp; Iceberg Alley <span class="acc-chevron">▾</span>
       </button>
       <div class="accordion-body" id="acc-hist-twillingate-body" role="region">
-        <div class="acc-item" style="font-family:'Crimson Pro',serif;font-size:14px;line-height:1.7;color:rgba(255,255,255,.88)">
+        <div class="acc-item" style="font-family:'Crimson Pro',serif;font-size:14px;line-height:1.7">
           Twillingate, the "Iceberg Capital of the World," sits at the end of the Road to the Isles on Newfoundland's northeast coast. Named by French fishermen as "Toulinguet" after a town in Brittany, it has been a fishing settlement since the 1700s. Every spring and summer, massive icebergs calved from Greenland's glaciers drift south through Iceberg Alley on the Labrador Current. Some are 10,000+ years old. The icebergs arrive between May and July, and on a good year dozens are visible from shore. The town is also prime territory for humpback whale watching — the whales follow the capelin that follow the plankton-rich cold water pushed along by the same current that delivers the icebergs.
         </div>
       </div>
@@ -4022,7 +4022,7 @@ function dismissWelcome() {
         Fredericton &amp; New Brunswick <span class="acc-chevron">▾</span>
       </button>
       <div class="accordion-body" id="acc-hist-fredericton-body" role="region">
-        <div class="acc-item" style="font-family:'Crimson Pro',serif;font-size:14px;line-height:1.7;color:rgba(255,255,255,.88)">
+        <div class="acc-item" style="font-family:'Crimson Pro',serif;font-size:14px;line-height:1.7">
           Fredericton was founded by United Empire Loyalists who fled the American Revolution in the 1780s. The city sits on the Wolastoq (Saint John River) — the Wolastoqiyik (Maliseet) people have lived along this river for at least 10,000 years. The Beaverbrook Art Gallery, a gift from Lord Beaverbrook (the New Brunswick-born press baron who became Churchill's Minister of Aircraft Production), houses Salvador Dalí's monumental Santiago El Grande. New Brunswick is Canada's only officially bilingual province. The Hartland Covered Bridge, which you may pass on the drive home, is the longest covered bridge in the world at 1,282 feet — built in 1901, it was originally open-sided until a roof was added in 1921 after too many horses spooked at the sight of the river below.
         </div>
       </div>
@@ -4033,7 +4033,7 @@ function dismissWelcome() {
         Hopewell Rocks &amp; Fundy Tides <span class="acc-chevron">▾</span>
       </button>
       <div class="accordion-body" id="acc-hist-fundy-body" role="region">
-        <div class="acc-item" style="font-family:'Crimson Pro',serif;font-size:14px;line-height:1.7;color:rgba(255,255,255,.88)">
+        <div class="acc-item" style="font-family:'Crimson Pro',serif;font-size:14px;line-height:1.7">
           The Bay of Fundy, shared between New Brunswick and Nova Scotia, experiences the most extreme tides on Earth — 100 billion tonnes of water flow in and out twice daily. At Hopewell Rocks, the tides have carved dramatic "flowerpot" rock formations over thousands of years. At low tide you walk the ocean floor among towering rock pillars topped with trees; six hours later the same rocks are islands surrounded by 12+ metres of water. The phenomenon is caused by the bay's funnel shape and the natural resonance period of its water — which happens to match the tidal cycle almost exactly, amplifying the tides like pushing a child on a swing at just the right moment.
         </div>
       </div>
@@ -7914,7 +7914,7 @@ requestAnimationFrame(function(){
 // If a newer deploy is live, silently reloads so all users
 // always see the latest version without a manual hard-refresh.
 (function(){
-  var BUILD = '20260410_1538';
+  var BUILD = '20260411_1457';
   function checkForUpdate(){
     fetch(location.pathname + '?_bust=' + Date.now(), {cache:'no-store', method:'HEAD'})
       .then(function(r){ return fetch(location.pathname + '?_bust=' + Date.now(), {cache:'no-store'}); })
