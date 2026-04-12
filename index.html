@@ -5133,16 +5133,16 @@ onScroll();
 
   // ── Day distance & drive-time data ──
   var dayInfo = {
-    '1':   { route:'Arrive in Portland, ME', miles:null, drive:null, ferry:null, note:'Starting point — no driving today' },
-    '2':   { route:'Portland → Saint John → Digby', miles:298, drive:'5h 15m', ferry:'2h 15m (Fundy Rose)', note:null },
-    '3':   { route:'Digby → Lunenburg (Lighthouse Route)', miles:93, drive:'2h 15m', ferry:null, note:null },
-    '4':   { route:'Lunenburg → North Sydney → Ferry', miles:297, drive:'5h 45m', ferry:'6h 30m (Marine Atlantic)', note:null },
-    '5':   { route:'Port aux Basques → Corner Brook → Twillingate', miles:388, drive:'7h', ferry:null, note:'Longest driving day' },
-    '6-8': { route:'Twillingate → Farewell → Fogo Island', miles:50, drive:'1h 15m', ferry:'45m (Fogo Island ferry)', note:'3 nights on Fogo Island' },
-    '9':   { route:'Fogo Island → Farewell → Port aux Basques → Ferry', miles:388, drive:'7h', ferry:'6h 30m + 45m (Marine Atlantic + Fogo)', note:null },
-    '10':  { route:'North Sydney → Pictou', miles:160, drive:'3h 20m', ferry:null, note:null },
-    '11':  { route:'Pictou → Hopewell Rocks → Fredericton', miles:254, drive:'4h 45m', ferry:null, note:'Includes Bay of Fundy stop' },
-    '12':  { route:'Fredericton → Portland (Home)', miles:322, drive:'5h 50m', ferry:null, note:null }
+    '1':   { route:'Arrive in Portland, ME', miles:null, drive:null, ferry:null, note:'Starting point \u2014 no driving today' },
+    '2':   { route:'Portland \u2192 Saint John \u2192 Digby', miles:295, drive:'~6h', ferry:'2h 15m (Fundy Rose)', note:null },
+    '3':   { route:'Digby \u2192 Lunenburg (Lighthouse Route)', miles:100, drive:'~2.5\u20133h', ferry:null, note:null },
+    '4':   { route:'Lunenburg \u2192 North Sydney \u2192 Ferry', miles:300, drive:'~6h', ferry:'6h 30m (Marine Atlantic)', note:null },
+    '5':   { route:'Port aux Basques \u2192 Corner Brook \u2192 Twillingate', miles:360, drive:'~7.5h', ferry:null, note:'Longest driving day' },
+    '6-8': { route:'Twillingate \u2192 Farewell \u2192 Fogo Island', miles:50, drive:'~1h 15m', ferry:'45m (Fogo Island ferry)', note:'3 nights on Fogo Island' },
+    '9':   { route:'Fogo Island \u2192 Farewell \u2192 Port aux Basques \u2192 Ferry', miles:390, drive:'~8h', ferry:'6h 30m + 45m (Marine Atlantic + Fogo)', note:null },
+    '10':  { route:'North Sydney \u2192 Pictou', miles:165, drive:'~3.5h', ferry:null, note:null },
+    '11':  { route:'Pictou \u2192 Hopewell Rocks \u2192 Fredericton', miles:300, drive:'~6h', ferry:null, note:'Includes Bay of Fundy stop' },
+    '12':  { route:'Fredericton \u2192 Portland (Home)', miles:320, drive:'~6h', ferry:null, note:null }
   };
 
   var dayInfoEl = document.getElementById('map-day-info');
