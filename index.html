@@ -1857,18 +1857,19 @@ body:has(#search-card.open) #a2hs-banner{display:none!important}
 }
 .map-day-info.visible{display:flex}
 .map-day-info-close{
-  position:absolute;top:8px;right:10px;
-  width:26px;height:26px;
+  position:absolute;top:10px;right:12px;
+  width:28px;height:28px;
   display:flex;align-items:center;justify-content:center;
-  background:rgba(255,255,255,.08);
-  border:1px solid rgba(255,255,255,.15);
+  background:rgba(255,255,255,.12);
+  border:1px solid rgba(255,255,255,.25);
   border-radius:50%;cursor:pointer;
-  color:rgba(255,255,255,.6);
-  font-size:14px;line-height:1;
+  color:rgba(255,255,255,.75);
+  font-size:15px;line-height:1;
   transition:background .15s,color .15s;
+  -webkit-tap-highlight-color:transparent;
 }
-.map-day-info-close:hover{
-  background:rgba(255,255,255,.18);color:#fff;
+.map-day-info-close:hover,.map-day-info-close:active{
+  background:rgba(255,255,255,.25);color:#fff;
 }
 .map-day-info-item{
   display:flex;align-items:center;gap:8px;
