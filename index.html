@@ -486,6 +486,53 @@ img{display:block;max-width:100%}
   padding:3px 9px;border-radius:20px;
 }
 /* action row */
+/* ── Navigate-to-destination bar ── */
+.nav-drive-bar{
+  display:flex;align-items:center;gap:10px;
+  padding:12px 14px;
+  margin-bottom:var(--sp16);
+  border-radius:var(--r12);
+  background:rgba(201,169,110,.07);
+  border:1px solid rgba(201,169,110,.18);
+}
+.nav-drive-label{
+  flex:1;min-width:0;
+}
+.nav-drive-label-hat{
+  font-family:'DM Mono',monospace;font-size:8px;
+  text-transform:uppercase;letter-spacing:.06em;
+  color:rgba(255,255,255,.4);margin-bottom:2px;
+}
+.nav-drive-label-dest{
+  font-family:'Playfair Display',serif;font-size:14px;
+  color:#fff;font-weight:600;line-height:1.25;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.nav-drive-btns{
+  display:flex;gap:8px;flex-shrink:0;
+}
+.nav-drive-btn{
+  display:flex;align-items:center;justify-content:center;
+  width:42px;height:42px;border-radius:10px;
+  border:1px solid rgba(255,255,255,.12);
+  background:var(--navy);
+  cursor:pointer;transition:all .18s ease;
+  text-decoration:none;
+  position:relative;
+}
+.nav-drive-btn:hover{
+  border-color:var(--gold);
+  transform:translateY(-1px);
+  box-shadow:0 4px 12px rgba(0,0,0,.3);
+}
+.nav-drive-btn:active{transform:scale(.94);transition-duration:.06s}
+.nav-drive-btn img,.nav-drive-btn svg{width:22px;height:22px;border-radius:4px}
+.nav-drive-btn-label{
+  position:absolute;bottom:-14px;left:50%;transform:translateX(-50%);
+  font-family:'DM Mono',monospace;font-size:6.5px;
+  text-transform:uppercase;letter-spacing:.04em;
+  color:rgba(255,255,255,.35);white-space:nowrap;
+}
 .stop-actions{
   display:flex;flex-wrap:wrap;gap:var(--sp8);
   align-items:center;
@@ -2981,6 +3028,27 @@ function dismissWelcome() {
       </div>
 
     </div>
+    <div class="nav-drive-bar">
+      <div class="nav-drive-label">
+        <div class="nav-drive-label-hat">Navigate to</div>
+        <div class="nav-drive-label-dest">Saint John, NB</div>
+      </div>
+      <div class="nav-drive-btns">
+        <a class="nav-drive-btn" href="https://www.google.com/maps/dir/?api=1&amp;destination=Saint+John,+New+Brunswick,+Canada&amp;travelmode=driving" target="_blank" rel="noopener" aria-label="Open in Google Maps" title="Google Maps">
+          <svg viewBox="0 0 24 24"><path fill="#4285F4" d="M12 2C8.13 2 5 5.13 5 9c0 1.74.5 3.37 1.41 4.84.95 1.54 2.2 2.86 3.16 4.4.47.75.81 1.45 1.17 2.26C11 21.05 11.21 22 12 22s1-.95 1.27-1.5c.36-.81.7-1.51 1.17-2.26.96-1.54 2.21-2.86 3.16-4.4C18.5 12.37 19 10.74 19 9c0-3.87-3.13-7-7-7zm0 9.75a2.75 2.75 0 1 1 0-5.5 2.75 2.75 0 0 1 0 5.5z"/></svg>
+          <span class="nav-drive-btn-label">Google</span>
+        </a>
+        <a class="nav-drive-btn" href="https://waze.com/ul?ll=45.2718,-66.0582&amp;navigate=yes" target="_blank" rel="noopener" aria-label="Open in Waze" title="Waze">
+          <svg viewBox="0 0 24 24"><path fill="#33ccff" d="M12 2C6.5 2 2 6 2 11c0 2.1.8 4.1 2.2 5.6-.5 1.8-1.4 3.8-2.2 5.4 2.8-.5 5.1-1.7 6.6-2.9.9.2 1.8.4 2.8.4h.6c5.5 0 10-4 10-9s-4.5-9-10-9z"/><circle fill="#fff" cx="8.5" cy="10.5" r="1.5"/><circle fill="#fff" cx="15.5" cy="10.5" r="1.5"/><path fill="none" stroke="#fff" stroke-width="1.2" stroke-linecap="round" d="M8.5 14.5c.8 1 2.2 1.5 3.5 1.5s2.7-.5 3.5-1.5"/></svg>
+          <span class="nav-drive-btn-label">Waze</span>
+        </a>
+        <a class="nav-drive-btn" href="https://maps.apple.com/?daddr=45.2718,-66.0582&amp;dirflg=d" target="_blank" rel="noopener" aria-label="Open in Apple Maps" title="Apple Maps">
+          <svg viewBox="0 0 24 24"><rect fill="#30D158" rx="5" width="24" height="24"/><path fill="#fff" d="M17.3 7.6c-.4-.5-.9-.8-1.5-1-.3-.1-.7-.1-1-.1-.5 0-1 .1-1.4.4l-.4.2-.4-.2c-.4-.2-.9-.4-1.4-.4-.3 0-.7 0-1 .1-.6.2-1.1.5-1.5 1-.8 1-1 2.6-.3 4.3.3.8.8 1.6 1.4 2.3.5.6 1.1 1.1 1.6 1.4.3.2.6.3.8.3h.1c.2 0 .5-.1.7-.3.5-.3 1.1-.8 1.6-1.4.6-.7 1.1-1.5 1.4-2.3.7-1.7.5-3.3-.3-4.3zm-2.4-.1c.5 0 .9.2 1.3.5-.4.2-.7.5-1 .9-.3.4-.5.9-.5 1.4h-.1c-.5 0-1-.2-1.3-.5.3-.4.7-.7 1.1-1 .2-.2.4-.3.5-.3z"/></svg>
+          <span class="nav-drive-btn-label">Apple</span>
+        </a>
+      </div>
+    </div>
+
     <div class="stops" role="list">
       <article class="stop" role="listitem">
         <div class="stop-time">Morning</div>
@@ -2991,9 +3059,6 @@ function dismissWelcome() {
           <span class="meta-chip" data-popup data-popup-title="Drive Time: ~6 Hours" data-popup-body="Portland to Saint John without stops. Add 30-60 min for the border crossing and any rest stops. The drive through northern Maine is scenic but remote — limited services." data-popup-tip="Download offline maps before the rural Maine stretch. Cell coverage is patchy.">⏱ ~6 hours</span>
           <span class="meta-chip" data-popup data-popup-title="US–Canada Border Crossing" data-popup-body="You&#39;ll cross at either Houlton/Woodstock or Calais/St. Stephen. Passports required. Declare any food items. Wait times vary but are usually under 30 minutes." data-popup-tip="Have passports easily accessible. ArriveCAN is no longer required as of 2024.">🛂 US–Canada Border</span>
           <span class="meta-chip" data-popup data-popup-title="Cell Coverage: Northern Maine" data-popup-body="Once you leave Bangor on I-95 heading north, coverage thins quickly. Expect dead zones between Lincoln and Houlton and along the St. John River valley. Cross into New Brunswick and coverage picks up, but rural sections between St. Stephen and Saint John are still patchy. If your maps aren&rsquo;t already downloaded, do it before leaving Portland &mdash; not at a rest stop." data-popup-tip="US carriers (AT&amp;T, Verizon, T-Mobile) have reasonable coverage in southern Maine but struggle north of Bangor. Canadian coverage resumes at the border but roaming rates apply.">📵 Spotty Signal: Northern ME</span>
-        </div>
-        <div class="stop-actions">
-          <a class="btn-primary" href="https://maps.google.com/maps/dir/Portland+ME/Saint+John+NB" target="_blank" rel="noopener">🗺 Route</a>
         </div>
       </article>
       <article class="stop" role="listitem">
@@ -3088,6 +3153,27 @@ function dismissWelcome() {
       </div>
 
     </div>
+    <div class="nav-drive-bar">
+      <div class="nav-drive-label">
+        <div class="nav-drive-label-hat">Navigate to</div>
+        <div class="nav-drive-label-dest">Lunenburg, NS</div>
+      </div>
+      <div class="nav-drive-btns">
+        <a class="nav-drive-btn" href="https://www.google.com/maps/dir/?api=1&amp;destination=Lunenburg,+Nova+Scotia,+Canada&amp;travelmode=driving" target="_blank" rel="noopener" aria-label="Open in Google Maps" title="Google Maps">
+          <svg viewBox="0 0 24 24"><path fill="#4285F4" d="M12 2C8.13 2 5 5.13 5 9c0 1.74.5 3.37 1.41 4.84.95 1.54 2.2 2.86 3.16 4.4.47.75.81 1.45 1.17 2.26C11 21.05 11.21 22 12 22s1-.95 1.27-1.5c.36-.81.7-1.51 1.17-2.26.96-1.54 2.21-2.86 3.16-4.4C18.5 12.37 19 10.74 19 9c0-3.87-3.13-7-7-7zm0 9.75a2.75 2.75 0 1 1 0-5.5 2.75 2.75 0 0 1 0 5.5z"/></svg>
+          <span class="nav-drive-btn-label">Google</span>
+        </a>
+        <a class="nav-drive-btn" href="https://waze.com/ul?ll=44.3764,-64.3118&amp;navigate=yes" target="_blank" rel="noopener" aria-label="Open in Waze" title="Waze">
+          <svg viewBox="0 0 24 24"><path fill="#33ccff" d="M12 2C6.5 2 2 6 2 11c0 2.1.8 4.1 2.2 5.6-.5 1.8-1.4 3.8-2.2 5.4 2.8-.5 5.1-1.7 6.6-2.9.9.2 1.8.4 2.8.4h.6c5.5 0 10-4 10-9s-4.5-9-10-9z"/><circle fill="#fff" cx="8.5" cy="10.5" r="1.5"/><circle fill="#fff" cx="15.5" cy="10.5" r="1.5"/><path fill="none" stroke="#fff" stroke-width="1.2" stroke-linecap="round" d="M8.5 14.5c.8 1 2.2 1.5 3.5 1.5s2.7-.5 3.5-1.5"/></svg>
+          <span class="nav-drive-btn-label">Waze</span>
+        </a>
+        <a class="nav-drive-btn" href="https://maps.apple.com/?daddr=44.3764,-64.3118&amp;dirflg=d" target="_blank" rel="noopener" aria-label="Open in Apple Maps" title="Apple Maps">
+          <svg viewBox="0 0 24 24"><rect fill="#30D158" rx="5" width="24" height="24"/><path fill="#fff" d="M17.3 7.6c-.4-.5-.9-.8-1.5-1-.3-.1-.7-.1-1-.1-.5 0-1 .1-1.4.4l-.4.2-.4-.2c-.4-.2-.9-.4-1.4-.4-.3 0-.7 0-1 .1-.6.2-1.1.5-1.5 1-.8 1-1 2.6-.3 4.3.3.8.8 1.6 1.4 2.3.5.6 1.1 1.1 1.6 1.4.3.2.6.3.8.3h.1c.2 0 .5-.1.7-.3.5-.3 1.1-.8 1.6-1.4.6-.7 1.1-1.5 1.4-2.3.7-1.7.5-3.3-.3-4.3zm-2.4-.1c.5 0 .9.2 1.3.5-.4.2-.7.5-1 .9-.3.4-.5.9-.5 1.4h-.1c-.5 0-1-.2-1.3-.5.3-.4.7-.7 1.1-1 .2-.2.4-.3.5-.3z"/></svg>
+          <span class="nav-drive-btn-label">Apple</span>
+        </a>
+      </div>
+    </div>
+
     <div class="stops" role="list">
       <article class="stop" role="listitem">
         <div class="stop-time">Morning</div>
@@ -3097,9 +3183,6 @@ function dismissWelcome() {
           <span class="meta-chip" data-popup data-popup-title="Digby → Lunenburg" data-popup-body="The Lighthouse Route (Highway 3) hugs the South Shore of Nova Scotia through fishing villages, coves, and harbours. It&#39;s slower than the highway but infinitely more scenic." data-popup-tip="Don&#39;t rush this drive — the Lighthouse Route is one of the trip&#39;s highlights.">🚗 ~100 mi</span>
           <span class="meta-chip" data-popup data-popup-title="Drive Time: 2.5–3 Hours" data-popup-body="Via the Lighthouse Route (recommended) rather than the inland highway. Winding coastal roads through Yarmouth, Shelburne, and Liverpool. Add time for photo stops." data-popup-tip="Shelburne is worth a 30-min detour — beautiful historic waterfront and boat-building heritage.">⏱ ~2.5–3 hours</span>
           <span class="meta-chip" data-popup data-popup-title="Nova Scotia&#39;s Lighthouse Route" data-popup-body="Highway 3 from Yarmouth to Halifax — one of Canada&#39;s most scenic drives. Passes through dozens of fishing villages with white clapboard churches, rocky coves, and working lobster wharves. Several iconic lighthouses along the way." data-popup-tip="Peggy&#39;s Cove lighthouse is the most famous, but the quieter ones along this stretch are equally photogenic without the crowds.">🏠 Lighthouse Route</span>
-        </div>
-        <div class="stop-actions">
-          <a class="btn-primary" href="https://maps.google.com/maps/dir/Digby+NS/Lunenburg+NS" target="_blank" rel="noopener">🗺 Route</a>
         </div>
       </article>
       <article class="stop" role="listitem">
@@ -3166,6 +3249,27 @@ function dismissWelcome() {
       </div>
 
     </div>
+    <div class="nav-drive-bar">
+      <div class="nav-drive-label">
+        <div class="nav-drive-label-hat">Navigate to</div>
+        <div class="nav-drive-label-dest">North Sydney Ferry Terminal</div>
+      </div>
+      <div class="nav-drive-btns">
+        <a class="nav-drive-btn" href="https://www.google.com/maps/dir/?api=1&amp;destination=Marine+Atlantic+Terminal,+North+Sydney,+Nova+Scotia,+Canada&amp;travelmode=driving" target="_blank" rel="noopener" aria-label="Open in Google Maps" title="Google Maps">
+          <svg viewBox="0 0 24 24"><path fill="#4285F4" d="M12 2C8.13 2 5 5.13 5 9c0 1.74.5 3.37 1.41 4.84.95 1.54 2.2 2.86 3.16 4.4.47.75.81 1.45 1.17 2.26C11 21.05 11.21 22 12 22s1-.95 1.27-1.5c.36-.81.7-1.51 1.17-2.26.96-1.54 2.21-2.86 3.16-4.4C18.5 12.37 19 10.74 19 9c0-3.87-3.13-7-7-7zm0 9.75a2.75 2.75 0 1 1 0-5.5 2.75 2.75 0 0 1 0 5.5z"/></svg>
+          <span class="nav-drive-btn-label">Google</span>
+        </a>
+        <a class="nav-drive-btn" href="https://waze.com/ul?ll=46.217,-60.2488&amp;navigate=yes" target="_blank" rel="noopener" aria-label="Open in Waze" title="Waze">
+          <svg viewBox="0 0 24 24"><path fill="#33ccff" d="M12 2C6.5 2 2 6 2 11c0 2.1.8 4.1 2.2 5.6-.5 1.8-1.4 3.8-2.2 5.4 2.8-.5 5.1-1.7 6.6-2.9.9.2 1.8.4 2.8.4h.6c5.5 0 10-4 10-9s-4.5-9-10-9z"/><circle fill="#fff" cx="8.5" cy="10.5" r="1.5"/><circle fill="#fff" cx="15.5" cy="10.5" r="1.5"/><path fill="none" stroke="#fff" stroke-width="1.2" stroke-linecap="round" d="M8.5 14.5c.8 1 2.2 1.5 3.5 1.5s2.7-.5 3.5-1.5"/></svg>
+          <span class="nav-drive-btn-label">Waze</span>
+        </a>
+        <a class="nav-drive-btn" href="https://maps.apple.com/?daddr=46.217,-60.2488&amp;dirflg=d" target="_blank" rel="noopener" aria-label="Open in Apple Maps" title="Apple Maps">
+          <svg viewBox="0 0 24 24"><rect fill="#30D158" rx="5" width="24" height="24"/><path fill="#fff" d="M17.3 7.6c-.4-.5-.9-.8-1.5-1-.3-.1-.7-.1-1-.1-.5 0-1 .1-1.4.4l-.4.2-.4-.2c-.4-.2-.9-.4-1.4-.4-.3 0-.7 0-1 .1-.6.2-1.1.5-1.5 1-.8 1-1 2.6-.3 4.3.3.8.8 1.6 1.4 2.3.5.6 1.1 1.1 1.6 1.4.3.2.6.3.8.3h.1c.2 0 .5-.1.7-.3.5-.3 1.1-.8 1.6-1.4.6-.7 1.1-1.5 1.4-2.3.7-1.7.5-3.3-.3-4.3zm-2.4-.1c.5 0 .9.2 1.3.5-.4.2-.7.5-1 .9-.3.4-.5.9-.5 1.4h-.1c-.5 0-1-.2-1.3-.5.3-.4.7-.7 1.1-1 .2-.2.4-.3.5-.3z"/></svg>
+          <span class="nav-drive-btn-label">Apple</span>
+        </a>
+      </div>
+    </div>
+
     <div class="stops" role="list">
       <article class="stop" role="listitem">
         <div class="stop-time">8:00 AM <span class="stop-time-badge badge-dep">Early Start</span></div>
@@ -3176,9 +3280,6 @@ function dismissWelcome() {
           <span class="meta-chip" data-popup data-popup-title="Drive Time: ~6 Hours" data-popup-body="Lunenburg to North Sydney without stops. With meal breaks in Halifax or Truro, plan for 7+ hours total. The Trans-Canada through Cape Breton offers beautiful Bras d'Or Lake glimpses." data-popup-tip="If time allows, the Cabot Trail through Cape Breton Highlands is spectacular — but adds 4+ hours.">⏱ ~6 hours</span>
         </div>
         <p class="stop-note">Suggested stops: <strong>Mahone Bay</strong> (charming waterfront village with the iconic Three Churches view — just 10 min from Lunenburg) · <strong>Chester</strong> (picturesque sailing village with galleries and cafés — well worth a stroll) · <strong>Halifax</strong> (grab coffee near the Citadel or Public Gardens) · <strong>Truro</strong> (Victoria Park for a quick walk) · <strong>Baddeck</strong> (Alexander Graham Bell Museum if time allows)</p>
-        <div class="stop-actions">
-          <a class="btn-primary" href="https://maps.google.com/maps/dir/Lunenburg+NS/North+Sydney+NS" target="_blank" rel="noopener">🗺 Route</a>
-        </div>
       </article>
       <article class="stop is-ferry" role="listitem">
         <div class="stop-time">Evening <span class="stop-time-badge badge-ferry">⛴ Overnight Ferry</span></div>
@@ -3246,6 +3347,27 @@ function dismissWelcome() {
       </div>
 
     </div>
+    <div class="nav-drive-bar">
+      <div class="nav-drive-label">
+        <div class="nav-drive-label-hat">Navigate to</div>
+        <div class="nav-drive-label-dest">Twillingate, NL</div>
+      </div>
+      <div class="nav-drive-btns">
+        <a class="nav-drive-btn" href="https://www.google.com/maps/dir/?api=1&amp;destination=Twillingate,+Newfoundland+and+Labrador,+Canada&amp;travelmode=driving" target="_blank" rel="noopener" aria-label="Open in Google Maps" title="Google Maps">
+          <svg viewBox="0 0 24 24"><path fill="#4285F4" d="M12 2C8.13 2 5 5.13 5 9c0 1.74.5 3.37 1.41 4.84.95 1.54 2.2 2.86 3.16 4.4.47.75.81 1.45 1.17 2.26C11 21.05 11.21 22 12 22s1-.95 1.27-1.5c.36-.81.7-1.51 1.17-2.26.96-1.54 2.21-2.86 3.16-4.4C18.5 12.37 19 10.74 19 9c0-3.87-3.13-7-7-7zm0 9.75a2.75 2.75 0 1 1 0-5.5 2.75 2.75 0 0 1 0 5.5z"/></svg>
+          <span class="nav-drive-btn-label">Google</span>
+        </a>
+        <a class="nav-drive-btn" href="https://waze.com/ul?ll=49.3458,-54.7727&amp;navigate=yes" target="_blank" rel="noopener" aria-label="Open in Waze" title="Waze">
+          <svg viewBox="0 0 24 24"><path fill="#33ccff" d="M12 2C6.5 2 2 6 2 11c0 2.1.8 4.1 2.2 5.6-.5 1.8-1.4 3.8-2.2 5.4 2.8-.5 5.1-1.7 6.6-2.9.9.2 1.8.4 2.8.4h.6c5.5 0 10-4 10-9s-4.5-9-10-9z"/><circle fill="#fff" cx="8.5" cy="10.5" r="1.5"/><circle fill="#fff" cx="15.5" cy="10.5" r="1.5"/><path fill="none" stroke="#fff" stroke-width="1.2" stroke-linecap="round" d="M8.5 14.5c.8 1 2.2 1.5 3.5 1.5s2.7-.5 3.5-1.5"/></svg>
+          <span class="nav-drive-btn-label">Waze</span>
+        </a>
+        <a class="nav-drive-btn" href="https://maps.apple.com/?daddr=49.3458,-54.7727&amp;dirflg=d" target="_blank" rel="noopener" aria-label="Open in Apple Maps" title="Apple Maps">
+          <svg viewBox="0 0 24 24"><rect fill="#30D158" rx="5" width="24" height="24"/><path fill="#fff" d="M17.3 7.6c-.4-.5-.9-.8-1.5-1-.3-.1-.7-.1-1-.1-.5 0-1 .1-1.4.4l-.4.2-.4-.2c-.4-.2-.9-.4-1.4-.4-.3 0-.7 0-1 .1-.6.2-1.1.5-1.5 1-.8 1-1 2.6-.3 4.3.3.8.8 1.6 1.4 2.3.5.6 1.1 1.1 1.6 1.4.3.2.6.3.8.3h.1c.2 0 .5-.1.7-.3.5-.3 1.1-.8 1.6-1.4.6-.7 1.1-1.5 1.4-2.3.7-1.7.5-3.3-.3-4.3zm-2.4-.1c.5 0 .9.2 1.3.5-.4.2-.7.5-1 .9-.3.4-.5.9-.5 1.4h-.1c-.5 0-1-.2-1.3-.5.3-.4.7-.7 1.1-1 .2-.2.4-.3.5-.3z"/></svg>
+          <span class="nav-drive-btn-label">Apple</span>
+        </a>
+      </div>
+    </div>
+
     <div class="stops" role="list">
       <article class="stop" role="listitem">
         <div class="stop-time">Morning</div>
@@ -3255,9 +3377,6 @@ function dismissWelcome() {
           <span class="meta-chip" data-popup data-popup-title="Port aux Basques → Twillingate" data-popup-body="The longest driving day in Newfoundland. Trans-Canada Highway to Corner Brook, then Deer Lake, then the Road to the Isles to Twillingate. The landscape shifts from coastal mountains to boreal forest to the dramatic northern coast." data-popup-tip="Break it up: coffee in Corner Brook, lunch in Deer Lake, arrive Twillingate by late afternoon.">🚗 ~360 mi to Twillingate</span>
           <span class="meta-chip" data-popup data-popup-title="Drive Time: ~7.5 Hours" data-popup-body="Non-stop driving time. With meal stops and fuel, plan for 9+ hours door-to-door. The Trans-Canada is well-maintained but single-lane in many sections. Watch for moose — seriously." data-popup-tip="Moose are most active at dawn and dusk. They&#39;re dark-coloured and nearly invisible at night. Don&#39;t drive after dark if you can avoid it.">⏱ ~7.5 hours driving</span>
           <span class="meta-chip meta-chip-maps" data-popup data-popup-title="Download Google Maps — Do This Now" data-popup-body="Offline maps are essential for this drive. Cell coverage on the Trans-Canada through Newfoundland is minimal to non-existent between Port aux Basques and Gander &mdash; a 4+ hour stretch. The Road to the Isles to Twillingate is almost entirely without signal. How to download: In Google Maps, tap your profile photo &rarr; Offline maps &rarr; Select your own map. Cover all of Newfoundland and tap Download (1&ndash;2 GB). Once saved, your GPS navigates turn-by-turn with zero bars. Open the app as you normally would &mdash; it routes from the offline data automatically." data-popup-tip="If you downloaded offline maps in Portland, you&rsquo;re set. If not, do it now on the ferry&rsquo;s Wi-Fi before disembarking &mdash; you won&rsquo;t have another chance until Gander.">📵 Download Maps — Critical</span>
-        </div>
-        <div class="stop-actions">
-          <a class="btn-primary" href="https://maps.google.com/maps/dir/Port+aux+Basques+NL/Twillingate+NL" target="_blank" rel="noopener">🗺 Route</a>
         </div>
       </article>
       <article class="stop" role="listitem">
@@ -3356,6 +3475,27 @@ function dismissWelcome() {
       </div>
 
     </div>
+    <div class="nav-drive-bar">
+      <div class="nav-drive-label">
+        <div class="nav-drive-label-hat">Navigate to</div>
+        <div class="nav-drive-label-dest">Fogo Island Inn</div>
+      </div>
+      <div class="nav-drive-btns">
+        <a class="nav-drive-btn" href="https://www.google.com/maps/dir/?api=1&amp;destination=Fogo+Island+Inn,+Joe+Batts+Arm,+Newfoundland,+Canada&amp;travelmode=driving" target="_blank" rel="noopener" aria-label="Open in Google Maps" title="Google Maps">
+          <svg viewBox="0 0 24 24"><path fill="#4285F4" d="M12 2C8.13 2 5 5.13 5 9c0 1.74.5 3.37 1.41 4.84.95 1.54 2.2 2.86 3.16 4.4.47.75.81 1.45 1.17 2.26C11 21.05 11.21 22 12 22s1-.95 1.27-1.5c.36-.81.7-1.51 1.17-2.26.96-1.54 2.21-2.86 3.16-4.4C18.5 12.37 19 10.74 19 9c0-3.87-3.13-7-7-7zm0 9.75a2.75 2.75 0 1 1 0-5.5 2.75 2.75 0 0 1 0 5.5z"/></svg>
+          <span class="nav-drive-btn-label">Google</span>
+        </a>
+        <a class="nav-drive-btn" href="https://waze.com/ul?ll=49.7483,-54.1729&amp;navigate=yes" target="_blank" rel="noopener" aria-label="Open in Waze" title="Waze">
+          <svg viewBox="0 0 24 24"><path fill="#33ccff" d="M12 2C6.5 2 2 6 2 11c0 2.1.8 4.1 2.2 5.6-.5 1.8-1.4 3.8-2.2 5.4 2.8-.5 5.1-1.7 6.6-2.9.9.2 1.8.4 2.8.4h.6c5.5 0 10-4 10-9s-4.5-9-10-9z"/><circle fill="#fff" cx="8.5" cy="10.5" r="1.5"/><circle fill="#fff" cx="15.5" cy="10.5" r="1.5"/><path fill="none" stroke="#fff" stroke-width="1.2" stroke-linecap="round" d="M8.5 14.5c.8 1 2.2 1.5 3.5 1.5s2.7-.5 3.5-1.5"/></svg>
+          <span class="nav-drive-btn-label">Waze</span>
+        </a>
+        <a class="nav-drive-btn" href="https://maps.apple.com/?daddr=49.7483,-54.1729&amp;dirflg=d" target="_blank" rel="noopener" aria-label="Open in Apple Maps" title="Apple Maps">
+          <svg viewBox="0 0 24 24"><rect fill="#30D158" rx="5" width="24" height="24"/><path fill="#fff" d="M17.3 7.6c-.4-.5-.9-.8-1.5-1-.3-.1-.7-.1-1-.1-.5 0-1 .1-1.4.4l-.4.2-.4-.2c-.4-.2-.9-.4-1.4-.4-.3 0-.7 0-1 .1-.6.2-1.1.5-1.5 1-.8 1-1 2.6-.3 4.3.3.8.8 1.6 1.4 2.3.5.6 1.1 1.1 1.6 1.4.3.2.6.3.8.3h.1c.2 0 .5-.1.7-.3.5-.3 1.1-.8 1.6-1.4.6-.7 1.1-1.5 1.4-2.3.7-1.7.5-3.3-.3-4.3zm-2.4-.1c.5 0 .9.2 1.3.5-.4.2-.7.5-1 .9-.3.4-.5.9-.5 1.4h-.1c-.5 0-1-.2-1.3-.5.3-.4.7-.7 1.1-1 .2-.2.4-.3.5-.3z"/></svg>
+          <span class="nav-drive-btn-label">Apple</span>
+        </a>
+      </div>
+    </div>
+
     <div class="stops" role="list">
       <article class="stop is-ferry" role="listitem">
         <div class="stop-time">Day 6 · Morning <span class="stop-time-badge badge-ferry">⛴ Ferry</span></div>
@@ -3462,6 +3602,27 @@ function dismissWelcome() {
       </div>
 
     </div>
+    <div class="nav-drive-bar">
+      <div class="nav-drive-label">
+        <div class="nav-drive-label-hat">Navigate to</div>
+        <div class="nav-drive-label-dest">Port aux Basques Terminal</div>
+      </div>
+      <div class="nav-drive-btns">
+        <a class="nav-drive-btn" href="https://www.google.com/maps/dir/?api=1&amp;destination=Marine+Atlantic+Terminal,+Port+aux+Basques,+Newfoundland,+Canada&amp;travelmode=driving" target="_blank" rel="noopener" aria-label="Open in Google Maps" title="Google Maps">
+          <svg viewBox="0 0 24 24"><path fill="#4285F4" d="M12 2C8.13 2 5 5.13 5 9c0 1.74.5 3.37 1.41 4.84.95 1.54 2.2 2.86 3.16 4.4.47.75.81 1.45 1.17 2.26C11 21.05 11.21 22 12 22s1-.95 1.27-1.5c.36-.81.7-1.51 1.17-2.26.96-1.54 2.21-2.86 3.16-4.4C18.5 12.37 19 10.74 19 9c0-3.87-3.13-7-7-7zm0 9.75a2.75 2.75 0 1 1 0-5.5 2.75 2.75 0 0 1 0 5.5z"/></svg>
+          <span class="nav-drive-btn-label">Google</span>
+        </a>
+        <a class="nav-drive-btn" href="https://waze.com/ul?ll=47.5719,-59.1354&amp;navigate=yes" target="_blank" rel="noopener" aria-label="Open in Waze" title="Waze">
+          <svg viewBox="0 0 24 24"><path fill="#33ccff" d="M12 2C6.5 2 2 6 2 11c0 2.1.8 4.1 2.2 5.6-.5 1.8-1.4 3.8-2.2 5.4 2.8-.5 5.1-1.7 6.6-2.9.9.2 1.8.4 2.8.4h.6c5.5 0 10-4 10-9s-4.5-9-10-9z"/><circle fill="#fff" cx="8.5" cy="10.5" r="1.5"/><circle fill="#fff" cx="15.5" cy="10.5" r="1.5"/><path fill="none" stroke="#fff" stroke-width="1.2" stroke-linecap="round" d="M8.5 14.5c.8 1 2.2 1.5 3.5 1.5s2.7-.5 3.5-1.5"/></svg>
+          <span class="nav-drive-btn-label">Waze</span>
+        </a>
+        <a class="nav-drive-btn" href="https://maps.apple.com/?daddr=47.5719,-59.1354&amp;dirflg=d" target="_blank" rel="noopener" aria-label="Open in Apple Maps" title="Apple Maps">
+          <svg viewBox="0 0 24 24"><rect fill="#30D158" rx="5" width="24" height="24"/><path fill="#fff" d="M17.3 7.6c-.4-.5-.9-.8-1.5-1-.3-.1-.7-.1-1-.1-.5 0-1 .1-1.4.4l-.4.2-.4-.2c-.4-.2-.9-.4-1.4-.4-.3 0-.7 0-1 .1-.6.2-1.1.5-1.5 1-.8 1-1 2.6-.3 4.3.3.8.8 1.6 1.4 2.3.5.6 1.1 1.1 1.6 1.4.3.2.6.3.8.3h.1c.2 0 .5-.1.7-.3.5-.3 1.1-.8 1.6-1.4.6-.7 1.1-1.5 1.4-2.3.7-1.7.5-3.3-.3-4.3zm-2.4-.1c.5 0 .9.2 1.3.5-.4.2-.7.5-1 .9-.3.4-.5.9-.5 1.4h-.1c-.5 0-1-.2-1.3-.5.3-.4.7-.7 1.1-1 .2-.2.4-.3.5-.3z"/></svg>
+          <span class="nav-drive-btn-label">Apple</span>
+        </a>
+      </div>
+    </div>
+
     <div class="stops" role="list">
       <article class="stop is-ferry" role="listitem">
         <div class="stop-time">Morning <span class="stop-time-badge badge-ferry">⛴ Ferry</span></div>
@@ -3480,9 +3641,6 @@ function dismissWelcome() {
           <span class="meta-chip" data-popup data-popup-title="Farewell → Port aux Basques" data-popup-body="The long drive back across Newfoundland, retracing the Trans-Canada Highway. Same route as Day 5 in reverse, but with different light and perspective." data-popup-tip="Stock up on gas and snacks on Fogo — services are limited until Gander (2+ hours).">🚗 ~390 mi</span>
           <span class="meta-chip" data-popup data-popup-title="Drive Time: ~8 Hours" data-popup-body="Non-stop driving time across Newfoundland. With meal stops and fuel, plan for 9+ hours. Watch for moose, especially at dawn and dusk." data-popup-tip="Same route as Day 5 in reverse. Corner Brook and Deer Lake are the best rest stops.">⏱ ~8 hours</span>
           <span class="meta-chip" data-popup data-popup-title="Cell Coverage: Rural Newfoundland" data-popup-body="Same dead zones as Day 5, in reverse. Coverage is minimal to non-existent from Farewell all the way to Gander (~3.5 hours). It picks up slightly around Grand Falls-Windsor before dropping again. The stretch from Deer Lake to Port aux Basques has very limited service. Your offline maps are essential &mdash; open the Google Maps app as usual and it routes from the downloaded data automatically." data-popup-tip="Stock up on fuel and snacks before leaving the Fogo terminal area &mdash; the first reliable services are in Gander, 3.5 hours out, and you won&rsquo;t be able to search for anything en route.">📵 No Cell — Rural NL</span>
-        </div>
-        <div class="stop-actions">
-          <a class="btn-primary" href="https://maps.google.com/maps/dir/Farewell+NL/Port+aux+Basques+NL" target="_blank" rel="noopener">🗺 Route</a>
         </div>
       </article>
       <article class="stop" role="listitem">
@@ -3560,6 +3718,27 @@ function dismissWelcome() {
       </div>
 
     </div>
+    <div class="nav-drive-bar">
+      <div class="nav-drive-label">
+        <div class="nav-drive-label-hat">Navigate to</div>
+        <div class="nav-drive-label-dest">Pictou, NS</div>
+      </div>
+      <div class="nav-drive-btns">
+        <a class="nav-drive-btn" href="https://www.google.com/maps/dir/?api=1&amp;destination=Pictou,+Nova+Scotia,+Canada&amp;travelmode=driving" target="_blank" rel="noopener" aria-label="Open in Google Maps" title="Google Maps">
+          <svg viewBox="0 0 24 24"><path fill="#4285F4" d="M12 2C8.13 2 5 5.13 5 9c0 1.74.5 3.37 1.41 4.84.95 1.54 2.2 2.86 3.16 4.4.47.75.81 1.45 1.17 2.26C11 21.05 11.21 22 12 22s1-.95 1.27-1.5c.36-.81.7-1.51 1.17-2.26.96-1.54 2.21-2.86 3.16-4.4C18.5 12.37 19 10.74 19 9c0-3.87-3.13-7-7-7zm0 9.75a2.75 2.75 0 1 1 0-5.5 2.75 2.75 0 0 1 0 5.5z"/></svg>
+          <span class="nav-drive-btn-label">Google</span>
+        </a>
+        <a class="nav-drive-btn" href="https://waze.com/ul?ll=45.6768,-62.7086&amp;navigate=yes" target="_blank" rel="noopener" aria-label="Open in Waze" title="Waze">
+          <svg viewBox="0 0 24 24"><path fill="#33ccff" d="M12 2C6.5 2 2 6 2 11c0 2.1.8 4.1 2.2 5.6-.5 1.8-1.4 3.8-2.2 5.4 2.8-.5 5.1-1.7 6.6-2.9.9.2 1.8.4 2.8.4h.6c5.5 0 10-4 10-9s-4.5-9-10-9z"/><circle fill="#fff" cx="8.5" cy="10.5" r="1.5"/><circle fill="#fff" cx="15.5" cy="10.5" r="1.5"/><path fill="none" stroke="#fff" stroke-width="1.2" stroke-linecap="round" d="M8.5 14.5c.8 1 2.2 1.5 3.5 1.5s2.7-.5 3.5-1.5"/></svg>
+          <span class="nav-drive-btn-label">Waze</span>
+        </a>
+        <a class="nav-drive-btn" href="https://maps.apple.com/?daddr=45.6768,-62.7086&amp;dirflg=d" target="_blank" rel="noopener" aria-label="Open in Apple Maps" title="Apple Maps">
+          <svg viewBox="0 0 24 24"><rect fill="#30D158" rx="5" width="24" height="24"/><path fill="#fff" d="M17.3 7.6c-.4-.5-.9-.8-1.5-1-.3-.1-.7-.1-1-.1-.5 0-1 .1-1.4.4l-.4.2-.4-.2c-.4-.2-.9-.4-1.4-.4-.3 0-.7 0-1 .1-.6.2-1.1.5-1.5 1-.8 1-1 2.6-.3 4.3.3.8.8 1.6 1.4 2.3.5.6 1.1 1.1 1.6 1.4.3.2.6.3.8.3h.1c.2 0 .5-.1.7-.3.5-.3 1.1-.8 1.6-1.4.6-.7 1.1-1.5 1.4-2.3.7-1.7.5-3.3-.3-4.3zm-2.4-.1c.5 0 .9.2 1.3.5-.4.2-.7.5-1 .9-.3.4-.5.9-.5 1.4h-.1c-.5 0-1-.2-1.3-.5.3-.4.7-.7 1.1-1 .2-.2.4-.3.5-.3z"/></svg>
+          <span class="nav-drive-btn-label">Apple</span>
+        </a>
+      </div>
+    </div>
+
     <div class="stops" role="list">
       <article class="stop" role="listitem">
         <div class="stop-time">Morning</div>
@@ -3568,9 +3747,6 @@ function dismissWelcome() {
         <div class="stop-meta">
           <span class="meta-chip" data-popup data-popup-title="North Sydney → Pictou" data-popup-body="A relatively easy drive along the Trans-Canada and then north to the Northumberland Shore. Pictou is a small, historic town on the strait — a welcome change of pace after the Newfoundland marathon." data-popup-tip="The Northumberland Shore has some of the warmest salt water beaches in Nova Scotia — worth a detour if it&#39;s sunny.">🚗 ~165 mi</span>
           <span class="meta-chip" data-popup data-popup-title="Drive Time: ~3.5 Hours" data-popup-body="One of the easier driving days of the trip. Enjoy the slower pace and explore Pictou on foot." data-popup-tip="Use the extra time to visit the Hector Heritage Quay or walk along the waterfront.">⏱ ~3.5 hours</span>
-        </div>
-        <div class="stop-actions">
-          <a class="btn-primary" href="https://maps.google.com/maps/dir/North+Sydney+NS/Pictou+NS" target="_blank" rel="noopener">🗺 Route</a>
         </div>
       </article>
       <article class="stop" role="listitem">
@@ -3647,6 +3823,27 @@ function dismissWelcome() {
       </div>
 
     </div>
+    <div class="nav-drive-bar">
+      <div class="nav-drive-label">
+        <div class="nav-drive-label-hat">Navigate to</div>
+        <div class="nav-drive-label-dest">Fredericton, NB</div>
+      </div>
+      <div class="nav-drive-btns">
+        <a class="nav-drive-btn" href="https://www.google.com/maps/dir/?api=1&amp;destination=Fredericton,+New+Brunswick,+Canada&amp;travelmode=driving" target="_blank" rel="noopener" aria-label="Open in Google Maps" title="Google Maps">
+          <svg viewBox="0 0 24 24"><path fill="#4285F4" d="M12 2C8.13 2 5 5.13 5 9c0 1.74.5 3.37 1.41 4.84.95 1.54 2.2 2.86 3.16 4.4.47.75.81 1.45 1.17 2.26C11 21.05 11.21 22 12 22s1-.95 1.27-1.5c.36-.81.7-1.51 1.17-2.26.96-1.54 2.21-2.86 3.16-4.4C18.5 12.37 19 10.74 19 9c0-3.87-3.13-7-7-7zm0 9.75a2.75 2.75 0 1 1 0-5.5 2.75 2.75 0 0 1 0 5.5z"/></svg>
+          <span class="nav-drive-btn-label">Google</span>
+        </a>
+        <a class="nav-drive-btn" href="https://waze.com/ul?ll=45.9636,-66.6431&amp;navigate=yes" target="_blank" rel="noopener" aria-label="Open in Waze" title="Waze">
+          <svg viewBox="0 0 24 24"><path fill="#33ccff" d="M12 2C6.5 2 2 6 2 11c0 2.1.8 4.1 2.2 5.6-.5 1.8-1.4 3.8-2.2 5.4 2.8-.5 5.1-1.7 6.6-2.9.9.2 1.8.4 2.8.4h.6c5.5 0 10-4 10-9s-4.5-9-10-9z"/><circle fill="#fff" cx="8.5" cy="10.5" r="1.5"/><circle fill="#fff" cx="15.5" cy="10.5" r="1.5"/><path fill="none" stroke="#fff" stroke-width="1.2" stroke-linecap="round" d="M8.5 14.5c.8 1 2.2 1.5 3.5 1.5s2.7-.5 3.5-1.5"/></svg>
+          <span class="nav-drive-btn-label">Waze</span>
+        </a>
+        <a class="nav-drive-btn" href="https://maps.apple.com/?daddr=45.9636,-66.6431&amp;dirflg=d" target="_blank" rel="noopener" aria-label="Open in Apple Maps" title="Apple Maps">
+          <svg viewBox="0 0 24 24"><rect fill="#30D158" rx="5" width="24" height="24"/><path fill="#fff" d="M17.3 7.6c-.4-.5-.9-.8-1.5-1-.3-.1-.7-.1-1-.1-.5 0-1 .1-1.4.4l-.4.2-.4-.2c-.4-.2-.9-.4-1.4-.4-.3 0-.7 0-1 .1-.6.2-1.1.5-1.5 1-.8 1-1 2.6-.3 4.3.3.8.8 1.6 1.4 2.3.5.6 1.1 1.1 1.6 1.4.3.2.6.3.8.3h.1c.2 0 .5-.1.7-.3.5-.3 1.1-.8 1.6-1.4.6-.7 1.1-1.5 1.4-2.3.7-1.7.5-3.3-.3-4.3zm-2.4-.1c.5 0 .9.2 1.3.5-.4.2-.7.5-1 .9-.3.4-.5.9-.5 1.4h-.1c-.5 0-1-.2-1.3-.5.3-.4.7-.7 1.1-1 .2-.2.4-.3.5-.3z"/></svg>
+          <span class="nav-drive-btn-label">Apple</span>
+        </a>
+      </div>
+    </div>
+
     <div class="stops" role="list">
       <article class="stop" role="listitem">
         <div class="stop-time">Morning</div>
@@ -3655,9 +3852,6 @@ function dismissWelcome() {
         <div class="stop-meta">
           <span class="meta-chip" data-popup data-popup-title="Pictou → Fredericton" data-popup-body="Across Nova Scotia into New Brunswick, with a stop at Hopewell Rocks on the Bay of Fundy. The drive passes through Moncton and follows the Saint John River valley into Fredericton." data-popup-tip="Time your Hopewell Rocks visit for low tide — check the tide schedule online the night before.">🚗 ~300 mi</span>
           <span class="meta-chip" data-popup data-popup-title="Drive Time: ~6 Hours" data-popup-body="Drive time from Pictou to Fredericton via Hopewell Rocks. Factor in 1.5–2 hours at the rocks themselves. Plan your departure based on the low-tide schedule." data-popup-tip="Low tide at Hopewell is the experience — walking among the flowerpot rocks on the ocean floor.">⏱ ~6 hours</span>
-        </div>
-        <div class="stop-actions">
-          <a class="btn-primary" href="https://maps.google.com/maps/dir/Pictou+NS/Fredericton+NB" target="_blank" rel="noopener">🗺 Route</a>
         </div>
       </article>
       <article class="stop" role="listitem">
@@ -3734,6 +3928,27 @@ function dismissWelcome() {
       </div>
 
     </div>
+    <div class="nav-drive-bar">
+      <div class="nav-drive-label">
+        <div class="nav-drive-label-hat">Navigate to</div>
+        <div class="nav-drive-label-dest">Portland, ME</div>
+      </div>
+      <div class="nav-drive-btns">
+        <a class="nav-drive-btn" href="https://www.google.com/maps/dir/?api=1&amp;destination=Portland,+Maine,+USA&amp;travelmode=driving" target="_blank" rel="noopener" aria-label="Open in Google Maps" title="Google Maps">
+          <svg viewBox="0 0 24 24"><path fill="#4285F4" d="M12 2C8.13 2 5 5.13 5 9c0 1.74.5 3.37 1.41 4.84.95 1.54 2.2 2.86 3.16 4.4.47.75.81 1.45 1.17 2.26C11 21.05 11.21 22 12 22s1-.95 1.27-1.5c.36-.81.7-1.51 1.17-2.26.96-1.54 2.21-2.86 3.16-4.4C18.5 12.37 19 10.74 19 9c0-3.87-3.13-7-7-7zm0 9.75a2.75 2.75 0 1 1 0-5.5 2.75 2.75 0 0 1 0 5.5z"/></svg>
+          <span class="nav-drive-btn-label">Google</span>
+        </a>
+        <a class="nav-drive-btn" href="https://waze.com/ul?ll=43.6591,-70.2568&amp;navigate=yes" target="_blank" rel="noopener" aria-label="Open in Waze" title="Waze">
+          <svg viewBox="0 0 24 24"><path fill="#33ccff" d="M12 2C6.5 2 2 6 2 11c0 2.1.8 4.1 2.2 5.6-.5 1.8-1.4 3.8-2.2 5.4 2.8-.5 5.1-1.7 6.6-2.9.9.2 1.8.4 2.8.4h.6c5.5 0 10-4 10-9s-4.5-9-10-9z"/><circle fill="#fff" cx="8.5" cy="10.5" r="1.5"/><circle fill="#fff" cx="15.5" cy="10.5" r="1.5"/><path fill="none" stroke="#fff" stroke-width="1.2" stroke-linecap="round" d="M8.5 14.5c.8 1 2.2 1.5 3.5 1.5s2.7-.5 3.5-1.5"/></svg>
+          <span class="nav-drive-btn-label">Waze</span>
+        </a>
+        <a class="nav-drive-btn" href="https://maps.apple.com/?daddr=43.6591,-70.2568&amp;dirflg=d" target="_blank" rel="noopener" aria-label="Open in Apple Maps" title="Apple Maps">
+          <svg viewBox="0 0 24 24"><rect fill="#30D158" rx="5" width="24" height="24"/><path fill="#fff" d="M17.3 7.6c-.4-.5-.9-.8-1.5-1-.3-.1-.7-.1-1-.1-.5 0-1 .1-1.4.4l-.4.2-.4-.2c-.4-.2-.9-.4-1.4-.4-.3 0-.7 0-1 .1-.6.2-1.1.5-1.5 1-.8 1-1 2.6-.3 4.3.3.8.8 1.6 1.4 2.3.5.6 1.1 1.1 1.6 1.4.3.2.6.3.8.3h.1c.2 0 .5-.1.7-.3.5-.3 1.1-.8 1.6-1.4.6-.7 1.1-1.5 1.4-2.3.7-1.7.5-3.3-.3-4.3zm-2.4-.1c.5 0 .9.2 1.3.5-.4.2-.7.5-1 .9-.3.4-.5.9-.5 1.4h-.1c-.5 0-1-.2-1.3-.5.3-.4.7-.7 1.1-1 .2-.2.4-.3.5-.3z"/></svg>
+          <span class="nav-drive-btn-label">Apple</span>
+        </a>
+      </div>
+    </div>
+
     <div class="stops" role="list">
       <article class="stop" role="listitem">
         <div class="stop-time">Morning</div>
@@ -3743,9 +3958,6 @@ function dismissWelcome() {
           <span class="meta-chip" data-popup data-popup-title="Fredericton → Portland" data-popup-body="The final drive home. South through New Brunswick, crossing back into Maine at Houlton, then I-95 all the way to Portland. The landscape shifts from Maritime forest to familiar New England." data-popup-tip="Budget 30 min for the border crossing back into the US. Declare any purchases over $800 per person.">🚗 ~320 mi</span>
           <span class="meta-chip" data-popup data-popup-title="Drive Time: ~6 Hours" data-popup-body="Without stops. Add time for the border crossing, fuel, and the optional Hartland or Freeport detours." data-popup-tip="Fill up with gas in New Brunswick — it&#39;s often cheaper than Maine.">⏱ ~6 hours</span>
           <span class="meta-chip" data-popup data-popup-title="Canada–US Border Return" data-popup-body="Re-entering the US at Houlton, ME. Have your passports ready and be prepared to declare any goods purchased in Canada. Duty-free shops are at the border if you want last-minute souvenirs." data-popup-tip="Keep receipts for any major purchases. The personal exemption is $800 USD after 48+ hours abroad.">🛂 Canada–US Border</span>
-        </div>
-        <div class="stop-actions">
-          <a class="btn-primary" href="https://maps.google.com/maps/dir/Fredericton+NB/Portland+ME" target="_blank" rel="noopener">🗺 Route</a>
         </div>
       </article>
       <article class="stop" role="listitem">
