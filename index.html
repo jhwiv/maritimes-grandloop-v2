@@ -1841,6 +1841,44 @@ body:has(#search-card.open) #a2hs-banner{display:none!important}
   border-color:var(--gold);
   background:rgba(201,169,110,.1);
 }
+.map-day-info{
+  display:none;flex-wrap:wrap;gap:12px 20px;
+  align-items:center;justify-content:center;
+  margin-bottom:var(--sp12);
+  padding:10px 14px;
+  border-radius:10px;
+  background:rgba(201,169,110,.06);
+  border:1px solid rgba(201,169,110,.15);
+}
+.map-day-info.visible{display:flex}
+.map-day-info-item{
+  display:flex;align-items:center;gap:6px;
+  font-family:'DM Mono',monospace;
+  font-size:10px;letter-spacing:.03em;
+  text-transform:uppercase;
+  color:rgba(255,255,255,.7);
+}
+.map-day-info-item svg{
+  width:14px;height:14px;flex-shrink:0;
+  fill:none;stroke:var(--gold);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;
+}
+.map-day-info-value{
+  color:var(--gold);font-weight:600;
+}
+.map-day-info-route{
+  width:100%;
+  text-align:center;
+  font-family:'DM Mono',monospace;
+  font-size:9px;letter-spacing:.03em;
+  color:rgba(255,255,255,.45);
+  margin-top:2px;
+}
+body.map-fullscreen .map-day-info{
+  position:absolute;top:52px;left:12px;right:54px;z-index:9010;
+  background:rgba(17,29,43,.88);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  border-color:rgba(201,169,110,.2);
+  font-size:9px;padding:8px 12px;
+}
 .map-legend{
   display:flex;flex-wrap:wrap;gap:12px;
   margin-top:var(--sp8);
@@ -4221,6 +4259,7 @@ function dismissWelcome() {
     <button class="map-filter-chip" data-day="11">D11 Fredericton</button>
     <button class="map-filter-chip" data-day="12">D12 Home</button>
   </div>
+  <div class="map-day-info" id="map-day-info"></div>
 
   <div class="map-wrap">
     <div id="route-map"></div>
@@ -5092,6 +5131,69 @@ onScroll();
   var group = L.featureGroup(markers);
   map.fitBounds(group.getBounds().pad(0.08));
 
+  // ── Day distance & drive-time data ──
+  var dayInfo = {
+    '1':   { route:'Arrive in Portland, ME', miles:null, drive:null, ferry:null, note:'Starting point — no driving today' },
+    '2':   { route:'Portland → Saint John → Digby', miles:298, drive:'5h 15m', ferry:'2h 15m (Fundy Rose)', note:null },
+    '3':   { route:'Digby → Lunenburg (Lighthouse Route)', miles:93, drive:'2h 15m', ferry:null, note:null },
+    '4':   { route:'Lunenburg → North Sydney → Ferry', miles:297, drive:'5h 45m', ferry:'6h 30m (Marine Atlantic)', note:null },
+    '5':   { route:'Port aux Basques → Corner Brook → Twillingate', miles:388, drive:'7h', ferry:null, note:'Longest driving day' },
+    '6-8': { route:'Twillingate → Farewell → Fogo Island', miles:50, drive:'1h 15m', ferry:'45m (Fogo Island ferry)', note:'3 nights on Fogo Island' },
+    '9':   { route:'Fogo Island → Farewell → Port aux Basques → Ferry', miles:388, drive:'7h', ferry:'6h 30m + 45m (Marine Atlantic + Fogo)', note:null },
+    '10':  { route:'North Sydney → Pictou', miles:160, drive:'3h 20m', ferry:null, note:null },
+    '11':  { route:'Pictou → Hopewell Rocks → Fredericton', miles:254, drive:'4h 45m', ferry:null, note:'Includes Bay of Fundy stop' },
+    '12':  { route:'Fredericton → Portland (Home)', miles:322, drive:'5h 50m', ferry:null, note:null }
+  };
+
+  var dayInfoEl = document.getElementById('map-day-info');
+
+  function updateDayInfo(day) {
+    if (!dayInfoEl) return;
+    if (day === 'all' || !dayInfo[day]) {
+      dayInfoEl.classList.remove('visible');
+      dayInfoEl.innerHTML = '';
+      return;
+    }
+    var d = dayInfo[day];
+    var html = '';
+
+    // Route label
+    html += '<div class="map-day-info-route">' + d.route + '</div>';
+
+    // Miles
+    if (d.miles) {
+      html += '<div class="map-day-info-item">'
+        + '<svg viewBox="0 0 24 24"><path d="M3 12h4l3-9 4 18 3-9h4"/></svg>'
+        + '<span class="map-day-info-value">' + d.miles + ' mi</span>'
+        + '</div>';
+    }
+
+    // Drive time
+    if (d.drive) {
+      html += '<div class="map-day-info-item">'
+        + '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>'
+        + '<span class="map-day-info-value">' + d.drive + ' drive</span>'
+        + '</div>';
+    }
+
+    // Ferry time
+    if (d.ferry) {
+      html += '<div class="map-day-info-item">'
+        + '<svg viewBox="0 0 24 24"><path d="M2 20l2-2c2-2 6-2 8 0s6 2 8 0l2 2"/><path d="M4 18V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12"/><path d="M12 2v4"/><path d="M8 6h8"/></svg>'
+        + '<span class="map-day-info-value">' + d.ferry + '</span>'
+        + '</div>';
+    }
+
+    // Note
+    if (!d.miles && d.note) {
+      html += '<div class="map-day-info-item" style="color:rgba(255,255,255,.45)">'
+        + d.note + '</div>';
+    }
+
+    dayInfoEl.innerHTML = html;
+    dayInfoEl.classList.add('visible');
+  }
+
   // ── Day filtering ──
   var filterBtns = document.querySelectorAll('#map-filters .map-filter-chip');
   filterBtns.forEach(function(btn) {
@@ -5099,6 +5201,9 @@ onScroll();
       filterBtns.forEach(function(b) { b.classList.remove('active'); });
       btn.classList.add('active');
       var day = btn.dataset.day;
+
+      // Update miles/drive-time info bar
+      updateDayInfo(day);
 
       markers.forEach(function(m) {
         if (day === 'all' || m._dayTag === day) { m.addTo(map); }
