@@ -1853,8 +1853,23 @@ body:has(#search-card.open) #a2hs-banner{display:none!important}
   border-radius:12px;
   background:rgba(201,169,110,.10);
   border:1px solid rgba(201,169,110,.25);
+  position:relative;
 }
 .map-day-info.visible{display:flex}
+.map-day-info-close{
+  position:absolute;top:8px;right:10px;
+  width:26px;height:26px;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.15);
+  border-radius:50%;cursor:pointer;
+  color:rgba(255,255,255,.6);
+  font-size:14px;line-height:1;
+  transition:background .15s,color .15s;
+}
+.map-day-info-close:hover{
+  background:rgba(255,255,255,.18);color:#fff;
+}
 .map-day-info-item{
   display:flex;align-items:center;gap:8px;
   font-family:'DM Mono',monospace;
@@ -5209,9 +5224,18 @@ onScroll();
         + d.note + '</div>';
     }
 
+    // Close button
+    html += '<button class="map-day-info-close" aria-label="Close drive info" onclick="closeDayInfo()">✕</button>';
+
     dayInfoEl.innerHTML = html;
     dayInfoEl.classList.add('visible');
   }
+
+  window.closeDayInfo = function() {
+    if (!dayInfoEl) return;
+    dayInfoEl.classList.remove('visible');
+    dayInfoEl.innerHTML = '';
+  };
 
   // ── Day filtering ──
   var filterBtns = document.querySelectorAll('#map-filters .map-filter-chip');
