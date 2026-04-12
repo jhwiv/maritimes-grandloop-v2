@@ -1880,10 +1880,27 @@ body:has(#search-card.open) #a2hs-banner{display:none!important}
 }
 body.map-fullscreen .map-day-info{
   position:absolute;top:52px;left:12px;right:54px;z-index:9010;
-  background:rgba(17,29,43,.94);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
-  border-color:rgba(201,169,110,.35);
-  font-size:13px;padding:14px 18px;
-  box-shadow:0 4px 20px rgba(0,0,0,.4);
+  background:rgba(17,29,43,.95);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border-color:rgba(201,169,110,.45);
+  padding:18px 22px;
+  box-shadow:0 4px 24px rgba(0,0,0,.5);
+}
+body.map-fullscreen .map-day-info-route{
+  font-size:15px;letter-spacing:.05em;
+  color:rgba(255,255,255,.95);
+  font-weight:600;
+  margin-bottom:4px;
+}
+body.map-fullscreen .map-day-info-item{
+  font-size:16px;gap:10px;
+  color:#fff;
+}
+body.map-fullscreen .map-day-info-item svg{
+  width:22px;height:22px;
+  stroke-width:2.2;
+}
+body.map-fullscreen .map-day-info-value{
+  color:#e8cc7a;font-weight:700;font-size:17px;
 }
 .map-legend{
   display:flex;flex-wrap:wrap;gap:12px;
