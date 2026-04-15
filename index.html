@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="build-version" content="20260415_0900">
+<meta name="build-version" content="20260415_0915">
 <meta name="theme-color" content="#111D2B">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -166,6 +166,8 @@ img{display:block;max-width:100%}
   display:flex;flex-direction:column;
   justify-content:center;
   opacity:0;
+  will-change:transform;
+  -webkit-transform:translateZ(0);transform:translateZ(0);
 }
 #site-header.scrolled{
   box-shadow:0 2px 20px rgba(0,0,0,.35);
@@ -216,6 +218,12 @@ img{display:block;max-width:100%}
   .hdr-row-1,.hdr-row-2,.hdr-row-3{gap:4px 5px}
 }
 
+
+/* ── REDUCE BACKDROP-FILTER ON MOBILE FOR SCROLL PERF ── */
+@media(max-width:600px){
+  #site-header{backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+  #ferry-bar,.float-menu-bar{backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+}
 /* ── FERRY ALERT BAR ───────────────────────────── */
 #ferry-bar{
   position:fixed;
@@ -404,6 +412,8 @@ img{display:block;max-width:100%}
 .content-section:first-of-type{
   border-top:none;
 }
+/* Paint containment — skip rendering off-screen day sections */
+.day-break{content-visibility:auto;contain-intrinsic-size:auto 2000px}
 /* Visual break between day sections */
 .day-break .content-section{
   border-top:4px solid var(--navy2);
@@ -822,6 +832,7 @@ img{display:block;max-width:100%}
 }
 .conn-alert-chips{display:flex;flex-wrap:wrap;gap:5px}
 @keyframes chip-pulse{0%,100%{box-shadow:0 0 0 0 rgba(5,150,105,.55)}50%{box-shadow:0 0 0 5px rgba(5,150,105,0)}}
+@media(prefers-reduced-motion:reduce){.meta-chip-maps{animation:none!important}.sv-pin-dot{animation:none!important}}
 .meta-chip-maps{
   background:rgba(5,150,105,.15)!important;
   border-color:rgba(5,150,105,.6)!important;
@@ -1211,7 +1222,7 @@ table.rtbl tr:nth-child(even) td{background:rgba(240,237,230,.5)}
   width:0%;z-index:195;
   transition:width .1s linear;
   opacity:.8;
-}
+;will-change:width;-webkit-transform:translateZ(0);transform:translateZ(0)}
 
 /* ── TRANSITIONS ────────────────────────────────── */
 #page-fade{
@@ -2456,6 +2467,7 @@ body.hero-visible #ferry-chip{
   opacity:0;pointer-events:none;
   transform:translateY(8px);
   transition:opacity .3s,transform .3s;
+  will-change:transform,opacity;
 }
 #float-menu.visible{opacity:1;pointer-events:all;transform:none}
 .float-btn{
@@ -4927,6 +4939,11 @@ let lastScroll = 0;
 let lastActiveSection = 'section-day1';
 let scrollRafPending = false;
 
+// Cache DOM lookups once — avoid querySelectorAll in hot scroll path
+const cachedNavChips = Array.from(document.querySelectorAll('.nav-chip'));
+const cachedHdrH = 84; // matches --hdr token, avoids getComputedStyle per frame
+const cachedSectionEls = sections.map(s => ({ id: s.id, el: document.getElementById(s.id) }));
+
 function onScroll() {
   if (scrollRafPending) return;
   scrollRafPending = true;
@@ -4943,24 +4960,24 @@ function onScroll() {
     const pct = docH > 0 ? Math.min(100, (scroll / docH) * 100) : 0;
     progressBar.style.width = pct + '%';
 
-    // Scroll spy — use offsetTop to avoid forced reflow
-    const hdrH = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--hdr')) || 56;
-    const scrollTop = scroll + hdrH + 40;
+    // Scroll spy — cached elements, no getComputedStyle
+    const scrollTop = scroll + cachedHdrH + 40;
     let activeSection = 'hero';
-    sections.forEach(s => {
-      const el = document.getElementById(s.id);
-      if (el && el.offsetTop <= scrollTop) activeSection = s.id;
-    });
+    for (let i = 0; i < cachedSectionEls.length; i++) {
+      const s = cachedSectionEls[i];
+      if (s.el && s.el.offsetTop <= scrollTop) activeSection = s.id;
+    }
 
     if (activeSection !== lastActiveSection && !navTapLock) {
       lastActiveSection = activeSection;
-      document.querySelectorAll('.nav-chip').forEach(chip => {
+      for (let i = 0; i < cachedNavChips.length; i++) {
+        const chip = cachedNavChips[i];
         const isActive = chip.dataset.target === activeSection;
         chip.classList.toggle('active', isActive);
         if (isActive && hdrLabel) {
           hdrLabel.textContent = chip.textContent;
         }
-      });
+      }
       if (typeof updateFabJump === 'function') updateFabJump(activeSection);
     }
 
@@ -5136,14 +5153,21 @@ const floatMenu = document.getElementById('float-menu');
     fadeAnim = null;
   }
 
+  var lastCheckHeroTime = 0;
+  var lastCheckHeroResult = false;
   function shouldShowHeader() {
+    // Throttle getBoundingClientRect to every 100ms — it forces layout
+    var now = performance.now();
+    if (now - lastCheckHeroTime < 100) return lastCheckHeroResult;
+    lastCheckHeroTime = now;
     var heroBottom = heroEl.getBoundingClientRect().bottom;
-    if (heroBottom > 10) return false;
+    if (heroBottom > 10) { lastCheckHeroResult = false; return false; }
     if (condensedSection) {
       var hdrH = hdr.offsetHeight || 90;
       var csBottom = condensedSection.getBoundingClientRect().bottom;
-      if (csBottom > -hdrH) return false;
+      if (csBottom > -hdrH) { lastCheckHeroResult = false; return false; }
     }
+    lastCheckHeroResult = true;
     return true;
   }
 
