@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="build-version" content="20260415_0930">
+<meta name="build-version" content="20260415_0950">
 <meta name="theme-color" content="#111D2B">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -259,72 +259,29 @@ img{display:block;max-width:100%}
 
 /* ── PRINT STYLES ────────────────────────────────── */
 @media print{
-  /* Hide everything except the targeted print section */
-  body.printing *{visibility:hidden!important}
-  body.printing .print-target,
-  body.printing .print-target *{visibility:visible!important}
-  body.printing .print-target{
-    position:absolute;top:0;left:0;right:0;
-    width:100%!important;max-width:100%!important;
-    padding:0 24px!important;margin:0!important;
-  }
+  /* ── PRINT OVERLAY STRATEGY ──
+     printSection() clones the target into #print-overlay.
+     Everything else is display:none so zero blank pages. */
 
-  /* Hide all non-content elements */
-  body.printing #site-header,
-  body.printing #ferry-bar,
-  body.printing #float-menu,
-  body.printing #hero,
-  body.printing .chat-fab,
-  body.printing .chat-window,
-  body.printing .print-btn,
-  body.printing .print-bar,
-  body.printing .nav-app-btns,
-  body.printing .wx-card,
-  body.printing .meta-chip-maps,
-  body.printing .stop-pron,
-  body.printing .location-banner,
-  body.printing .day-banner,
-  body.printing .fbar-text,
-  body.printing #progress-bar,
-  body.printing .float-btn,
-  body.printing #offline-bar,
-  body.printing .sv-img-panel,
-  body.printing .conn-alert,
-  body.printing footer,
-  body.printing .surv-rule{
+  /* Hide the entire page */
+  body.printing > *:not(#print-overlay){
     display:none!important;
   }
 
-  /* Clean typography for print */
-  body.printing .print-target{
-    font-family:'Crimson Pro',Georgia,serif!important;
-    font-size:11pt!important;
-    line-height:1.5!important;
-    color:#000!important;
+  /* Show only the print overlay */
+  #print-overlay{
+    display:block!important;
+    position:static!important;
+    width:100%!important;
+    max-width:100%!important;
+    padding:0!important;
+    margin:0!important;
     background:#fff!important;
   }
-  body.printing .print-target h2{
-    font-family:'Playfair Display',Georgia,serif!important;
-    font-size:18pt!important;
-    color:#000!important;
-    margin-bottom:8pt!important;
-    border-bottom:1px solid #ccc;
-    padding-bottom:4pt;
-  }
-  body.printing .print-target h3{
-    font-family:'Playfair Display',Georgia,serif!important;
-    font-size:13pt!important;
-    color:#222!important;
-    margin:12pt 0 4pt!important;
-  }
-  body.printing .print-target p{
-    color:#333!important;
-    margin-bottom:6pt!important;
-  }
 
-  /* Print header watermark */
-  body.printing .print-target::before{
-    content:'Maritimes Grand Loop · Summer 2026';
+  /* Watermark header */
+  #print-overlay::before{
+    content:'Maritimes Grand Loop \B7  Summer 2026';
     display:block;
     font-family:'DM Mono',monospace;
     font-size:8pt;
@@ -334,16 +291,41 @@ img{display:block;max-width:100%}
     padding-bottom:8pt;
     margin-bottom:12pt;
     border-bottom:2px solid #1B2838;
-    visibility:visible!important;
   }
 
-  /* Tables print cleanly */
-  body.printing .rtbl{
+  /* Clean typography */
+  #print-overlay{
+    font-family:'Crimson Pro',Georgia,serif!important;
+    font-size:11pt!important;
+    line-height:1.5!important;
+    color:#000!important;
+  }
+  #print-overlay h2{
+    font-family:'Playfair Display',Georgia,serif!important;
+    font-size:18pt!important;
+    color:#000!important;
+    margin-bottom:8pt!important;
+    border-bottom:1px solid #ccc;
+    padding-bottom:4pt;
+  }
+  #print-overlay h3{
+    font-family:'Playfair Display',Georgia,serif!important;
+    font-size:13pt!important;
+    color:#222!important;
+    margin:12pt 0 4pt!important;
+  }
+  #print-overlay p{
+    color:#333!important;
+    margin-bottom:6pt!important;
+  }
+
+  /* Tables */
+  #print-overlay .rtbl{
     width:100%!important;
     border-collapse:collapse!important;
     font-size:10pt!important;
   }
-  body.printing .rtbl th{
+  #print-overlay .rtbl th{
     background:#f0f0f0!important;
     color:#000!important;
     font-weight:700!important;
@@ -351,111 +333,111 @@ img{display:block;max-width:100%}
     border:1px solid #ccc!important;
     text-align:left!important;
   }
-  body.printing .rtbl td{
+  #print-overlay .rtbl td{
     padding:5pt 8pt!important;
     border:1px solid #ddd!important;
     color:#333!important;
   }
-  body.printing .rtbl a{
+  #print-overlay .rtbl a{
     color:#333!important;
     text-decoration:none!important;
   }
-  body.printing .rtbl a::after{
+  #print-overlay .rtbl a::after{
     content:' (' attr(href) ')';
     font-size:8pt;
     color:#666;
   }
 
-  /* Condensed itinerary print styles */
-  body.printing .cond-day{
+  /* Condensed itinerary */
+  #print-overlay .cond-day{
     margin-bottom:8pt!important;
     padding:6pt 0!important;
     border-bottom:1px solid #eee!important;
     background:transparent!important;
   }
-  body.printing .cond-day-label{
+  #print-overlay .cond-day-label{
     font-weight:700!important;
     color:#000!important;
     font-size:11pt!important;
   }
-  body.printing .cond-row{
+  #print-overlay .cond-row{
     color:#333!important;
     padding:2pt 0!important;
   }
-  body.printing .cond-time{
+  #print-overlay .cond-time{
     color:#666!important;
     font-weight:600!important;
     min-width:60pt!important;
   }
-  body.printing .cond-badge{
+  #print-overlay .cond-badge{
     border:1px solid #999!important;
     color:#666!important;
     background:transparent!important;
     font-size:8pt!important;
     padding:1pt 4pt!important;
   }
-  body.printing .cond-header{
+  #print-overlay .cond-header{
     text-align:center!important;
     margin-bottom:12pt!important;
   }
-  body.printing .cond-title{
+  #print-overlay .cond-title{
     font-family:'Playfair Display',Georgia,serif!important;
     font-size:20pt!important;
     color:#000!important;
   }
-  body.printing .cond-eyebrow{
+  #print-overlay .cond-eyebrow{
     color:#666!important;
   }
-  body.printing .cond-divider{
+  #print-overlay .cond-divider{
     margin-top:12pt!important;
     border-top:2px solid #ccc!important;
     padding-top:8pt!important;
     background:transparent!important;
   }
-  body.printing .cond-divider-label{
+  #print-overlay .cond-divider-label{
     color:#000!important;
     font-weight:700!important;
   }
 
   /* Essentials grid */
-  body.printing .ess-grid{
+  #print-overlay .ess-grid{
     display:grid!important;
     grid-template-columns:1fr 1fr!important;
     gap:8pt!important;
   }
-  body.printing .ess-item{
+  #print-overlay .ess-item{
     padding:6pt!important;
     border:1px solid #ddd!important;
     border-radius:4pt!important;
     background:#fafafa!important;
   }
-  body.printing .ess-label{
+  #print-overlay .ess-label{
     color:#666!important;
     font-size:9pt!important;
     text-transform:uppercase!important;
   }
-  body.printing .ess-value{
+  #print-overlay .ess-value{
     color:#000!important;
     font-size:10pt!important;
   }
-  body.printing .ess-badge{
+  #print-overlay .ess-badge{
     color:#333!important;
   }
 
-  /* Day section print */
-  body.printing .day-header{
+  /* Day sections */
+  #print-overlay .day-header{
     display:block!important;
   }
-  body.printing .day-title{
+  #print-overlay .day-title{
     font-size:18pt!important;
     color:#000!important;
   }
-  body.printing .day-intro{
+  #print-overlay .day-intro{
     color:#444!important;
     font-style:italic!important;
     margin-bottom:8pt!important;
   }
-  body.printing .drive-info-panel{
+  #print-overlay .drive-info-panel{
     border:1px solid #ccc!important;
     background:#f8f8f8!important;
     padding:8pt 12pt!important;
@@ -463,45 +445,45 @@ img{display:block;max-width:100%}
     border-radius:4pt!important;
     page-break-inside:avoid;
   }
-  body.printing .drive-info-row{
+  #print-overlay .drive-info-row{
     color:#000!important;
     font-size:10pt!important;
   }
-  body.printing .drive-info-label{
+  #print-overlay .drive-info-label{
     color:#666!important;
   }
-  body.printing .drive-info-value{
+  #print-overlay .drive-info-value{
     color:#000!important;
     font-weight:700!important;
   }
-  body.printing .drive-info-detail{
+  #print-overlay .drive-info-detail{
     color:#666!important;
   }
-  body.printing .drive-info-dest-link{
+  #print-overlay .drive-info-dest-link{
     color:#333!important;
   }
-  body.printing .drive-info-dest-link::after{
+  #print-overlay .drive-info-dest-link::after{
     content:' (' attr(href) ')';
     font-size:8pt;
     color:#666;
   }
 
   /* Stop cards */
-  body.printing .stop-title{
+  #print-overlay .stop-title{
     font-size:12pt!important;
     color:#222!important;
     page-break-after:avoid;
   }
-  body.printing .stop-body{
+  #print-overlay .stop-body{
     color:#333!important;
     font-size:10pt!important;
   }
-  body.printing .stop-note{
+  #print-overlay .stop-note{
     color:#555!important;
     font-size:9pt!important;
     font-style:italic!important;
   }
-  body.printing .meta-chip{
+  #print-overlay .meta-chip{
     border:1px solid #ccc!important;
     background:transparent!important;
     color:#555!important;
@@ -510,49 +492,66 @@ img{display:block;max-width:100%}
   }
 
   /* Reference section */
-  body.printing .ref-block{
+  #print-overlay .ref-block{
     margin-bottom:12pt!important;
     page-break-inside:avoid;
   }
-  body.printing .ref-title{
+  #print-overlay .ref-title{
     font-size:13pt!important;
     color:#000!important;
     font-weight:700!important;
     margin-bottom:6pt!important;
   }
-  body.printing .ref-note{
+  #print-overlay .ref-note{
     color:#555!important;
     font-size:9pt!important;
     font-style:italic!important;
   }
 
-  /* Survival section */
-  body.printing .accordion{
+  /* Survival accordions */
+  #print-overlay .accordion{
     border:1px solid #ddd!important;
     margin:4pt 0!important;
     background:transparent!important;
   }
-  body.printing .accordion-body{
+  #print-overlay .accordion-body{
     max-height:none!important;
     overflow:visible!important;
     padding:6pt 12pt!important;
   }
-  body.printing .accordion-hdr{
+  #print-overlay .accordion-hdr{
     font-weight:700!important;
     color:#000!important;
     font-size:11pt!important;
   }
 
   /* Page breaks */
-  body.printing .content-section{
+  #print-overlay .content-section{
     page-break-before:auto;
+  }
+  #print-overlay .stop-title{
+    page-break-after:avoid;
+  }
+  #print-overlay .ref-block{
     page-break-inside:avoid;
   }
-  body.printing .day-break{
-    page-break-before:always;
+
+  /* Kill all backgrounds, shadows, border-radius for clean print */
+  #print-overlay *{
+    box-shadow:none!important;
+    text-shadow:none!important;
   }
-  body.printing .ref-block{
-    page-break-inside:avoid;
+  #print-overlay .content-section{
+    background:#fff!important;
+    border:none!important;
+    padding:0!important;
+    margin:0!important;
+    max-width:100%!important;
+  }
+  #print-overlay .day-break{
+    background:#fff!important;
+    min-height:auto!important;
+    padding:0!important;
   }
 }
 
@@ -5265,26 +5264,45 @@ function printSection(sectionId) {
   var section = document.getElementById(sectionId);
   if (!section) return;
 
-  // Mark the section as the print target
-  section.classList.add('print-target');
-  document.body.classList.add('printing');
+  // Remove any leftover overlay from a previous print
+  var old = document.getElementById('print-overlay');
+  if (old) old.remove();
 
-  // For accordion sections — temporarily expand all for print
-  var closedAccordions = [];
-  section.querySelectorAll('.accordion:not(.open)').forEach(function(acc) {
+  // Clone the section into an overlay div
+  var overlay = document.createElement('div');
+  overlay.id = 'print-overlay';
+  var clone = section.cloneNode(true);
+  clone.removeAttribute('id');
+
+  // Expand all accordions in the clone so they print open
+  clone.querySelectorAll('.accordion:not(.open)').forEach(function(acc) {
     acc.classList.add('open');
-    closedAccordions.push(acc);
+    var body = acc.querySelector('.accordion-body');
+    if (body) body.style.maxHeight = 'none';
   });
 
-  // Small delay to let styles apply, then print
+  // Remove non-printable elements from clone
+  var removeSelectors = [
+    '.print-bar', '.print-btn', '.nav-app-btns', '.wx-card',
+    '.meta-chip-maps', '.stop-pron', '.location-banner',
+    '.day-banner', '.sv-img-panel', '.chat-fab', '.chat-window'
+  ];
+  removeSelectors.forEach(function(sel) {
+    clone.querySelectorAll(sel).forEach(function(el) { el.remove(); });
+  });
+
+  overlay.appendChild(clone);
+  document.body.appendChild(overlay);
+  document.body.classList.add('printing');
+
+  // Small delay for styles to apply
   setTimeout(function() {
     window.print();
 
-    // Clean up after print dialog closes
+    // Clean up after print dialog
     setTimeout(function() {
-      section.classList.remove('print-target');
       document.body.classList.remove('printing');
-      closedAccordions.forEach(function(acc) { acc.classList.remove('open'); });
+      overlay.remove();
     }, 500);
   }, 100);
 }
