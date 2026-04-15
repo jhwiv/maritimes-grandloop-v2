@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="build-version" content="20260415_0915">
+<meta name="build-version" content="20260415_0930">
 <meta name="theme-color" content="#111D2B">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -218,6 +218,343 @@ img{display:block;max-width:100%}
   .hdr-row-1,.hdr-row-2,.hdr-row-3{gap:4px 5px}
 }
 
+
+
+/* ── PRINT BUTTON ────────────────────────────────── */
+.print-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  font-family:'DM Mono',monospace;
+  font-size:10px;letter-spacing:.06em;
+  text-transform:uppercase;
+  color:var(--steel);
+  background:transparent;
+  border:1px solid var(--divider);
+  border-radius:6px;
+  padding:6px 12px;
+  cursor:pointer;
+  transition:all .18s;
+  -webkit-tap-highlight-color:transparent;
+}
+.print-btn:hover{
+  color:var(--navy);
+  border-color:var(--gold);
+  background:rgba(201,169,110,.08);
+}
+.print-btn:active{transform:scale(.96)}
+.print-btn svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.print-bar{
+  display:flex;justify-content:flex-end;
+  padding:4px 0 8px;
+}
+/* Light-themed sections need slightly different styling */
+.light-theme .print-btn,.content-section .print-btn{
+  color:var(--steel);
+  border-color:var(--divider);
+}
+.light-theme .print-btn:hover,.content-section .print-btn:hover{
+  color:var(--navy);
+  border-color:var(--gold);
+  background:rgba(201,169,110,.08);
+}
+
+/* ── PRINT STYLES ────────────────────────────────── */
+@media print{
+  /* Hide everything except the targeted print section */
+  body.printing *{visibility:hidden!important}
+  body.printing .print-target,
+  body.printing .print-target *{visibility:visible!important}
+  body.printing .print-target{
+    position:absolute;top:0;left:0;right:0;
+    width:100%!important;max-width:100%!important;
+    padding:0 24px!important;margin:0!important;
+  }
+
+  /* Hide all non-content elements */
+  body.printing #site-header,
+  body.printing #ferry-bar,
+  body.printing #float-menu,
+  body.printing #hero,
+  body.printing .chat-fab,
+  body.printing .chat-window,
+  body.printing .print-btn,
+  body.printing .print-bar,
+  body.printing .nav-app-btns,
+  body.printing .wx-card,
+  body.printing .meta-chip-maps,
+  body.printing .stop-pron,
+  body.printing .location-banner,
+  body.printing .day-banner,
+  body.printing .fbar-text,
+  body.printing #progress-bar,
+  body.printing .float-btn,
+  body.printing #offline-bar,
+  body.printing .sv-img-panel,
+  body.printing .conn-alert,
+  body.printing footer,
+  body.printing .surv-rule{
+    display:none!important;
+  }
+
+  /* Clean typography for print */
+  body.printing .print-target{
+    font-family:'Crimson Pro',Georgia,serif!important;
+    font-size:11pt!important;
+    line-height:1.5!important;
+    color:#000!important;
+    background:#fff!important;
+  }
+  body.printing .print-target h2{
+    font-family:'Playfair Display',Georgia,serif!important;
+    font-size:18pt!important;
+    color:#000!important;
+    margin-bottom:8pt!important;
+    border-bottom:1px solid #ccc;
+    padding-bottom:4pt;
+  }
+  body.printing .print-target h3{
+    font-family:'Playfair Display',Georgia,serif!important;
+    font-size:13pt!important;
+    color:#222!important;
+    margin:12pt 0 4pt!important;
+  }
+  body.printing .print-target p{
+    color:#333!important;
+    margin-bottom:6pt!important;
+  }
+
+  /* Print header watermark */
+  body.printing .print-target::before{
+    content:'Maritimes Grand Loop · Summer 2026';
+    display:block;
+    font-family:'DM Mono',monospace;
+    font-size:8pt;
+    color:#999;
+    text-transform:uppercase;
+    letter-spacing:.1em;
+    padding-bottom:8pt;
+    margin-bottom:12pt;
+    border-bottom:2px solid #1B2838;
+    visibility:visible!important;
+  }
+
+  /* Tables print cleanly */
+  body.printing .rtbl{
+    width:100%!important;
+    border-collapse:collapse!important;
+    font-size:10pt!important;
+  }
+  body.printing .rtbl th{
+    background:#f0f0f0!important;
+    color:#000!important;
+    font-weight:700!important;
+    padding:6pt 8pt!important;
+    border:1px solid #ccc!important;
+    text-align:left!important;
+  }
+  body.printing .rtbl td{
+    padding:5pt 8pt!important;
+    border:1px solid #ddd!important;
+    color:#333!important;
+  }
+  body.printing .rtbl a{
+    color:#333!important;
+    text-decoration:none!important;
+  }
+  body.printing .rtbl a::after{
+    content:' (' attr(href) ')';
+    font-size:8pt;
+    color:#666;
+  }
+
+  /* Condensed itinerary print styles */
+  body.printing .cond-day{
+    margin-bottom:8pt!important;
+    padding:6pt 0!important;
+    border-bottom:1px solid #eee!important;
+    background:transparent!important;
+  }
+  body.printing .cond-day-label{
+    font-weight:700!important;
+    color:#000!important;
+    font-size:11pt!important;
+  }
+  body.printing .cond-row{
+    color:#333!important;
+    padding:2pt 0!important;
+  }
+  body.printing .cond-time{
+    color:#666!important;
+    font-weight:600!important;
+    min-width:60pt!important;
+  }
+  body.printing .cond-badge{
+    border:1px solid #999!important;
+    color:#666!important;
+    background:transparent!important;
+    font-size:8pt!important;
+    padding:1pt 4pt!important;
+  }
+  body.printing .cond-header{
+    text-align:center!important;
+    margin-bottom:12pt!important;
+  }
+  body.printing .cond-title{
+    font-family:'Playfair Display',Georgia,serif!important;
+    font-size:20pt!important;
+    color:#000!important;
+  }
+  body.printing .cond-eyebrow{
+    color:#666!important;
+  }
+  body.printing .cond-divider{
+    margin-top:12pt!important;
+    border-top:2px solid #ccc!important;
+    padding-top:8pt!important;
+    background:transparent!important;
+  }
+  body.printing .cond-divider-label{
+    color:#000!important;
+    font-weight:700!important;
+  }
+
+  /* Essentials grid */
+  body.printing .ess-grid{
+    display:grid!important;
+    grid-template-columns:1fr 1fr!important;
+    gap:8pt!important;
+  }
+  body.printing .ess-item{
+    padding:6pt!important;
+    border:1px solid #ddd!important;
+    border-radius:4pt!important;
+    background:#fafafa!important;
+  }
+  body.printing .ess-label{
+    color:#666!important;
+    font-size:9pt!important;
+    text-transform:uppercase!important;
+  }
+  body.printing .ess-value{
+    color:#000!important;
+    font-size:10pt!important;
+  }
+  body.printing .ess-badge{
+    color:#333!important;
+  }
+
+  /* Day section print */
+  body.printing .day-header{
+    display:block!important;
+  }
+  body.printing .day-title{
+    font-size:18pt!important;
+    color:#000!important;
+  }
+  body.printing .day-intro{
+    color:#444!important;
+    font-style:italic!important;
+    margin-bottom:8pt!important;
+  }
+  body.printing .drive-info-panel{
+    border:1px solid #ccc!important;
+    background:#f8f8f8!important;
+    padding:8pt 12pt!important;
+    margin:8pt 0!important;
+    border-radius:4pt!important;
+    page-break-inside:avoid;
+  }
+  body.printing .drive-info-row{
+    color:#000!important;
+    font-size:10pt!important;
+  }
+  body.printing .drive-info-label{
+    color:#666!important;
+  }
+  body.printing .drive-info-value{
+    color:#000!important;
+    font-weight:700!important;
+  }
+  body.printing .drive-info-detail{
+    color:#666!important;
+  }
+  body.printing .drive-info-dest-link{
+    color:#333!important;
+  }
+  body.printing .drive-info-dest-link::after{
+    content:' (' attr(href) ')';
+    font-size:8pt;
+    color:#666;
+  }
+
+  /* Stop cards */
+  body.printing .stop-title{
+    font-size:12pt!important;
+    color:#222!important;
+    page-break-after:avoid;
+  }
+  body.printing .stop-body{
+    color:#333!important;
+    font-size:10pt!important;
+  }
+  body.printing .stop-note{
+    color:#555!important;
+    font-size:9pt!important;
+    font-style:italic!important;
+  }
+  body.printing .meta-chip{
+    border:1px solid #ccc!important;
+    background:transparent!important;
+    color:#555!important;
+    font-size:8pt!important;
+    padding:2pt 6pt!important;
+  }
+
+  /* Reference section */
+  body.printing .ref-block{
+    margin-bottom:12pt!important;
+    page-break-inside:avoid;
+  }
+  body.printing .ref-title{
+    font-size:13pt!important;
+    color:#000!important;
+    font-weight:700!important;
+    margin-bottom:6pt!important;
+  }
+  body.printing .ref-note{
+    color:#555!important;
+    font-size:9pt!important;
+    font-style:italic!important;
+  }
+
+  /* Survival section */
+  body.printing .accordion{
+    border:1px solid #ddd!important;
+    margin:4pt 0!important;
+    background:transparent!important;
+  }
+  body.printing .accordion-body{
+    max-height:none!important;
+    overflow:visible!important;
+    padding:6pt 12pt!important;
+  }
+  body.printing .accordion-hdr{
+    font-weight:700!important;
+    color:#000!important;
+    font-size:11pt!important;
+  }
+
+  /* Page breaks */
+  body.printing .content-section{
+    page-break-before:auto;
+    page-break-inside:avoid;
+  }
+  body.printing .day-break{
+    page-break-before:always;
+  }
+  body.printing .ref-block{
+    page-break-inside:avoid;
+  }
+}
 
 /* ── REDUCE BACKDROP-FILTER ON MOBILE FOR SCROLL PERF ── */
 @media(max-width:600px){
@@ -2892,6 +3229,7 @@ function dismissWelcome() {
       <div class="cond-eyebrow">At a Glance</div>
       <div class="cond-title">12-Day Maritime Loop</div>
     </div>
+    <div class="print-bar"><button class="print-btn" onclick="printSection('section-condensed')" aria-label="Print Print Overview"><svg viewBox="0 0 24 24"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg> Print Overview</button></div>
 
     <!-- DAY 1: PORTLAND -->
     <div class="cond-day">
@@ -3007,6 +3345,7 @@ function dismissWelcome() {
     <div class="day-header">
       <div>
         <h2 class="day-title">Portland, ME</h2>
+        <div class="print-bar"><button class="print-btn" onclick="printSection('section-day1')" aria-label="Print Print"><svg viewBox="0 0 24 24"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg> Print</button></div>
         <p class="day-intro">Meet up, unwind, and ease into the trip. Old Port stroll with Molly and Bonie, then an early dinner before the long drive north tomorrow.</p>
       </div>
       <div class="wx-card" role="button" tabindex="0" aria-label="Portland, ME weather — tap for expanded view" id="wx-day1" data-wx-city="Portland, ME" data-wx-date="Saturday, June 27" data-wx-datestr="2026-06-27" data-wx-lat="43.6591" data-wx-lng="-70.2568" data-wx-tz="America/New_York" data-wx-ext="https://www.accuweather.com/en/us/portland/04101/weather-forecast/329157" onclick="openWxModal(this)">
@@ -3112,6 +3451,7 @@ function dismissWelcome() {
             <a class="drive-info-dest-link" href="https://www.fundyrestaurant.com/suites" target="_blank" rel="noopener">Fundy Complex Dockside Suites <span class="drive-info-arrow">→</span></a>
           </div>
         </div>
+        <div class="print-bar"><button class="print-btn" onclick="printSection('section-day2')" aria-label="Print this section"><svg viewBox="0 0 24 24"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg> Print</button></div>
         <p class="day-intro">Drive north to Saint John, NB, then take the Fundy Rose ferry across the Bay of Fundy to Digby, Nova Scotia.</p>
       </div>
       <div class="wx-card" role="button" tabindex="0" aria-label="Digby, NS weather — tap for expanded view" id="wx-day2" data-wx-city="Digby, NS" data-wx-date="Sunday, June 28" data-wx-datestr="2026-06-28" data-wx-lat="44.6217" data-wx-lng="-65.7573" data-wx-tz="America/Halifax" data-wx-ext="https://www.accuweather.com/en/ca/digby/b0v/weather-forecast/1152" onclick="openWxModal(this)">
@@ -3238,6 +3578,7 @@ function dismissWelcome() {
             <a class="drive-info-dest-link" href="https://smugglerscoveinn.ca/" target="_blank" rel="noopener">Smugglers Cove Inn <span class="drive-info-arrow">→</span></a>
           </div>
         </div>
+        <div class="print-bar"><button class="print-btn" onclick="printSection('section-day3')" aria-label="Print this section"><svg viewBox="0 0 24 24"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg> Print</button></div>
         <p class="day-intro">Scenic coastal drive along the South Shore to Lunenburg — a UNESCO World Heritage town. Colourful waterfront, the Bluenose II, and outstanding seafood.</p>
       </div>
       <div class="wx-card" role="button" tabindex="0" aria-label="Lunenburg, NS weather — tap for expanded view" id="wx-day3" data-wx-city="Lunenburg, NS" data-wx-date="Monday, June 29" data-wx-datestr="2026-06-29" data-wx-lat="44.3716" data-wx-lng="-64.3093" data-wx-tz="America/Halifax" data-wx-ext="https://www.accuweather.com/en/ca/lunenburg/b0j/weather-forecast/54728" onclick="openWxModal(this)">
@@ -3335,6 +3676,7 @@ function dismissWelcome() {
             <a class="drive-info-dest-link" href="https://www.marineatlantic.ca/" target="_blank" rel="noopener">Marine Atlantic Terminal <span class="drive-info-arrow">→</span></a>
           </div>
         </div>
+        <div class="print-bar"><button class="print-btn" onclick="printSection('section-day4')" aria-label="Print this section"><svg viewBox="0 0 24 24"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg> Print</button></div>
         <p class="day-intro">Early departure. Long drive to North Sydney, then board the Marine Atlantic overnight ferry to Newfoundland. Sleep on the water.</p>
       </div>
       <div class="wx-card" role="button" tabindex="0" aria-label="North Sydney, NS weather — tap for expanded view" id="wx-day4" data-wx-city="North Sydney, NS" data-wx-date="Tuesday, June 30" data-wx-datestr="2026-06-30" data-wx-lat="46.2170" data-wx-lng="-60.2490" data-wx-tz="America/Halifax" data-wx-ext="https://www.accuweather.com/en/ca/north-sydney/b2a/weather-forecast/54828" onclick="openWxModal(this)">
@@ -3434,6 +3776,7 @@ function dismissWelcome() {
             <a class="drive-info-dest-link" href="https://twillingate.com/" target="_blank" rel="noopener">Anchor Inn Hotel & Suites <span class="drive-info-arrow">→</span></a>
           </div>
         </div>
+        <div class="print-bar"><button class="print-btn" onclick="printSection('section-day5')" aria-label="Print this section"><svg viewBox="0 0 24 24"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg> Print</button></div>
         <p class="day-intro">Welcome to Newfoundland. Drive across the island — the Trans-Canada Highway passes through Corner Brook and Deer Lake before turning east to the iceberg capital, Twillingate.</p>
       </div>
       <div class="wx-card" role="button" tabindex="0" aria-label="Twillingate, NL weather — tap for expanded view" id="wx-day5" data-wx-city="Twillingate, NL" data-wx-date="Wednesday, July 1" data-wx-datestr="2026-07-01" data-wx-lat="49.6500" data-wx-lng="-54.7667" data-wx-tz="America/St_Johns" data-wx-ext="https://www.accuweather.com/en/ca/twillingate/a0g/weather-forecast/54408" onclick="openWxModal(this)">
@@ -3563,6 +3906,7 @@ function dismissWelcome() {
             <a class="drive-info-dest-link" href="https://fogoislandinn.ca/" target="_blank" rel="noopener">Fogo Island Inn <span class="drive-info-arrow">→</span></a>
           </div>
         </div>
+        <div class="print-bar"><button class="print-btn" onclick="printSection('section-fogo')" aria-label="Print this section"><svg viewBox="0 0 24 24"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg> Print</button></div>
         <p class="day-intro">The crown jewel of the trip. Three nights at the world-renowned Fogo Island Inn on one of the four corners of the earth. Remote, stunning, and utterly unique.</p>
       </div>
       <div class="wx-card" role="button" tabindex="0" aria-label="Fogo Island, NL weather — tap for expanded view" id="wx-fogo" data-wx-city="Fogo Island, NL" data-wx-date="Thursday, July 2" data-wx-datestr="2026-07-02" data-wx-lat="49.7167" data-wx-lng="-54.1833" data-wx-tz="America/St_Johns" data-wx-ext="https://www.accuweather.com/en/ca/fogo-island/a0g/weather-forecast/3383537" onclick="openWxModal(this)">
@@ -3691,6 +4035,7 @@ function dismissWelcome() {
             <a class="drive-info-dest-link" href="https://www.marineatlantic.ca/" target="_blank" rel="noopener">Marine Atlantic Terminal <span class="drive-info-arrow">→</span></a>
           </div>
         </div>
+        <div class="print-bar"><button class="print-btn" onclick="printSection('section-day9')" aria-label="Print this section"><svg viewBox="0 0 24 24"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg> Print</button></div>
         <p class="day-intro">Say goodbye to Fogo Island. Ferry back to the mainland, then drive across Newfoundland to Port aux Basques for the overnight return ferry.</p>
       </div>
       <div class="wx-card" role="button" tabindex="0" aria-label="North Sydney, NS weather — tap for expanded view" id="wx-day9" data-wx-city="North Sydney, NS" data-wx-date="Sunday, July 5" data-wx-datestr="2026-07-05" data-wx-lat="46.2170" data-wx-lng="-60.2490" data-wx-tz="America/Halifax" data-wx-ext="https://www.accuweather.com/en/ca/north-sydney/b2a/weather-forecast/54828" onclick="openWxModal(this)">
@@ -3808,6 +4153,7 @@ function dismissWelcome() {
             <a class="drive-info-dest-link" href="https://scotsmaninn.com/" target="_blank" rel="noopener">The Scotsman Inn <span class="drive-info-arrow">→</span></a>
           </div>
         </div>
+        <div class="print-bar"><button class="print-btn" onclick="printSection('section-day10')" aria-label="Print this section"><svg viewBox="0 0 24 24"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg> Print</button></div>
         <p class="day-intro">Morning arrival in Nova Scotia. Easy drive to Pictou — birthplace of New Scotland, known for its Scottish heritage and the Hector ship museum.</p>
       </div>
       <div class="wx-card" role="button" tabindex="0" aria-label="Pictou, NS weather — tap for expanded view" id="wx-day10" data-wx-city="Pictou, NS" data-wx-date="Monday, July 6" data-wx-datestr="2026-07-06" data-wx-lat="45.6793" data-wx-lng="-62.7108" data-wx-tz="America/Halifax" data-wx-ext="https://www.accuweather.com/en/ca/pictou/b0k/weather-forecast/54691" onclick="openWxModal(this)">
@@ -3914,6 +4260,7 @@ function dismissWelcome() {
             <a class="drive-info-dest-link" href="https://www.marriott.com/en-us/hotels/yfcdf-delta-hotels-fredericton/overview/" target="_blank" rel="noopener">Delta Hotels by Marriott <span class="drive-info-arrow">→</span></a>
           </div>
         </div>
+        <div class="print-bar"><button class="print-btn" onclick="printSection('section-day11')" aria-label="Print this section"><svg viewBox="0 0 24 24"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg> Print</button></div>
         <p class="day-intro">Drive through New Brunswick to the provincial capital. Stroll the Saint John River waterfront and enjoy a final Maritime evening.</p>
       </div>
       <div class="wx-card" role="button" tabindex="0" aria-label="Fredericton, NB weather — tap for expanded view" id="wx-day11" data-wx-city="Fredericton, NB" data-wx-date="Tuesday, July 7" data-wx-datestr="2026-07-07" data-wx-lat="45.9636" data-wx-lng="-66.6431" data-wx-tz="America/Halifax" data-wx-ext="https://www.accuweather.com/en/ca/fredericton/e3b/weather-forecast/1001" onclick="openWxModal(this)">
@@ -4020,6 +4367,7 @@ function dismissWelcome() {
             <a class="drive-info-dest-link" href="https://www.marriott.com/en-us/hotels/pwmcd-courtyard-portland-downtown-waterfront/overview/" target="_blank" rel="noopener">Courtyard by Marriott Portland <span class="drive-info-arrow">→</span></a>
           </div>
         </div>
+        <div class="print-bar"><button class="print-btn" onclick="printSection('section-day12')" aria-label="Print this section"><svg viewBox="0 0 24 24"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg> Print</button></div>
         <p class="day-intro">The final drive home. Cross back into the US and return to Portland, ME. Full circle — 12 days, three provinces, one unforgettable island.</p>
       </div>
       <div class="wx-card" role="button" tabindex="0" aria-label="Portland, ME weather — tap for expanded view" id="wx-day12" data-wx-city="Portland, ME" data-wx-date="Wednesday, July 8" data-wx-datestr="2026-07-08" data-wx-lat="43.6591" data-wx-lng="-70.2568" data-wx-tz="America/New_York" data-wx-ext="https://www.accuweather.com/en/us/portland/04101/weather-forecast/329157" onclick="openWxModal(this)">
@@ -4094,6 +4442,7 @@ function dismissWelcome() {
       <div class="essentials-eyebrow">Quick Reference</div>
       <h2 class="essentials-title">Trip Essentials</h2>
     </div>
+    <div class="print-bar"><button class="print-btn" onclick="printSection('section-essentials')" aria-label="Print Print Essentials"><svg viewBox="0 0 24 24"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg> Print Essentials</button></div>
     <div class="ess-grid">
       <div class="ess-item">
         <div class="ess-label">Trip</div>
@@ -4142,6 +4491,7 @@ function dismissWelcome() {
       <div class="section-eyebrow">Reference</div>
       <h2 class="section-title">Lodging, Ferries &amp; Survival</h2>
     </div>
+    <div class="print-bar"><button class="print-btn" onclick="printSection('section-reference')" aria-label="Print Print Reference"><svg viewBox="0 0 24 24"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg> Print Reference</button></div>
 
     <div class="ref-block">
       <div class="ref-title">Confirmed Lodging Summary</div>
@@ -4907,6 +5257,36 @@ function dismissFerryBar() {
   const fb = document.getElementById('ferry-bar');
   fb.classList.add('hidden');
   ferryBarDismissed = true;
+}
+
+
+// ── SECTION PRINT ─────────────────────────────────────
+function printSection(sectionId) {
+  var section = document.getElementById(sectionId);
+  if (!section) return;
+
+  // Mark the section as the print target
+  section.classList.add('print-target');
+  document.body.classList.add('printing');
+
+  // For accordion sections — temporarily expand all for print
+  var closedAccordions = [];
+  section.querySelectorAll('.accordion:not(.open)').forEach(function(acc) {
+    acc.classList.add('open');
+    closedAccordions.push(acc);
+  });
+
+  // Small delay to let styles apply, then print
+  setTimeout(function() {
+    window.print();
+
+    // Clean up after print dialog closes
+    setTimeout(function() {
+      section.classList.remove('print-target');
+      document.body.classList.remove('printing');
+      closedAccordions.forEach(function(acc) { acc.classList.remove('open'); });
+    }, 500);
+  }, 100);
 }
 
 // ── SCROLL BEHAVIORS ───────────────────────────────────
