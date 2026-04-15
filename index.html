@@ -81,8 +81,8 @@ img{display:block;max-width:100%}
 .drive-info-panel{
   margin:8px 0 16px;
   padding:10px 14px;
-  background:rgba(255,255,255,0.04);
-  border:1px solid rgba(201,169,110,.15);
+  background:var(--navy2);
+  border:1px solid rgba(201,169,110,.2);
   border-radius:10px;
 }
 .drive-info-row{
@@ -95,7 +95,7 @@ img{display:block;max-width:100%}
   color:var(--cream);
 }
 .drive-info-row + .drive-info-row{
-  border-top:1px solid rgba(201,169,110,.08);
+  border-top:1px solid rgba(201,169,110,.1);
 }
 .drive-info-icon{
   font-size:14px;
@@ -119,7 +119,7 @@ img{display:block;max-width:100%}
 }
 .drive-info-detail{
   font-size:12px;
-  color:var(--muted);
+  color:var(--steel);
   margin-left:auto;
   text-align:right;
   white-space:nowrap;
@@ -147,23 +147,6 @@ img{display:block;max-width:100%}
 }
 .drive-info-dest-row{
   padding-top:6px;
-}
-/* Light theme support */
-.light-theme .drive-info-panel{
-  background:rgba(0,0,0,.03);
-  border-color:rgba(0,0,0,.08);
-}
-.light-theme .drive-info-row{
-  color:var(--body);
-}
-.light-theme .drive-info-value{
-  color:var(--navy);
-}
-.light-theme .drive-info-dest-link{
-  color:var(--blue)!important;
-}
-.light-theme .drive-info-dest-link:hover{
-  color:var(--navy)!important;
 }
 /* Responsive */
 @media(max-width:420px){
