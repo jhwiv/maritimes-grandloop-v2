@@ -64,7 +64,9 @@
   --r6:6px;--r9:9px;--r12:12px;
   --hdr:84px;
 }
-html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;-webkit-overflow-scrolling:touch}
+html{-webkit-text-size-adjust:100%;scroll-behavior:auto;-webkit-overflow-scrolling:touch}
+.page-fade-out{opacity:0;transition:opacity .25s ease-out}
+.page-fade-in{opacity:1;transition:opacity .3s ease-in}
 body{
   font-family:'Crimson Pro',Georgia,serif;
   background:var(--navy2);
@@ -5202,12 +5204,28 @@ function restoreChipTransitions() {
   });
 }
 
+let _navFading = false;
+function fadeScrollTo(top, callback) {
+  if (_navFading) { window.scrollTo(0, top); if (callback) callback(); return; }
+  _navFading = true;
+  const main = document.documentElement;
+  main.classList.remove('page-fade-in');
+  main.classList.add('page-fade-out');
+  setTimeout(() => {
+    window.scrollTo(0, top);
+    main.classList.remove('page-fade-out');
+    main.classList.add('page-fade-in');
+    if (callback) callback();
+    setTimeout(() => { main.classList.remove('page-fade-in'); _navFading = false; }, 320);
+  }, 260);
+}
+
 function navTo(sectionId, btn) {
   // Always lock scroll spy during navigation, even without a btn reference
   navTapLock = true;
   lastActiveSection = sectionId;
   clearTimeout(navTapTimer);
-  navTapTimer = setTimeout(() => { navTapLock = false; }, 1500);
+  navTapTimer = setTimeout(() => { navTapLock = false; }, 1800);
 
   // Suppress transitions to prevent flicker during chip swap
   suppressChipTransitions();
@@ -5231,7 +5249,7 @@ function navTo(sectionId, btn) {
   restoreChipTransitions();
 
   if (sectionId === 'hero') {
-    try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch(e) { window.scrollTo(0, 0); }
+    fadeScrollTo(0);
     return;
   }
 
@@ -5241,7 +5259,7 @@ function navTo(sectionId, btn) {
   // For condensed section, scroll to show AT A GLANCE at top (no header offset since header is hidden)
   if (sectionId === 'section-condensed') {
     const targetTop = section.getBoundingClientRect().top + window.scrollY - 12;
-    try { window.scrollTo({ top: targetTop, behavior: 'smooth' }); } catch(e) { window.scrollTo(0, targetTop); }
+    fadeScrollTo(targetTop);
     return;
   }
 
@@ -5262,7 +5280,7 @@ function navTo(sectionId, btn) {
   const gap = 20;
   const targetTop = Math.max(0, scrollTarget.getBoundingClientRect().top + window.scrollY - hdrH - gap);
 
-  try { window.scrollTo({ top: targetTop, behavior: 'smooth' }); } catch(e) { window.scrollTo(0, targetTop); }
+  fadeScrollTo(targetTop);
 }
 
 // ── DYNAMIC HEADER HEIGHT ───────────────────────
@@ -5488,7 +5506,7 @@ document.querySelectorAll('.accordion-hdr').forEach(btn => {
 });
 
 // Back to top buttons
-function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+function scrollToTop() { fadeScrollTo(0); }
 const footerTopBtn = document.getElementById('footer-top-btn');
 if (footerTopBtn) footerTopBtn.addEventListener('click', scrollToTop);
 
@@ -6145,7 +6163,7 @@ onScroll();
   var fabTopBtn = document.getElementById('fab-top-btn');
   if (fabJumpBtn) fabJumpBtn.addEventListener('click', fabJump);
   if (fabTriggerBtn) fabTriggerBtn.addEventListener('click', toggleFab);
-  if (fabTopBtn) fabTopBtn.addEventListener('click', function() { window.scrollTo({ top: 0, behavior: 'smooth' }); });
+  if (fabTopBtn) fabTopBtn.addEventListener('click', function() { fadeScrollTo(0); });
 })();
 </script>
 
