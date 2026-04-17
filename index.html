@@ -768,8 +768,8 @@ img{display:block;max-width:100%}
 .content-section:first-of-type{
   border-top:none;
 }
-/* Paint containment — skip rendering off-screen day sections */
-.day-break{content-visibility:auto;contain-intrinsic-size:auto 2000px}
+/* Paint containment disabled — intrinsic-size mismatch caused visible scroll jumps. */
+.day-break{/* content-visibility:auto; */}
 /* Visual break between day sections */
 .day-break .content-section{
   border-top:4px solid var(--navy2);
