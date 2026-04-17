@@ -5485,6 +5485,12 @@ function navTo(sectionId, btn) {
     return;
   }
 
+  // Show header immediately so the jump lands on a solid nav bar
+  // (prevents Map section bleeding through a fading-in translucent header)
+  if (typeof window.__showHeaderInstant === 'function') {
+    window.__showHeaderInstant();
+  }
+
   const section = document.getElementById(sectionId);
   if (!section) return;
 
@@ -5841,6 +5847,17 @@ const floatMenu = document.getElementById('float-menu');
     setHeaderOpacity(0);
     fadeAnim = null;
   }
+
+  // Expose an instant-show helper for programmatic navigation (avoids
+  // see-through header during the 800ms fade-in after a jump)
+  window.__showHeaderInstant = function() {
+    if (fadeAnim) cancelAnimationFrame(fadeAnim);
+    fadeAnim = null;
+    setHeaderOpacity(1);
+    headerVisible = true;
+    hdr.classList.add('scrolled');
+    document.body.classList.remove('hero-visible');
+  };
 
   var lastCheckHeroTime = 0;
   var lastCheckHeroResult = false;
