@@ -8,12 +8,18 @@ That endpoint is implemented as a Cloudflare Pages Function in
 The architecture is patterned on `vigil-family-advisor/server/email.ts`
 (Cloudflare Pages + SendGrid), which is what the user already operates.
 
+The form collects only **category** + a free-text **message** + auto-
+attached device/page context. There is no sender-email field — replies
+go from Chip to whoever pings him separately.
+
 ## Hosting reality check
 
 This repo currently ships via **GitHub Pages** (see `CNAME`). GitHub Pages
 is a pure static host and **cannot execute Pages Functions** — the
-`/api/feedback` POST will return 404 there, and the UI will surface a
-graceful error telling the traveler to email Chip directly.
+`/api/feedback` POST returns **HTTP 405 (method not allowed)** there, and
+the UI surfaces a graceful error pointing the traveler at
+`ChipWilkes@gmail.com` directly. Live in-app email delivery only works
+after migrating to Cloudflare Pages and setting `SENDGRID_API_KEY`.
 
 To make the button actually deliver email, the site needs to run on a
 host that executes the Function. The cheapest path that matches Vigil's
