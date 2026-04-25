@@ -1,0 +1,20 @@
+# Cloudflare Pages config — required for the /api/feedback Pages Function
+# (functions/api/feedback.ts) that delivers in-app feedback email via SendGrid.
+#
+# This file is only meaningful when the site is deployed on Cloudflare Pages.
+# It has no effect on GitHub Pages (which ignores it and cannot run Functions).
+# See FEEDBACK_DEPLOYMENT.md for the full runbook.
+
+name = "maritimes-grandloop"
+compatibility_date = "2025-01-01"
+pages_build_output_dir = "."
+
+[vars]
+# Override at deploy time if these defaults are not appropriate.
+# SENDGRID_FROM_EMAIL must be a SendGrid-verified sender.
+FEEDBACK_TO         = "ChipWilkes@gmail.com"
+SENDGRID_FROM_EMAIL = "no-reply@maritimesgrandloop.com"
+SENDGRID_FROM_NAME  = "Maritimes Grand Loop"
+
+# Secrets (set via `wrangler pages secret put <NAME> --project-name=maritimes-grandloop`):
+#   SENDGRID_API_KEY   — SendGrid API key with Mail Send permission

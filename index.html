@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="build-version" content="20260415_1040">
+<meta name="build-version" content="20260425_1100">
 <meta name="theme-color" content="#111D2B">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -2209,6 +2209,167 @@ body:has(#search-card.open) #a2hs-banner{display:none!important}
   margin:0 8px;
 }
 
+/* ── FEEDBACK FAB + PANEL ───────────────────────── */
+#feedback-fab{
+  position:fixed;
+  bottom:calc(var(--sp24) + env(safe-area-inset-bottom,0px));
+  right:calc(var(--sp16) + 244px);
+  z-index:176;
+  height:34px;
+  display:none;
+  align-items:center;justify-content:center;
+  gap:6px;
+  padding:0 12px;
+  border-radius:18px;
+  background:var(--navy);
+  color:var(--gold);
+  border:1px solid rgba(200,168,75,.28);
+  box-shadow:0 4px 24px rgba(0,0,0,.45),0 0 0 1px rgba(0,0,0,.15);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  font-family:'DM Mono',monospace;
+  font-size:9px;font-weight:600;
+  letter-spacing:.1em;text-transform:uppercase;
+  cursor:pointer;
+  transition:transform .18s ease,background .18s ease,border-color .18s ease,color .18s ease;
+  -webkit-tap-highlight-color:transparent;
+}
+#feedback-fab.visible{display:inline-flex}
+#feedback-fab:hover{background:var(--navy3);border-color:var(--gold);color:var(--cream)}
+#feedback-fab:active{transform:scale(.96)}
+.feedback-fab-icon{
+  width:14px;height:14px;display:block;
+  fill:none;stroke:currentColor;stroke-width:1.9;
+  stroke-linecap:round;stroke-linejoin:round;
+}
+#feedback-backdrop{
+  position:fixed;inset:0;z-index:2490;
+  background:rgba(7,14,22,.5);
+  backdrop-filter:blur(4px);
+  -webkit-backdrop-filter:blur(4px);
+  opacity:0;pointer-events:none;
+  transition:opacity .22s ease;
+}
+#feedback-backdrop.open{opacity:1;pointer-events:auto}
+#feedback-panel{
+  position:fixed;
+  right:var(--sp16);
+  bottom:calc(var(--sp24) + env(safe-area-inset-bottom,0px) + 50px);
+  z-index:2500;
+  width:min(390px,calc(100vw - 32px));
+  max-height:min(640px,calc(100dvh - 110px));
+  overflow:auto;
+  background:var(--cream);
+  color:var(--body);
+  border:1px solid rgba(201,169,110,.4);
+  border-radius:18px;
+  box-shadow:0 22px 70px rgba(0,0,0,.5),0 0 0 1px rgba(255,255,255,.06) inset;
+  transform:translateY(16px) scale(.98);
+  opacity:0;pointer-events:none;
+  transition:opacity .22s ease,transform .22s ease;
+}
+#feedback-panel.open{opacity:1;pointer-events:auto;transform:translateY(0) scale(1)}
+.feedback-panel-inner{padding:20px}
+.feedback-panel-top{
+  display:flex;align-items:flex-start;justify-content:space-between;
+  gap:16px;margin-bottom:12px;
+}
+.feedback-eyebrow{
+  font-family:'DM Mono',monospace;
+  font-size:9px;font-weight:600;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--gold);margin-bottom:4px;
+}
+.feedback-title{
+  font-family:'Playfair Display',serif;
+  font-size:24px;line-height:1.05;color:var(--navy);letter-spacing:.01em;
+}
+.feedback-copy{
+  font-size:14px;line-height:1.45;color:var(--steel);margin-bottom:14px;
+}
+.feedback-close{
+  width:34px;height:34px;flex:0 0 auto;
+  display:flex;align-items:center;justify-content:center;
+  border-radius:50%;
+  color:var(--steel);
+  background:rgba(27,40,56,.06);
+  border:1px solid rgba(27,40,56,.08);
+  font-size:18px;
+  transition:background .18s,color .18s,transform .18s;
+}
+.feedback-close:hover{color:var(--navy);background:rgba(201,169,110,.14)}
+.feedback-close:active{transform:scale(.94)}
+.feedback-row{margin-bottom:12px;position:relative}
+.feedback-row label{
+  display:block;
+  font-family:'DM Mono',monospace;
+  font-size:9px;font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--navy);
+  margin-bottom:6px;
+}
+.feedback-input,
+.feedback-select,
+.feedback-textarea{
+  width:100%;min-height:44px;
+  padding:10px 12px;border-radius:10px;
+  border:1px solid var(--divider);background:#fff;color:var(--body);
+  font-family:'Crimson Pro',Georgia,serif;
+  font-size:16px;line-height:1.4;outline:none;
+  transition:border-color .18s,box-shadow .18s,background .18s;
+}
+.feedback-textarea{min-height:110px;resize:vertical}
+.feedback-input:focus,
+.feedback-select:focus,
+.feedback-textarea:focus{
+  border-color:var(--gold);
+  box-shadow:0 0 0 3px rgba(201,169,110,.18);
+}
+.feedback-hint{
+  display:block;margin-top:6px;
+  font-size:13px;color:var(--muted);line-height:1.35;
+}
+.feedback-submit{
+  width:100%;min-height:46px;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  border-radius:10px;
+  background:var(--navy);color:var(--cream);
+  font-family:'DM Mono',monospace;
+  font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  box-shadow:0 8px 18px rgba(27,40,56,.22);
+  transition:background .18s,transform .18s,opacity .18s;
+}
+.feedback-submit:hover{background:var(--navy2)}
+.feedback-submit:active{transform:scale(.98)}
+.feedback-submit[disabled]{opacity:.68;cursor:wait}
+.feedback-status{
+  min-height:20px;margin-top:10px;
+  font-size:14px;line-height:1.4;color:var(--steel);
+}
+.feedback-status.success{color:#2f7a4d}
+.feedback-status.error{color:#a8332b}
+.feedback-honey{position:absolute;left:-9999px;opacity:0;pointer-events:none;height:0;width:0}
+@media(max-width:600px){
+  #feedback-fab{
+    right:calc(var(--sp16) + 188px);
+    padding:0 10px;
+    font-size:8.5px;
+  }
+  #feedback-panel{
+    left:var(--sp16);right:var(--sp16);
+    width:auto;
+    bottom:calc(var(--sp24) + env(safe-area-inset-bottom,0px) + 50px);
+    max-height:calc(100dvh - 100px);
+  }
+  .feedback-panel-inner{padding:18px}
+}
+@media(max-width:430px){
+  #feedback-fab{
+    right:calc(var(--sp16) + 168px);
+    height:32px;
+  }
+  .feedback-fab-text{display:none}
+  #feedback-fab{padding:0 9px}
+}
+
 /* ── PRONUNCIATION BUTTONS ────────────────────────── */
 .stop-pron{
   display:inline-flex;align-items:center;gap:3px;
@@ -2422,7 +2583,10 @@ body.map-fullscreen #site-footer,
 body.map-fullscreen #offline-bar,
 body.map-fullscreen .location-banner,
 body.map-fullscreen .day-banner,
-body.map-fullscreen #time-pill{display:none!important}
+body.map-fullscreen #time-pill,
+body.map-fullscreen #feedback-fab,
+body.map-fullscreen #feedback-backdrop,
+body.map-fullscreen #feedback-panel{display:none!important}
 body.map-fullscreen #page-wrap{padding-top:0!important;max-width:none;padding-left:0;padding-right:0}
 body.map-fullscreen #main-content{position:fixed;inset:0;z-index:9000;overflow:hidden;background:#e8e4dc}
 body.map-fullscreen #main-content > #page-wrap > section:not(#section-map),
@@ -8132,6 +8296,196 @@ if ('serviceWorker' in navigator) {
     <span class="tp-label" id="tp-dest-label">ATLANTIC</span>
   </div>
 </div>
+
+<!-- ── FEEDBACK FAB + PANEL ─────────────────────── -->
+<button id="feedback-fab" type="button" aria-label="Send feedback" aria-haspopup="dialog" aria-expanded="false">
+  <svg class="feedback-fab-icon" viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M21 12a8.5 8.5 0 0 1-12.4 7.5L3 21l1.5-5.6A8.5 8.5 0 1 1 21 12Z"/>
+  </svg>
+  <span class="feedback-fab-text">Feedback</span>
+</button>
+<div id="feedback-backdrop" aria-hidden="true"></div>
+<div id="feedback-panel" role="dialog" aria-modal="true" aria-labelledby="feedback-title" aria-hidden="true">
+  <div class="feedback-panel-inner">
+    <div class="feedback-panel-top">
+      <div>
+        <div class="feedback-eyebrow">Maritimes Grand Loop</div>
+        <div class="feedback-title" id="feedback-title">Send feedback</div>
+      </div>
+      <button type="button" class="feedback-close" id="feedback-close" aria-label="Close feedback">×</button>
+    </div>
+    <p class="feedback-copy">Spotted a problem, have a question, or want to suggest an improvement? It goes straight to Chip.</p>
+    <form id="feedback-form" novalidate>
+      <div class="feedback-row">
+        <label for="feedback-category">Type</label>
+        <select id="feedback-category" name="category" class="feedback-select">
+          <option value="problem">Problem / bug</option>
+          <option value="question">Question</option>
+          <option value="suggestion">Suggestion</option>
+          <option value="content">Content fix (typo, info)</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+      <div class="feedback-row">
+        <label for="feedback-email">Your email <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--muted)">(optional, for replies)</span></label>
+        <input id="feedback-email" name="email" class="feedback-input" type="email" autocomplete="email" inputmode="email" placeholder="you@example.com">
+      </div>
+      <div class="feedback-row">
+        <label for="feedback-message">Message</label>
+        <textarea id="feedback-message" name="message" class="feedback-textarea" required minlength="3" maxlength="4000" placeholder="What happened, or what would you like?"></textarea>
+        <span class="feedback-hint">Page, section, and device info will be attached automatically.</span>
+      </div>
+      <div class="feedback-row feedback-honey" aria-hidden="true">
+        <label for="feedback-website">Website</label>
+        <input id="feedback-website" name="website" type="text" tabindex="-1" autocomplete="off">
+      </div>
+      <button type="submit" class="feedback-submit" id="feedback-submit">Send to Chip</button>
+      <div class="feedback-status" id="feedback-status" role="status" aria-live="polite"></div>
+    </form>
+  </div>
+</div>
+
+<script>
+// ── Feedback FAB controller ──
+(function(){
+  var fab      = document.getElementById('feedback-fab');
+  var backdrop = document.getElementById('feedback-backdrop');
+  var panel    = document.getElementById('feedback-panel');
+  var closeBtn = document.getElementById('feedback-close');
+  var form     = document.getElementById('feedback-form');
+  var msg      = document.getElementById('feedback-message');
+  var emailIn  = document.getElementById('feedback-email');
+  var catIn    = document.getElementById('feedback-category');
+  var honey    = document.getElementById('feedback-website');
+  var submit   = document.getElementById('feedback-submit');
+  var status   = document.getElementById('feedback-status');
+  var pill     = document.getElementById('time-pill');
+  if(!fab || !panel) return;
+
+  // Mirror time-pill visibility — show the feedback FAB only when the timezone
+  // pill itself is visible (after scroll past hero), to keep them as a pair.
+  function syncVisibility(){
+    if(!pill) return;
+    if(pill.classList.contains('visible')) fab.classList.add('visible');
+    else fab.classList.remove('visible');
+  }
+  if(pill){
+    var mo = new MutationObserver(syncVisibility);
+    mo.observe(pill, { attributes:true, attributeFilter:['class','style'] });
+  }
+  syncVisibility();
+  // Fallback: also reveal on scroll (in case pill is rendered visible by other means).
+  window.addEventListener('scroll', syncVisibility, { passive:true });
+
+  function open(){
+    backdrop.classList.add('open');
+    panel.classList.add('open');
+    panel.setAttribute('aria-hidden','false');
+    fab.setAttribute('aria-expanded','true');
+    setTimeout(function(){ msg && msg.focus(); }, 60);
+  }
+  function close(){
+    backdrop.classList.remove('open');
+    panel.classList.remove('open');
+    panel.setAttribute('aria-hidden','true');
+    fab.setAttribute('aria-expanded','false');
+  }
+  fab.addEventListener('click', function(){
+    if(panel.classList.contains('open')) close(); else open();
+  });
+  closeBtn && closeBtn.addEventListener('click', close);
+  backdrop.addEventListener('click', close);
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape' && panel.classList.contains('open')) close();
+  });
+
+  function currentSection(){
+    try {
+      // Heuristic: closest visible <section id="…"> to the top.
+      var sections = document.querySelectorAll('section[id]');
+      var hdrH = (document.getElementById('site-header') || {}).offsetHeight || 60;
+      var threshold = hdrH + 40;
+      var best = '';
+      for (var i = 0; i < sections.length; i++){
+        var s = sections[i];
+        var r = s.getBoundingClientRect();
+        if (r.top <= threshold) best = s.id;
+      }
+      return best || '';
+    } catch(_) { return ''; }
+  }
+
+  function buildContext(){
+    var tz = '';
+    try { tz = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch(_) {}
+    return {
+      app: 'Maritimes Grand Loop',
+      url: location.href,
+      path: location.pathname + location.hash,
+      section: currentSection(),
+      userAgent: navigator.userAgent,
+      language: navigator.language || '',
+      viewport: (window.innerWidth || 0) + 'x' + (window.innerHeight || 0),
+      timezone: tz,
+      timestamp: new Date().toISOString()
+    };
+  }
+
+  function setStatus(text, kind){
+    status.textContent = text || '';
+    status.className = 'feedback-status' + (kind ? ' ' + kind : '');
+  }
+
+  form.addEventListener('submit', async function(e){
+    e.preventDefault();
+    setStatus('');
+    if (honey && honey.value) { return; } // bot trap
+    var message = (msg.value || '').trim();
+    if (message.length < 3) {
+      setStatus('Please write a message (3+ characters).', 'error');
+      msg.focus();
+      return;
+    }
+    var email = (emailIn.value || '').trim();
+    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setStatus('That email address looks off. Leave blank or fix it.', 'error');
+      emailIn.focus();
+      return;
+    }
+    var payload = {
+      category: catIn.value || 'other',
+      email: email,
+      message: message,
+      context: buildContext()
+    };
+    submit.disabled = true;
+    submit.textContent = 'Sending…';
+    try {
+      var res = await fetch('/api/feedback', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      var data = null;
+      try { data = await res.json(); } catch(_) {}
+      if (res.ok && data && data.ok) {
+        setStatus('Thanks — sent to Chip.', 'success');
+        msg.value = '';
+        emailIn.value = '';
+        setTimeout(close, 1400);
+      } else {
+        var err = (data && data.error) ? data.error : ('HTTP ' + res.status);
+        setStatus('Could not send (' + err + '). Try again, or email ChipWilkes@gmail.com directly.', 'error');
+      }
+    } catch (err) {
+      setStatus('Network error. Try again, or email ChipWilkes@gmail.com directly.', 'error');
+    } finally {
+      submit.disabled = false;
+      submit.textContent = 'Send to Chip';
+    }
+  });
+})();
+</script>
 
 <script>
 // ── Restaurant Menu Modal System ──
