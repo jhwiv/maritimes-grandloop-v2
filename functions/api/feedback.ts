@@ -39,7 +39,6 @@ type FeedbackContext = {
 
 type FeedbackBody = {
   category?: string;
-  email?: string;
   message?: string;
   context?: FeedbackContext;
 };
@@ -71,10 +70,6 @@ function clip(s: unknown, max: number): string {
   return v.length > max ? v.slice(0, max) : v;
 }
 
-function isValidEmail(s: string): boolean {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s) && s.length <= 254;
-}
-
 function jsonResponse(status: number, body: unknown): Response {
   return new Response(JSON.stringify(body), {
     status,
@@ -97,11 +92,6 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
 
   const rawCategory = clip(body?.category, 32).toLowerCase();
   const category = ALLOWED_CATEGORIES.has(rawCategory) ? rawCategory : "other";
-
-  const email = clip(body?.email, 254).trim();
-  if (email && !isValidEmail(email)) {
-    return jsonResponse(400, { ok: false, error: "invalid email" });
-  }
 
   const ctx: FeedbackContext = body?.context ?? {};
   const safeCtx = {
@@ -130,7 +120,6 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
 
   const textLines = [
     `Category: ${category}`,
-    `From:     ${email || "(not provided)"}`,
     `When:     ${safeCtx.timestamp}`,
     "",
     "Message",
@@ -157,7 +146,6 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   <h2 style="font-family:Georgia,serif;color:#111d2b;margin:0 0 4px;">Maritimes Grand Loop · feedback</h2>
   <p style="margin:0 0 16px;color:#5a6675;font-size:13px;">
     <strong>Category:</strong> ${escapeHtml(category)} &middot;
-    <strong>From:</strong> ${email ? `<a href="mailto:${escapeHtml(email)}">${escapeHtml(email)}</a>` : "(not provided)"} &middot;
     <strong>${escapeHtml(safeCtx.timestamp)}</strong>
   </p>
   <div style="white-space:pre-wrap;background:#faf7f2;border:1px solid #e6dfd1;border-radius:8px;padding:14px 16px;font-size:15px;line-height:1.5;">
@@ -187,9 +175,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   const sgBody = {
     personalizations: [{ to: [{ email: recipient }] }],
     from: { email: fromEmail, name: fromName },
-    reply_to: email
-      ? { email }
-      : { email: fromEmail, name: fromName },
+    reply_to: { email: fromEmail, name: fromName },
     subject,
     content: [
       { type: "text/plain", value: text },

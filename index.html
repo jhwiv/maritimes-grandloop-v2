@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="build-version" content="20260425_1100">
+<meta name="build-version" content="20260425_1300">
 <meta name="theme-color" content="#111D2B">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -2348,26 +2348,37 @@ body:has(#search-card.open) #a2hs-banner{display:none!important}
 .feedback-status.error{color:#a8332b}
 .feedback-honey{position:absolute;left:-9999px;opacity:0;pointer-events:none;height:0;width:0}
 @media(max-width:600px){
+  /* Mobile: collapse the feedback FAB to a compact icon-only circle and
+     stack it ABOVE the timezone pill so it can never sit on top of any
+     timezone button or the system browser controls below. */
   #feedback-fab{
-    right:calc(var(--sp16) + 188px);
-    padding:0 10px;
-    font-size:8.5px;
+    /* Anchor to the right edge, vertically stacked above the time-pill so it
+       cannot overlap any timezone column. The pill is ~54px tall when 3 zones
+       render — clear it with a generous gap. */
+    right:var(--sp16);
+    bottom:calc(var(--sp24) + env(safe-area-inset-bottom,0px) + 70px);
+    width:38px;height:38px;
+    padding:0;
+    border-radius:50%;
+    gap:0;
+    font-size:0;          /* hide any leftover text node */
   }
+  .feedback-fab-text{display:none}
+  .feedback-fab-icon{width:16px;height:16px}
   #feedback-panel{
     left:var(--sp16);right:var(--sp16);
     width:auto;
-    bottom:calc(var(--sp24) + env(safe-area-inset-bottom,0px) + 50px);
-    max-height:calc(100dvh - 100px);
+    /* Sit above the FAB stack (time-pill ~54px + gap + FAB 38px). */
+    bottom:calc(var(--sp24) + env(safe-area-inset-bottom,0px) + 116px);
+    max-height:calc(100dvh - 160px);
   }
   .feedback-panel-inner{padding:18px}
 }
 @media(max-width:430px){
   #feedback-fab{
-    right:calc(var(--sp16) + 168px);
-    height:32px;
+    width:36px;height:36px;
   }
-  .feedback-fab-text{display:none}
-  #feedback-fab{padding:0 9px}
+  .feedback-fab-icon{width:15px;height:15px}
 }
 
 /* ── PRONUNCIATION BUTTONS ────────────────────────── */
@@ -8327,10 +8338,6 @@ if ('serviceWorker' in navigator) {
         </select>
       </div>
       <div class="feedback-row">
-        <label for="feedback-email">Your email <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--muted)">(optional, for replies)</span></label>
-        <input id="feedback-email" name="email" class="feedback-input" type="email" autocomplete="email" inputmode="email" placeholder="you@example.com">
-      </div>
-      <div class="feedback-row">
         <label for="feedback-message">Message</label>
         <textarea id="feedback-message" name="message" class="feedback-textarea" required minlength="3" maxlength="4000" placeholder="What happened, or what would you like?"></textarea>
         <span class="feedback-hint">Page, section, and device info will be attached automatically.</span>
@@ -8354,7 +8361,6 @@ if ('serviceWorker' in navigator) {
   var closeBtn = document.getElementById('feedback-close');
   var form     = document.getElementById('feedback-form');
   var msg      = document.getElementById('feedback-message');
-  var emailIn  = document.getElementById('feedback-email');
   var catIn    = document.getElementById('feedback-category');
   var honey    = document.getElementById('feedback-website');
   var submit   = document.getElementById('feedback-submit');
@@ -8446,15 +8452,8 @@ if ('serviceWorker' in navigator) {
       msg.focus();
       return;
     }
-    var email = (emailIn.value || '').trim();
-    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      setStatus('That email address looks off. Leave blank or fix it.', 'error');
-      emailIn.focus();
-      return;
-    }
     var payload = {
       category: catIn.value || 'other',
-      email: email,
       message: message,
       context: buildContext()
     };
@@ -8471,14 +8470,20 @@ if ('serviceWorker' in navigator) {
       if (res.ok && data && data.ok) {
         setStatus('Thanks — sent to Chip.', 'success');
         msg.value = '';
-        emailIn.value = '';
         setTimeout(close, 1400);
       } else {
-        var err = (data && data.error) ? data.error : ('HTTP ' + res.status);
-        setStatus('Could not send (' + err + '). Try again, or email ChipWilkes@gmail.com directly.', 'error');
+        // 404/405 most often means the static host (e.g. GitHub Pages) is not
+        // running the /api/feedback Pages Function. Be honest about it instead
+        // of pretending the form worked.
+        if (res.status === 404 || res.status === 405) {
+          setStatus('In-app feedback delivery isn’t live on this host yet. Please email ChipWilkes@gmail.com directly — sorry for the detour!', 'error');
+        } else {
+          var err = (data && data.error) ? data.error : ('HTTP ' + res.status);
+          setStatus('Could not send (' + err + '). Please email ChipWilkes@gmail.com directly.', 'error');
+        }
       }
     } catch (err) {
-      setStatus('Network error. Try again, or email ChipWilkes@gmail.com directly.', 'error');
+      setStatus('Network hiccup. Please email ChipWilkes@gmail.com directly.', 'error');
     } finally {
       submit.disabled = false;
       submit.textContent = 'Send to Chip';
@@ -9402,7 +9407,7 @@ requestAnimationFrame(function(){
 // If a newer deploy is live, silently reloads so all users
 // always see the latest version without a manual hard-refresh.
 (function(){
-  var BUILD = '20260411_1457';
+  var BUILD = '20260425_1300';
   function checkForUpdate(){
     fetch(location.pathname + '?_bust=' + Date.now(), {cache:'no-store', method:'HEAD'})
       .then(function(r){ return fetch(location.pathname + '?_bust=' + Date.now(), {cache:'no-store'}); })
