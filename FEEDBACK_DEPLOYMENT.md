@@ -1,33 +1,65 @@
 # In-app feedback — deployment notes
 
-The floating feedback button in `index.html` posts to `/api/feedback`.
-That endpoint is implemented as a Cloudflare Pages Function in
-`functions/api/feedback.ts` and forwards the message to
-`ChipWilkes@gmail.com` via SendGrid.
+The floating feedback button in `index.html` collects a **category** plus a
+free-text **message** and auto-attaches device/page context (URL, current
+section, timezone, viewport, user agent, timestamp). There is no sender-email
+field — replies go from Chip to whoever pings him separately.
 
-The architecture is patterned on `vigil-family-advisor/server/email.ts`
-(Cloudflare Pages + SendGrid), which is what the user already operates.
+## Current delivery path: FormSubmit (GitHub Pages)
 
-The form collects only **category** + a free-text **message** + auto-
-attached device/page context. There is no sender-email field — replies
-go from Chip to whoever pings him separately.
+Because this site ships via **GitHub Pages** (see `CNAME`) — a pure static
+host with no ability to run server functions — the form posts directly to
+[FormSubmit](https://formsubmit.co/) from the browser:
 
-## Hosting reality check
+```
+POST https://formsubmit.co/ajax/ChipWilkes@gmail.com
+Content-Type: application/json
+Accept:       application/json
+```
 
-This repo currently ships via **GitHub Pages** (see `CNAME`). GitHub Pages
-is a pure static host and **cannot execute Pages Functions** — the
-`/api/feedback` POST returns **HTTP 405 (method not allowed)** there, and
-the UI surfaces a graceful error pointing the traveler at
-`ChipWilkes@gmail.com` directly. Live in-app email delivery only works
-after migrating to Cloudflare Pages and setting `SENDGRID_API_KEY`.
+FormSubmit forwards the JSON body to `ChipWilkes@gmail.com` as a formatted
+email. The payload includes the FormSubmit control fields:
 
-To make the button actually deliver email, the site needs to run on a
-host that executes the Function. The cheapest path that matches Vigil's
-stack is **Cloudflare Pages**.
+| Field      | Value                                              |
+| ---------- | -------------------------------------------------- |
+| `_subject` | `Maritimes Grand Loop feedback — <category>`       |
+| `_captcha` | `false` (skip the FormSubmit captcha, AJAX flow)   |
+| `_template`| `table` (render a clean table in the email body)   |
 
-## Cloudflare Pages setup (one-time)
+…plus the actual feedback fields: `category`, `message`, `page_url`,
+`page_path`, `section`, `timestamp`, `timezone`, `viewport`, `language`,
+`user_agent`.
 
-1. Create the Pages project, connected to this repo:
+### ⚠ First-time activation required
+
+FormSubmit requires every new recipient address to confirm once before any
+mail will deliver. The very first submission to `ChipWilkes@gmail.com` will
+trigger a confirmation email **to Chip** from FormSubmit; he has to click
+the activation link in that email. Until that happens, the in-app form will
+return an "activate / confirm" response and the UI will surface a friendly
+fallback that asks the user to email Chip directly.
+
+After Chip clicks the activation link once, subsequent submissions deliver
+normally with no further action needed.
+
+### Why the live UI used to fail with HTTP 405
+
+Before this build, the form posted to `/api/feedback`, which is a Cloudflare
+Pages Function. GitHub Pages cannot execute Pages Functions, so every submit
+returned **HTTP 405 Method Not Allowed**. The new FormSubmit path removes
+that dependency entirely.
+
+## Optional future path: Cloudflare Pages Function (first-party email)
+
+The Cloudflare Pages Function in `functions/api/feedback.ts` is **kept in
+the repo as an optional upgrade path** for the day Chip wants first-party
+email delivery (custom From address, no third-party broker, full template
+control). It is **not** required for the current GitHub Pages deployment
+and the front-end no longer calls it.
+
+If/when Chip wants to switch to the Cloudflare path:
+
+1. Create a Cloudflare Pages project pointing at this repo:
    - Build command: *(none — pure static)*
    - Build output directory: `.`
    - Functions directory: `functions/` (default; auto-detected)
@@ -41,11 +73,11 @@ stack is **Cloudflare Pages**.
    ```
    wrangler pages secret put SENDGRID_API_KEY --project-name=maritimes-grandloop
    ```
-   Optionally override the public vars in `wrangler.toml` via the
-   dashboard or `wrangler pages deployment …` if you change the recipient
-   or sender.
+5. Switch the `fetch(...)` target in `index.html`'s feedback handler back
+   to `/api/feedback` (and shape the payload like the Function expects —
+   see `functions/api/feedback.ts`).
 
-## Environment variables
+### Environment variables (Cloudflare path only)
 
 | Name                  | Type   | Default                                | Notes                                          |
 | --------------------- | ------ | -------------------------------------- | ---------------------------------------------- |
@@ -59,19 +91,8 @@ responds `{ ok: true, dev: true }` — same dev-mode pattern as Vigil's
 `server/email.ts`. This lets local `wrangler pages dev` work without
 hitting SendGrid.
 
-## Local dev
+#### Local dev (Cloudflare path only)
 
 ```
 npx wrangler pages dev . --compatibility-date=2025-01-01
 ```
-
-Open the served URL, click the **Feedback** pill (left of the timezone
-pill), submit a test message, and you'll see the formatted email logged
-to the wrangler console.
-
-## Staying on GitHub Pages
-
-If migrating hosts is not on the table right now, the front-end change
-is still safe to ship: the button will appear, the modal opens, validation
-runs, and a failed submit shows a friendly fallback message pointing the
-traveler at `ChipWilkes@gmail.com` directly.
