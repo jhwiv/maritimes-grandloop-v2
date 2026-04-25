@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="build-version" content="20260425_1500">
+<meta name="build-version" content="20260425_1700">
 <meta name="theme-color" content="#111D2B">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -8469,38 +8469,58 @@ if ('serviceWorker' in navigator) {
       msg.focus();
       return;
     }
+    var ctx = buildContext();
+    var category = catIn.value || 'other';
+    // FormSubmit AJAX endpoint — works on static hosts (GitHub Pages) without
+    // any server function. First-ever submission to a new recipient triggers
+    // a one-time confirmation email to ChipWilkes@gmail.com that must be
+    // accepted before subsequent messages deliver.
     var payload = {
-      category: catIn.value || 'other',
+      _subject: 'Maritimes Grand Loop feedback — ' + category,
+      _captcha: 'false',
+      _template: 'table',
+      category: category,
       message: message,
-      context: buildContext()
+      page_url: ctx.url,
+      page_path: ctx.path,
+      section: ctx.section || '(none)',
+      timestamp: ctx.timestamp,
+      timezone: ctx.timezone,
+      viewport: ctx.viewport,
+      language: ctx.language,
+      user_agent: ctx.userAgent
     };
     submit.disabled = true;
     submit.textContent = 'Sending…';
     try {
-      var res = await fetch('/api/feedback', {
+      var res = await fetch('https://formsubmit.co/ajax/ChipWilkes@gmail.com', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
         body: JSON.stringify(payload)
       });
       var data = null;
       try { data = await res.json(); } catch(_) {}
-      if (res.ok && data && data.ok) {
+      // FormSubmit returns { success: "true", message: "..." } on accepted
+      // submissions. The very first submission to a new recipient instead
+      // returns a message that asks the recipient to confirm via email.
+      var success = data && (data.success === 'true' || data.success === true);
+      if (res.ok && success) {
         setStatus('Thanks — sent to Chip.', 'success');
         msg.value = '';
         setTimeout(close, 1400);
       } else {
-        // 404/405 most often means the static host (e.g. GitHub Pages) is not
-        // running the /api/feedback Pages Function. Be honest about it instead
-        // of pretending the form worked.
-        if (res.status === 404 || res.status === 405) {
-          setStatus('In-app feedback delivery isn’t live on this host yet. Please email ChipWilkes@gmail.com directly — sorry for the detour!', 'error');
+        var srvMsg = (data && (data.message || data.error)) || '';
+        if (/activat|confirm/i.test(srvMsg)) {
+          setStatus('Almost there — Chip needs to confirm this inbox once before delivery starts. If this is the first time, please also email ChipWilkes@gmail.com directly so he knows to confirm.', 'error');
         } else {
-          var err = (data && data.error) ? data.error : ('HTTP ' + res.status);
-          setStatus('Could not send (' + err + '). Please email ChipWilkes@gmail.com directly.', 'error');
+          setStatus('Couldn’t confirm delivery. Please email ChipWilkes@gmail.com directly — sorry for the detour!', 'error');
         }
       }
     } catch (err) {
-      setStatus('Network hiccup. Please email ChipWilkes@gmail.com directly.', 'error');
+      setStatus('Network hiccup — couldn’t confirm delivery. Please email ChipWilkes@gmail.com directly.', 'error');
     } finally {
       submit.disabled = false;
       submit.textContent = 'Send to Chip';
@@ -9424,7 +9444,7 @@ requestAnimationFrame(function(){
 // If a newer deploy is live, silently reloads so all users
 // always see the latest version without a manual hard-refresh.
 (function(){
-  var BUILD = '20260425_1500';
+  var BUILD = '20260425_1700';
   function checkForUpdate(){
     fetch(location.pathname + '?_bust=' + Date.now(), {cache:'no-store', method:'HEAD'})
       .then(function(r){ return fetch(location.pathname + '?_bust=' + Date.now(), {cache:'no-store'}); })
