@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<meta name="build-version" content="20260503_static_directions_print">
+<title>Driving Directions Packet · Maritimes Grand Loop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=DM+Mono:wght@400;500&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#111;
+    --muted:#575757;
+    --rule:#a9a9a9;
+    --soft:#e9e9e9;
+    --navy:#1B2838;
+    --paper:#fff;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--paper);color:var(--ink)}
+  body{
+    font-family:'Crimson Pro', Georgia, serif;
+    font-size:10pt;
+    line-height:1.23;
+    padding:24px;
+  }
+  .screen-actions{
+    position:sticky;
+    top:0;
+    z-index:10;
+    display:flex;
+    gap:10px;
+    align-items:center;
+    justify-content:space-between;
+    margin:-24px -24px 18px;
+    padding:12px 18px;
+    background:#101b2a;
+    color:#fff;
+    font-family:'DM Mono', monospace;
+    font-size:12px;
+  }
+  .screen-actions a,
+  .screen-actions button{
+    color:#fff;
+    border:1px solid rgba(255,255,255,.35);
+    border-radius:999px;
+    background:transparent;
+    padding:8px 12px;
+    text-decoration:none;
+    font:inherit;
+    cursor:pointer;
+  }
+  .print-page{
+    max-width:8in;
+    margin:0 auto;
+    background:#fff;
+  }
+  .kicker{
+    font-family:'DM Mono', monospace;
+    font-size:7pt;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:#888;
+    border-bottom:2px solid var(--navy);
+    padding-bottom:5pt;
+    margin-bottom:7pt;
+  }
+  h1{
+    font-family:'Playfair Display', Georgia, serif;
+    font-size:20pt;
+    line-height:1.05;
+    margin:0 0 3pt;
+  }
+  .subtitle{
+    margin:0 0 8pt;
+    color:#333;
+    font-size:8.8pt;
+  }
+  .top-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:6pt;
+    margin-bottom:8pt;
+  }
+  .box,.route-card{
+    border:1px solid var(--rule);
+    background:#fff;
+  }
+  .box{padding:5pt}
+  .box-title,.route-day{
+    font-family:'DM Mono', monospace;
+    text-transform:uppercase;
+    letter-spacing:.08em;
+    color:#666;
+  }
+  .box-title{font-size:7.2pt;margin-bottom:3pt}
+  ul{
+    margin:0 0 0 12pt;
+    padding:0;
+  }
+  li{margin:0 0 2pt}
+  h2.section-title{
+    font-family:'Playfair Display', Georgia, serif;
+    font-size:13pt;
+    line-height:1.05;
+    margin:8pt 0 4pt;
+    padding-top:3pt;
+    border-top:1.5px solid var(--navy);
+  }
+  .route-card{
+    padding:5pt;
+    margin:0 0 5pt;
+    break-inside:avoid;
+    page-break-inside:avoid;
+  }
+  .route-day{
+    font-size:7.4pt;
+    margin-bottom:2pt;
+  }
+  .route-card h3{
+    font-family:'Playfair Display', Georgia, serif;
+    font-size:11pt;
+    line-height:1.05;
+    margin:0 0 3pt;
+  }
+  .route-card p{
+    font-size:8pt;
+    line-height:1.2;
+    margin:0 0 2pt;
+  }
+  strong{font-weight:700}
+  @page{
+    size:letter;
+    margin:.48in;
+  }
+  @media print{
+    html,body{
+      background:#fff!important;
+      color:#000!important;
+      min-height:auto!important;
+    }
+    body{
+      padding:0!important;
+      font-size:10pt!important;
+      -webkit-print-color-adjust:economy;
+      print-color-adjust:economy;
+    }
+    .screen-actions{display:none!important}
+    .print-page{
+      max-width:none!important;
+      margin:0!important;
+      background:#fff!important;
+    }
+    .box,.route-card{background:#fff!important;box-shadow:none!important}
+  }
+</style>
+</head>
+<body>
+  <div class="screen-actions" aria-label="Print controls">
+    <a href="index.html">Back to itinerary</a>
+    <span>Driving Directions Packet</span>
+    <button type="button" onclick="window.print()">Print</button>
+  </div>
+
+  <main class="print-page">
+    <div class="kicker">Maritimes Grand Loop · Driving Directions Packet</div>
+    <h1>Driving Directions Packet</h1>
+    <p class="subtitle">Separate directions-first backup. Open live navigation before departure; use this when service drops.</p>
+
+    <section class="top-grid" aria-label="Offline driving rules">
+      <div class="box">
+        <div class="box-title">Use with offline maps</div>
+        <ul>
+          <li>Start the route before leaving Wi-Fi/service.</li>
+          <li>Keep the packet on today’s page.</li>
+          <li>Fuel before Newfoundland and rural NB legs.</li>
+        </ul>
+      </div>
+      <div class="box">
+        <div class="box-title">Ferry priority</div>
+        <ul>
+          <li>Ferry check-in times override sightseeing.</li>
+          <li>If delayed, call operator at next service point.</li>
+          <li>Preserve the next fixed overnight first.</li>
+        </ul>
+      </div>
+    </section>
+
+    <h2 class="section-title">Route-by-route driving notes</h2>
+
+    <section class="route-card">
+      <div class="route-day">Day 2 · Sun Jun 28</div>
+      <h3>Portland → Saint John → Fundy Rose → Digby</h3>
+      <p><strong>Depart / drive:</strong> 7:00 AM · ~8 hrs total · <strong>Signal:</strong> Spotty north of Bangor and rural NB</p>
+      <p><strong>Tonight:</strong> Fundy Complex Dockside Suites, Digby</p>
+      <p><strong>Paper directions:</strong> Leave Portland early and drive north through Maine toward the US-Canada border. Cross at Calais/St. Stephen with passports ready; budget 10-30 minutes. Continue to Saint John and arrive at the Fundy Rose ferry terminal at least 1 hour before sailing. Take the Fundy Rose from Saint John to Digby; confirm sailing status before leaving Portland. After arrival in Digby, drive directly to the Dockside Suites and keep ferry confirmations printed or saved offline.</p>
+    </section>
+
+    <section class="route-card">
+      <div class="route-day">Day 3 · Mon Jun 29</div>
+      <h3>Digby → Annapolis Royal → Lunenburg</h3>
+      <p><strong>Depart / drive:</strong> 9:00 AM · ~2.5-3 hrs · <strong>Signal:</strong> Mostly workable, but download maps anyway</p>
+      <p><strong>Tonight:</strong> Smugglers Cove Inn, Lunenburg</p>
+      <p><strong>Paper directions:</strong> Leave Digby after breakfast and follow the Annapolis Valley east. Use Annapolis Royal as the primary leg-stretcher if you want a garden or historic stop. Continue toward the South Shore and Lunenburg via the Lighthouse Route where practical. Park once in Lunenburg and walk the UNESCO Old Town and waterfront. Keep the route relaxed; this is the easiest driving day of the loop.</p>
+    </section>
+
+    <section class="route-card">
+      <div class="route-day">Day 4 · Tue Jun 30</div>
+      <h3>Lunenburg → Halifax/Baddeck corridor → North Sydney ferry</h3>
+      <p><strong>Depart / drive:</strong> 8:00 AM · ~5.5 hrs · <strong>Signal:</strong> Generally available near towns; weaker in rural Cape Breton</p>
+      <p><strong>Tonight:</strong> Marine Atlantic ferry cabin</p>
+      <p><strong>Paper directions:</strong> Leave Lunenburg early enough to protect the Marine Atlantic check-in window. Use Mahone Bay, Chester, Halifax, Truro, or Baddeck only if the ferry timing still has a safe buffer. Arrive at the North Sydney terminal 2 hours before sailing with vehicle documents and reservation details handy. Board the overnight Marine Atlantic ferry to Port aux Basques. Pack an overnight ferry bag before boarding so you do not need the car deck.</p>
+    </section>
+
+    <section class="route-card">
+      <div class="route-day">Day 5 · Wed Jul 1</div>
+      <h3>Port aux Basques → Corner Brook → Deer Lake → Twillingate</h3>
+      <p><strong>Depart / drive:</strong> 7:00 AM · ~7 hrs · <strong>Signal:</strong> Critical dead zones across rural Newfoundland</p>
+      <p><strong>Tonight:</strong> Anchor Inn Hotel &amp; Suites, Twillingate</p>
+      <p><strong>Paper directions:</strong> Disembark at Port aux Basques and begin the Trans-Canada Highway eastbound. Treat Corner Brook as the first serious rest stop and Deer Lake as the natural lunch/fuel stop. Keep fuel above half a tank; services become sparse and cell coverage is unreliable. Turn north toward Twillingate on the Road to the Isles and expect little to no signal. Arrive before dark because moose risk is real, especially at dawn and dusk.</p>
+    </section>
+
+    <section class="route-card">
+      <div class="route-day">Day 6 · Thu Jul 2</div>
+      <h3>Twillingate → Farewell ferry → Fogo Island Inn</h3>
+      <p><strong>Depart / drive:</strong> 8:00 AM · ~2.5 hrs total · <strong>Signal:</strong> Minimal approaching Farewell and very limited on Fogo Island</p>
+      <p><strong>Tonight:</strong> Fogo Island Inn</p>
+      <p><strong>Paper directions:</strong> Leave Twillingate with the Fogo ferry schedule already checked and screenshots saved. Drive toward Farewell with fuel, snacks, and downloaded maps ready. Board the Fogo Island ferry; the crossing is roughly 45 minutes when operating normally. Drive from the island terminal to Joe Batt’s Arm and the Fogo Island Inn. Assume the phone is not a reliable planning tool on Fogo; use this packet and the inn concierge.</p>
+    </section>
+
+    <section class="route-card">
+      <div class="route-day">Days 7-8 · Fri Jul 3-Sat Jul 4</div>
+      <h3>Fogo Island rest days · no driving</h3>
+      <p><strong>Depart / drive:</strong> Stay put · No scheduled drive · <strong>Signal:</strong> Very limited; rely on inn Wi-Fi and concierge</p>
+      <p><strong>Tonight:</strong> Fogo Island Inn</p>
+      <p><strong>Paper directions:</strong> No major driving is planned on these days. Use the inn concierge for local timing, weather, and any island transfers. Confirm the return ferry plan before the final night on Fogo.</p>
+    </section>
+
+    <section class="route-card">
+      <div class="route-day">Day 9 · Sun Jul 5</div>
+      <h3>Fogo Island → Farewell → Port aux Basques ferry</h3>
+      <p><strong>Depart / drive:</strong> 7:00 AM · ~8 hrs total · <strong>Signal:</strong> Very limited until larger Newfoundland towns</p>
+      <p><strong>Tonight:</strong> Marine Atlantic ferry cabin</p>
+      <p><strong>Paper directions:</strong> Leave Fogo early and protect the ferry queue timing back to Farewell. Once back on Newfoundland, drive west across the island toward Port aux Basques. Use Gander, Grand Falls-Windsor, Deer Lake, and Corner Brook as the practical rest/fuel sequence. Avoid arriving at Port aux Basques late; moose risk rises after dusk. Check Marine Atlantic status whenever you have service and keep reservation details printed.</p>
+    </section>
+
+    <section class="route-card">
+      <div class="route-day">Day 10 · Mon Jul 6</div>
+      <h3>North Sydney → Pictou</h3>
+      <p><strong>Depart / drive:</strong> 10:00 AM · ~3 hrs · <strong>Signal:</strong> Generally available</p>
+      <p><strong>Tonight:</strong> The Scotsman Inn, Pictou</p>
+      <p><strong>Paper directions:</strong> Disembark in North Sydney and avoid rushing; this is an easier recovery day. Drive west across Nova Scotia toward Pictou. Use Antigonish or New Glasgow as simple coffee/fuel stops if needed. Check in at The Scotsman Inn and keep the afternoon open for the waterfront and Hector Heritage Quay.</p>
+    </section>
+
+    <section class="route-card">
+      <div class="route-day">Day 11 · Tue Jul 7</div>
+      <h3>Pictou → Moncton/Hopewell Rocks → Fredericton</h3>
+      <p><strong>Depart / drive:</strong> 8:00 AM · ~4 hrs without long stops · <strong>Signal:</strong> Mostly available with rural gaps</p>
+      <p><strong>Tonight:</strong> Delta Hotels by Marriott Fredericton</p>
+      <p><strong>Paper directions:</strong> Leave Pictou and cross from Nova Scotia into New Brunswick via the Amherst corridor. Use Moncton as the practical midpoint for fuel and food. Add Hopewell Rocks only if tide timing and energy make sense; otherwise continue direct to Fredericton. Arrive for afternoon check-in at the Delta and plan dinner on Queen Street or near the riverfront.</p>
+    </section>
+
+    <section class="route-card">
+      <div class="route-day">Day 12 · Wed Jul 8</div>
+      <h3>Fredericton → Maine border → Portland</h3>
+      <p><strong>Depart / drive:</strong> 8:00 AM · ~5 hrs plus border time · <strong>Signal:</strong> Patchy rural NB and northern Maine</p>
+      <p><strong>Tonight:</strong> Home / Portland</p>
+      <p><strong>Paper directions:</strong> Leave Fredericton with passports ready for re-entry into the United States. Cross into Maine and budget time for the border. Use Bangor as the most reliable mid-route stop for fuel, coffee, and food. Consider Freeport only if you want a final easy stop before Portland. Keep offline maps active until you are back in southern Maine.</p>
+    </section>
+
+    <section class="route-card">
+      <h3>When the plan changes</h3>
+      <p>Fundy Rose 1-877-762-7245 · Marine Atlantic 1-800-341-7981 · Fogo travel information 1-800-563-6353 · Emergency 911. If a ferry changes, choose the simplest route that protects the next confirmed overnight.</p>
+    </section>
+  </main>
+
+  <script>
+    window.addEventListener('load', function(){
+      setTimeout(function(){ window.print(); }, 350);
+    });
+  </script>
+</body>
+</html>

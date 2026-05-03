@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="build-version" content="20260503_compact_print_packets">
+<meta name="build-version" content="20260503_static_directions_print">
 <meta name="theme-color" content="#111D2B">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -6311,35 +6311,7 @@ function printRoadBook() {
 }
 
 function printDrivingDirections() {
-  var overlay = document.createElement('div');
-  overlay.innerHTML = compactHeaderHtml(
-    'Driving Directions Packet',
-    'Separate directions-first backup. Open live navigation before departure; use this when service drops.'
-  ) +
-  '<div class="compact-grid">' +
-    '<div class="compact-box"><div class="compact-box-title">Use with offline maps</div><ul class="print-small-list"><li>Start the route before leaving Wi-Fi/service.</li><li>Keep the packet on today’s page.</li><li>Fuel before Newfoundland and rural NB legs.</li></ul></div>' +
-    '<div class="compact-box"><div class="compact-box-title">Ferry priority</div><ul class="print-small-list"><li>Ferry check-in times override sightseeing.</li><li>If delayed, call operator at next service point.</li><li>Preserve the next fixed overnight first.</li></ul></div>' +
-  '</div>' +
-  '<h2 class="compact-section-title">Route-by-route driving notes</h2>';
-
-  drivingDirectionsPacket.forEach(function(item) {
-    var card = document.createElement('section');
-    card.className = 'route-card-compact';
-    card.innerHTML = '<div class="print-doc-kicker">' + escapePrintHtml(item.day) + '</div>' +
-      '<h2>' + escapePrintHtml(item.route) + '</h2>' +
-      '<p><strong>Depart / drive:</strong> ' + escapePrintHtml(item.depart) + ' · ' + escapePrintHtml(item.drive) + ' · <strong>Signal:</strong> ' + escapePrintHtml(item.signal) + '</p>' +
-      '<p><strong>Tonight:</strong> ' + escapePrintHtml(item.overnight) + '</p>' +
-      '<p><strong>Paper directions:</strong> ' + escapePrintHtml(item.steps.join(' ')) + '</p>';
-    overlay.appendChild(card);
-  });
-
-  var emergency = document.createElement('section');
-  emergency.className = 'route-card-compact';
-  emergency.innerHTML = '<h2>When the plan changes</h2>' +
-    '<p>Fundy Rose 1-877-762-7245 · Marine Atlantic 1-800-341-7981 · Fogo travel information 1-800-563-6353 · Emergency 911. If a ferry changes, choose the simplest route that protects the next confirmed overnight.</p>';
-  overlay.appendChild(emergency);
-
-  printFromOverlay(overlay, 'compact-packet print-directions');
+  window.location.href = 'print-directions.html?v=20260503_static_directions_print';
 }
 
 
