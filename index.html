@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="build-version" content="20260503_print_roadbook">
+<meta name="build-version" content="20260503_compact_print_packets">
 <meta name="theme-color" content="#111D2B">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -292,6 +292,14 @@ img{display:block;max-width:100%}
   /* ── PRINT OVERLAY STRATEGY ──
      printSection() clones the target into #print-overlay.
      Everything else is display:none so zero blank pages. */
+
+  html,
+  body,
+  body.printing{
+    background:#fff!important;
+    color:#000!important;
+    min-height:auto!important;
+  }
 
   /* Hide the entire page */
   body.printing > *:not(#print-overlay){
@@ -703,6 +711,106 @@ img{display:block;max-width:100%}
     border:1px solid #aaa!important;
     padding:7pt!important;
     min-height:42pt!important;
+  }
+
+  #print-overlay.compact-packet{
+    font-size:8.8pt!important;
+    line-height:1.24!important;
+  }
+  #print-overlay.compact-packet::before{
+    font-size:7pt!important;
+    padding-bottom:5pt!important;
+    margin-bottom:7pt!important;
+  }
+  #print-overlay .compact-title{
+    font-family:'Playfair Display',Georgia,serif!important;
+    font-size:18pt!important;
+    line-height:1.05!important;
+    color:#000!important;
+    margin:0 0 3pt!important;
+  }
+  #print-overlay .compact-subtitle{
+    font-size:8.5pt!important;
+    color:#333!important;
+    margin:0 0 7pt!important;
+  }
+  #print-overlay .compact-grid{
+    display:grid!important;
+    grid-template-columns:1fr 1fr!important;
+    gap:6pt!important;
+  }
+  #print-overlay .compact-box{
+    border:1px solid #bbb!important;
+    padding:5pt!important;
+    page-break-inside:avoid;
+  }
+  #print-overlay .compact-box-title{
+    font-family:'DM Mono',monospace!important;
+    font-size:7.3pt!important;
+    text-transform:uppercase!important;
+    letter-spacing:.08em!important;
+    color:#555!important;
+    margin-bottom:3pt!important;
+  }
+  #print-overlay .compact-section-title{
+    font-family:'Playfair Display',Georgia,serif!important;
+    font-size:12.5pt!important;
+    color:#000!important;
+    margin:9pt 0 4pt!important;
+    padding-top:3pt!important;
+    border-top:1.5px solid #1B2838!important;
+  }
+  #print-overlay .print-table{
+    width:100%!important;
+    border-collapse:collapse!important;
+    font-size:7.8pt!important;
+    line-height:1.18!important;
+    page-break-inside:auto;
+  }
+  #print-overlay .print-table th{
+    background:#eee!important;
+    color:#000!important;
+    border:1px solid #aaa!important;
+    padding:3.5pt!important;
+    text-align:left!important;
+    font-family:'DM Mono',monospace!important;
+    font-size:6.6pt!important;
+    text-transform:uppercase!important;
+    letter-spacing:.04em!important;
+  }
+  #print-overlay .print-table td{
+    border:1px solid #cfcfcf!important;
+    padding:3.3pt!important;
+    vertical-align:top!important;
+    color:#111!important;
+  }
+  #print-overlay .print-table tr{
+    page-break-inside:avoid;
+  }
+  #print-overlay .print-small-list{
+    margin:0 0 0 12pt!important;
+    padding:0!important;
+  }
+  #print-overlay .print-small-list li{
+    margin:0 0 2pt!important;
+    padding:0!important;
+  }
+  #print-overlay .route-card-compact{
+    border:1px solid #aaa!important;
+    padding:5pt!important;
+    margin:0 0 5pt!important;
+    page-break-inside:avoid;
+  }
+  #print-overlay .route-card-compact h2{
+    font-size:11pt!important;
+    margin:0 0 3pt!important;
+    border:none!important;
+    padding:0!important;
+  }
+  #print-overlay .route-card-compact p{
+    font-size:8pt!important;
+    line-height:1.2!important;
+    margin:0 0 2pt!important;
   }
 }
 
@@ -3604,7 +3712,7 @@ function dismissWelcome() {
       <div class="cond-title">12-Day Maritime Loop</div>
     </div>
     <div class="print-toolbar">
-      <button class="print-btn" onclick="printSection('section-condensed')" aria-label="Print overview"><svg viewBox="0 0 24 24"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg> Print Overview</button>
+      <button class="print-btn" onclick="printTripOverview()" aria-label="Print one-page overview"><svg viewBox="0 0 24 24"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg> Print Overview</button>
       <button class="print-btn" onclick="printRoadBook()" aria-label="Print full road book"><svg viewBox="0 0 24 24"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg> Print Road Book</button>
       <button class="print-btn" onclick="printDrivingDirections()" aria-label="Print driving directions"><svg viewBox="0 0 24 24"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg> Print Directions</button>
     </div>
@@ -5966,6 +6074,20 @@ var drivingDirectionsPacket = [
     ]
   },
   {
+    day:'Days 7-8 · Fri Jul 3-Sat Jul 4',
+    route:'Fogo Island rest days · no driving',
+    depart:'Stay put',
+    drive:'No scheduled drive',
+    signal:'Very limited; rely on inn Wi-Fi and concierge',
+    overnight:'Fogo Island Inn',
+    map:'',
+    steps:[
+      'No major driving is planned on these days.',
+      'Use the inn concierge for local timing, weather, and any island transfers.',
+      'Confirm the return ferry plan before the final night on Fogo.'
+    ]
+  },
+  {
     day:'Day 9 · Sun Jul 5',
     route:'Fogo Island → Farewell → Port aux Basques ferry',
     depart:'7:00 AM',
@@ -6084,77 +6206,140 @@ function printFromOverlay(overlay, className) {
   }, 100);
 }
 
+function escapePrintHtml(value) {
+  return String(value == null ? '' : value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function compactHeaderHtml(title, subtitle) {
+  return '<h1 class="compact-title">' + escapePrintHtml(title) + '</h1>' +
+    '<p class="compact-subtitle">' + escapePrintHtml(subtitle) + '</p>';
+}
+
+var roadBookDays = [
+  { day:'Day 1 · Sat Jun 27', route:'Portland, ME', timing:'Arrival / evening', overnight:'Courtyard Portland Downtown/Waterfront', note:'Print ferry and hotel confirmations. Download offline maps for Maine, New Brunswick, Nova Scotia, and Newfoundland.' },
+  { day:'Day 2 · Sun Jun 28', route:'Portland → Saint John → Fundy Rose → Digby', timing:'Depart 7:00 AM · ~8 hrs total', overnight:'Fundy Complex Dockside Suites, Digby', note:'Passports out before Calais/St. Stephen. Arrive Fundy Rose terminal 1 hour early. Expect weak signal north of Bangor and rural NB.' },
+  { day:'Day 3 · Mon Jun 29', route:'Digby → Annapolis Royal → Lunenburg', timing:'Depart 9:00 AM · ~2.5-3 hrs', overnight:'Smugglers Cove Inn, Lunenburg', note:'Easy day. Annapolis Royal is the natural leg-stretcher; park once in Lunenburg and walk the waterfront.' },
+  { day:'Day 4 · Tue Jun 30', route:'Lunenburg → North Sydney overnight ferry', timing:'Depart 8:00 AM · ~5.5 hrs', overnight:'Marine Atlantic ferry cabin', note:'Protect ferry check-in. Arrive North Sydney 2 hours before sailing. Pack overnight ferry bag before boarding.' },
+  { day:'Day 5 · Wed Jul 1', route:'Port aux Basques → Deer Lake → Twillingate', timing:'Start after ferry · ~7 hrs', overnight:'Anchor Inn Hotel & Suites, Twillingate', note:'Newfoundland dead zones. Fuel at Corner Brook / Deer Lake. Avoid driving after dark because of moose risk.' },
+  { day:'Day 6 · Thu Jul 2', route:'Twillingate → Farewell ferry → Fogo Island Inn', timing:'Depart 8:00 AM · ~2.5 hrs plus ferry', overnight:'Fogo Island Inn', note:'Check Fogo ferry status before leaving Wi-Fi. Assume little to no cell service approaching Farewell and on Fogo.' },
+  { day:'Days 7-8 · Fri Jul 3-Sat Jul 4', route:'Fogo Island', timing:'Stay put', overnight:'Fogo Island Inn', note:'Use inn concierge and printed packet. Confirm return ferry timing before the last night.' },
+  { day:'Day 9 · Sun Jul 5', route:'Fogo Island → Port aux Basques overnight ferry', timing:'Depart 7:00 AM · ~8 hrs total', overnight:'Marine Atlantic ferry cabin', note:'Protect return ferry timing. Use Gander, Grand Falls-Windsor, Deer Lake, and Corner Brook as service/fuel towns.' },
+  { day:'Day 10 · Mon Jul 6', route:'North Sydney → Pictou', timing:'Depart after ferry · ~3 hrs', overnight:'The Scotsman Inn, Pictou', note:'Recovery day. Antigonish or New Glasgow are simple stops if needed.' },
+  { day:'Day 11 · Tue Jul 7', route:'Pictou → Moncton / Hopewell Rocks → Fredericton', timing:'Depart 8:00 AM · ~4 hrs before stops', overnight:'Delta Hotels by Marriott Fredericton', note:'Hopewell Rocks only if tide timing and energy make sense. Otherwise go direct to Fredericton.' },
+  { day:'Day 12 · Wed Jul 8', route:'Fredericton → Maine border → Portland', timing:'Depart 8:00 AM · ~5 hrs plus border', overnight:'Home / Portland', note:'Passports ready for US re-entry. Bangor is the most reliable stop; keep offline maps active until southern Maine.' }
+];
+
+function rowsHtml(rows, columns) {
+  return rows.map(function(row) {
+    return '<tr>' + columns.map(function(col) {
+      return '<td>' + escapePrintHtml(row[col] || '') + '</td>';
+    }).join('') + '</tr>';
+  }).join('');
+}
+
+function printTripOverview() {
+  var overlay = document.createElement('div');
+  overlay.innerHTML = compactHeaderHtml(
+    'Maritimes Grand Loop · One-Page Overview',
+    'June 27-July 8, 2026 · Portland, Nova Scotia, Newfoundland, Fogo Island, New Brunswick'
+  ) +
+  '<div class="compact-grid">' +
+    '<div class="compact-box"><div class="compact-box-title">Before departure</div><ul class="print-small-list"><li>Passports and ferry confirmations printed.</li><li>Offline maps downloaded for all provinces.</li><li>Hotels, ferries, and key addresses screenshotted.</li></ul></div>' +
+    '<div class="compact-box"><div class="compact-box-title">No-signal rule</div><ul class="print-small-list"><li>Stay on the planned route.</li><li>Fuel before remote legs.</li><li>Avoid Newfoundland night driving.</li></ul></div>' +
+  '</div>' +
+  '<h2 class="compact-section-title">Daily spine</h2>' +
+  '<table class="print-table"><thead><tr><th>Day</th><th>Route / base</th><th>Overnight</th><th>Critical note</th></tr></thead><tbody>' +
+    rowsHtml(roadBookDays, ['day','route','overnight','note']) +
+  '</tbody></table>' +
+  '<h2 class="compact-section-title">Emergency / operators</h2>' +
+  '<table class="print-table"><tbody>' +
+    '<tr><td>Emergency</td><td>911 in Canada or the US.</td><td>Use hotel desk or ferry terminal staff if mobile service is unavailable.</td></tr>' +
+    '<tr><td>Fundy Rose</td><td>1-877-762-7245</td><td>Saint John ⇄ Digby ferry. Confirm status before leaving Portland.</td></tr>' +
+    '<tr><td>Marine Atlantic</td><td>1-800-341-7981</td><td>North Sydney ⇄ Port aux Basques. Protect check-in windows.</td></tr>' +
+    '<tr><td>Fogo travel info</td><td>1-800-563-6353</td><td>Use when island ferry timing changes.</td></tr>' +
+  '</tbody></table>';
+
+  printFromOverlay(overlay, 'compact-packet print-overview');
+}
+
 function printRoadBook() {
   var overlay = document.createElement('div');
-  overlay.className = 'print-roadbook';
-  overlay.appendChild(buildPrintCover(
+  overlay.innerHTML = compactHeaderHtml(
     'Maritimes Grand Loop Road Book',
-    'A car-friendly printed packet for the full loop from Portland to Fogo Island and back.',
-    '<strong>Use this when cell service disappears.</strong> It includes the at-a-glance itinerary, day-by-day route notes, ferry reminders, lodging, essentials, and packing checks. Download offline Google or Apple Maps before departure and print ferry confirmations separately.'
-  ));
+    'Printer-friendly car packet for poor cell service. Keep this in the front seat with ferry confirmations.'
+  ) +
+  '<div class="compact-grid">' +
+    '<div class="compact-box"><div class="compact-box-title">Morning launch</div><ul class="print-small-list"><li>Fuel above half tank before rural legs.</li><li>Open today’s map while on Wi-Fi or service.</li><li>Check ferry status and weather.</li><li>Passports accessible, not packed away.</li></ul></div>' +
+    '<div class="compact-box"><div class="compact-box-title">If cell service drops</div><ul class="print-small-list"><li>Do not improvise scenic detours.</li><li>Continue to the next named town or ferry terminal.</li><li>Use hotel or ferry staff for status changes.</li><li>Preserve fixed lodging and ferry nights first.</li></ul></div>' +
+  '</div>' +
+  '<h2 class="compact-section-title">Trip spine and overnight plan</h2>' +
+  '<table class="print-table"><thead><tr><th>Day</th><th>Route / base</th><th>Timing</th><th>Overnight</th><th>Do not miss</th></tr></thead><tbody>' +
+    rowsHtml(roadBookDays, ['day','route','timing','overnight','note']) +
+  '</tbody></table>' +
+  '<h2 class="compact-section-title">Ferries, fixed constraints, and phone numbers</h2>' +
+  '<table class="print-table"><thead><tr><th>Item</th><th>Rule</th><th>Phone / action</th></tr></thead><tbody>' +
+    '<tr><td>Fundy Rose · Sun Jun 28</td><td>Saint John to Digby. Be at terminal 1 hour early.</td><td>1-877-762-7245 · confirm before leaving Portland.</td></tr>' +
+    '<tr><td>Marine Atlantic · Tue Jun 30</td><td>North Sydney to Port aux Basques overnight. Vehicle check-in is the day’s anchor.</td><td>1-800-341-7981 · arrive 2 hours before sailing.</td></tr>' +
+    '<tr><td>Fogo ferry · Thu Jul 2</td><td>Farewell to Fogo. Service and queues can drive the day.</td><td>Confirm before leaving Twillingate Wi-Fi.</td></tr>' +
+    '<tr><td>Fogo return · Sun Jul 5</td><td>Leave early; protect the long drive to Port aux Basques.</td><td>Confirm prior evening with the inn.</td></tr>' +
+    '<tr><td>Marine Atlantic · Sun Jul 5</td><td>Port aux Basques to North Sydney overnight.</td><td>Keep reservation printed and car documents handy.</td></tr>' +
+  '</tbody></table>' +
+  '<h2 class="compact-section-title">Lodging and arrival notes</h2>' +
+  '<table class="print-table"><thead><tr><th>Night</th><th>Property</th><th>Arrival reminder</th></tr></thead><tbody>' +
+    '<tr><td>Jun 27</td><td>Courtyard Portland Downtown/Waterfront</td><td>Prepare the car packet and offline maps.</td></tr>' +
+    '<tr><td>Jun 28</td><td>Fundy Complex Dockside Suites, Digby</td><td>Arrive after ferry; keep dinner simple.</td></tr>' +
+    '<tr><td>Jun 29</td><td>Smugglers Cove Inn, Lunenburg</td><td>Park once and walk the old town.</td></tr>' +
+    '<tr><td>Jun 30</td><td>Marine Atlantic ferry cabin</td><td>Carry overnight bag; car deck access can be restricted.</td></tr>' +
+    '<tr><td>Jul 1</td><td>Anchor Inn Hotel & Suites, Twillingate</td><td>Aim to arrive before dark.</td></tr>' +
+    '<tr><td>Jul 2-4</td><td>Fogo Island Inn</td><td>Concierge is the best no-signal planning backup.</td></tr>' +
+    '<tr><td>Jul 5</td><td>Marine Atlantic ferry cabin</td><td>Confirm sailing whenever service appears.</td></tr>' +
+    '<tr><td>Jul 6</td><td>The Scotsman Inn, Pictou</td><td>Recovery day after ferry.</td></tr>' +
+    '<tr><td>Jul 7</td><td>Delta Hotels by Marriott Fredericton</td><td>Use riverfront / Queen Street for easy dinner.</td></tr>' +
+  '</tbody></table>' +
+  '<h2 class="compact-section-title">Offline packing and car checklist</h2>' +
+  '<div class="compact-grid">' +
+    '<div class="compact-box"><div class="compact-box-title">Car</div><ul class="print-small-list"><li>Chargers and battery pack.</li><li>Printed confirmations.</li><li>Water, snacks, light jacket.</li><li>Windshield cloth and sunglasses.</li></ul></div>' +
+    '<div class="compact-box"><div class="compact-box-title">Remote legs</div><ul class="print-small-list"><li>Fuel before rural Newfoundland.</li><li>Do not count on streaming maps.</li><li>Watch for moose at dawn/dusk.</li><li>Keep cash/card accessible for ferries and stops.</li></ul></div>' +
+  '</div>';
 
-  ['section-condensed'].concat(printableDaySectionIds, ['section-essentials', 'section-reference', 'section-packing']).forEach(function(id) {
-    var section = document.getElementById(id);
-    if (!section) return;
-    var clone = section.cloneNode(true);
-    clone.removeAttribute('id');
-    clone.classList.add('print-doc-section');
-    overlay.appendChild(removeScreenOnlyPrintItems(clone));
-  });
-
-  printFromOverlay(overlay, 'print-roadbook');
+  printFromOverlay(overlay, 'compact-packet print-roadbook');
 }
 
 function printDrivingDirections() {
   var overlay = document.createElement('div');
-  overlay.className = 'print-directions';
-  overlay.appendChild(buildPrintCover(
+  overlay.innerHTML = compactHeaderHtml(
     'Driving Directions Packet',
-    'A separate, directions-first output for the long no-signal driving days.',
-    '<strong>Important:</strong> This packet is not a substitute for live navigation. It is a printed backup with route sequence, timing, stops, ferry constraints, signal warnings, and map links to open before service drops.'
-  ));
-
-  var intro = document.createElement('section');
-  intro.className = 'print-doc-section';
-  intro.innerHTML = '<h2>Offline driving checklist</h2>' +
-    '<ul class="print-doc-list">' +
-      '<li>Download offline maps for Maine/NB/NS and all of Newfoundland before leaving Portland.</li>' +
-      '<li>Open the day’s Google/Apple Maps route while you still have service or Wi-Fi.</li>' +
-      '<li>Screenshot ferry confirmations, hotel addresses, and reservation numbers.</li>' +
-      '<li>Keep fuel above half a tank in Newfoundland and rural New Brunswick.</li>' +
-      '<li>Avoid Newfoundland night driving where possible because of moose risk.</li>' +
-    '</ul>';
-  overlay.appendChild(intro);
+    'Separate directions-first backup. Open live navigation before departure; use this when service drops.'
+  ) +
+  '<div class="compact-grid">' +
+    '<div class="compact-box"><div class="compact-box-title">Use with offline maps</div><ul class="print-small-list"><li>Start the route before leaving Wi-Fi/service.</li><li>Keep the packet on today’s page.</li><li>Fuel before Newfoundland and rural NB legs.</li></ul></div>' +
+    '<div class="compact-box"><div class="compact-box-title">Ferry priority</div><ul class="print-small-list"><li>Ferry check-in times override sightseeing.</li><li>If delayed, call operator at next service point.</li><li>Preserve the next fixed overnight first.</li></ul></div>' +
+  '</div>' +
+  '<h2 class="compact-section-title">Route-by-route driving notes</h2>';
 
   drivingDirectionsPacket.forEach(function(item) {
     var card = document.createElement('section');
-    card.className = 'print-route-card';
-    card.innerHTML = '<div class="print-doc-kicker">' + item.day + '</div>' +
-      '<h2>' + item.route + '</h2>' +
-      '<div class="print-route-meta">' +
-        '<div><span class="print-route-label">Depart</span><span class="print-route-value">' + item.depart + '</span></div>' +
-        '<div><span class="print-route-label">Drive</span><span class="print-route-value">' + item.drive + '</span></div>' +
-        '<div><span class="print-route-label">Signal</span><span class="print-route-value">' + item.signal + '</span></div>' +
-      '</div>' +
-      '<p><strong>Tonight:</strong> ' + item.overnight + '</p>' +
-      '<ol class="print-route-steps">' + item.steps.map(function(step) { return '<li>' + step + '</li>'; }).join('') + '</ol>' +
-      '<div class="print-link-line">Open before signal drops: ' + item.map + '</div>';
+    card.className = 'route-card-compact';
+    card.innerHTML = '<div class="print-doc-kicker">' + escapePrintHtml(item.day) + '</div>' +
+      '<h2>' + escapePrintHtml(item.route) + '</h2>' +
+      '<p><strong>Depart / drive:</strong> ' + escapePrintHtml(item.depart) + ' · ' + escapePrintHtml(item.drive) + ' · <strong>Signal:</strong> ' + escapePrintHtml(item.signal) + '</p>' +
+      '<p><strong>Tonight:</strong> ' + escapePrintHtml(item.overnight) + '</p>' +
+      '<p><strong>Paper directions:</strong> ' + escapePrintHtml(item.steps.join(' ')) + '</p>';
     overlay.appendChild(card);
   });
 
   var emergency = document.createElement('section');
-  emergency.className = 'print-doc-section';
+  emergency.className = 'route-card-compact';
   emergency.innerHTML = '<h2>When the plan changes</h2>' +
-    '<p>If a ferry is delayed or cancelled, preserve the fixed lodging nights first and use the Plan B section in the road book. Call ferry operators as soon as you have signal, then choose the simplest route that keeps the next confirmed overnight intact.</p>' +
-    '<ul class="print-doc-list">' +
-      '<li>Fundy Rose: 1-877-762-7245</li>' +
-      '<li>Marine Atlantic: 1-800-341-7981</li>' +
-      '<li>Fogo Island travel information: 1-800-563-6353</li>' +
-      '<li>Emergency in Canada or the US: 911</li>' +
-    '</ul>';
+    '<p>Fundy Rose 1-877-762-7245 · Marine Atlantic 1-800-341-7981 · Fogo travel information 1-800-563-6353 · Emergency 911. If a ferry changes, choose the simplest route that protects the next confirmed overnight.</p>';
   overlay.appendChild(emergency);
 
-  printFromOverlay(overlay, 'print-directions');
+  printFromOverlay(overlay, 'compact-packet print-directions');
 }
 
 
