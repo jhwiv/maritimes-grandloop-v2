@@ -7616,6 +7616,74 @@ if ('serviceWorker' in navigator) {
 </script>
 
 <script>
+// ── WEATHER FETCH THROTTLE + CACHE ─────────────────────
+// Wraps fetch() for Open-Meteo calls so the page does not fire 18+
+// parallel requests on load (which triggers their free-tier rate
+// limit and produces visible flicker as cards resolve / fail piecemeal).
+//
+// Behaviour:
+//   1. Returns a cached JSON "response" if the same URL was fetched
+//      within the last 15 minutes (key: localStorage 'wxc:' + url).
+//   2. Otherwise queues the real fetch behind a semaphore so at most
+//      WX_MAX_CONCURRENT requests are in flight at a time.
+//   3. On success, caches the JSON body for next time.
+//   4. On failure (network, non-2xx, parse error) the original error
+//      propagates so callers' .catch() still fires.
+//
+// Returned object mimics the bits of Response that the weather IIFEs use:
+//   { ok, status, json() }  — nothing else. Callers only read json().
+(function(){
+  var WX_MAX_CONCURRENT = 2;
+  var WX_TTL_MS = 15 * 60 * 1000;     // 15 minutes
+  var CACHE_PREFIX = 'wxc:';
+  var inFlight = 0;
+  var queue = [];
+
+  function cacheGet(url){
+    try {
+      var raw = localStorage.getItem(CACHE_PREFIX + url);
+      if (!raw) return null;
+      var obj = JSON.parse(raw);
+      if (!obj || typeof obj.t !== 'number') return null;
+      if (Date.now() - obj.t > WX_TTL_MS) return null;
+      return obj.body;
+    } catch(e) { return null; }
+  }
+  function cachePut(url, body){
+    try { localStorage.setItem(CACHE_PREFIX + url, JSON.stringify({ t: Date.now(), body: body })); }
+    catch(e){ /* quota or disabled — ignore */ }
+  }
+  function fakeResponse(body){
+    return { ok: true, status: 200, json: function(){ return Promise.resolve(body); } };
+  }
+  function pump(){
+    while (inFlight < WX_MAX_CONCURRENT && queue.length){
+      var job = queue.shift();
+      inFlight++;
+      fetch(job.url)
+        .then(function(r){
+          if (!r.ok) throw new Error('http ' + r.status);
+          return r.json().then(function(body){
+            cachePut(job.url, body);
+            job.resolve(fakeResponse(body));
+          });
+        })
+        .catch(function(err){ job.reject(err); })
+        .then(function(){ inFlight--; pump(); });
+    }
+  }
+  window.__wxFetch = function(url){
+    var cached = cacheGet(url);
+    if (cached) return Promise.resolve(fakeResponse(cached));
+    return new Promise(function(resolve, reject){
+      queue.push({ url: url, resolve: resolve, reject: reject });
+      pump();
+    });
+  };
+})();
+</script>
+
+<script>
 // ── LIVE WEATHER (Open-Meteo API) ─────────────────────────────
 (function() {
   var WX = {
@@ -7681,7 +7749,7 @@ if ('serviceWorker' in navigator) {
       + '&timezone=' + encodeURIComponent(g.tz)
       + '&start_date=' + startDate + '&end_date=' + endDate;
 
-    fetch(url)
+    __wxFetch(url)
       .then(function(r) { return r.json(); })
       .then(function(data) {
         var d = data.daily;
@@ -7815,7 +7883,7 @@ if ('serviceWorker' in navigator) {
         + '&forecast_days=1';
     }
 
-    fetch(url)
+    __wxFetch(url)
       .then(function(r) { return r.json(); })
       .then(function(data) {
         var card = document.getElementById(loc.cardId);
@@ -10000,14 +10068,18 @@ requestAnimationFrame(function(){
 </script>
 <script>
 // ── AUTO-UPDATE CHECK ──────────────────────────────────
-// Fetches the page with no-cache and compares build-version.
-// If a newer deploy is live, silently reloads so all users
-// always see the latest version without a manual hard-refresh.
+// Reads the live page's build-version meta and compares it to the
+// build-version meta that this page was loaded with. If they differ,
+// silently reload so all users always see the latest version.
+//
+// The reference build is read at startup from the DOM (single source of
+// truth) so the constant can never drift from the deployed meta tag.
 (function(){
-  var BUILD = '20260425_1700';
+  var metaEl = document.querySelector('meta[name="build-version"]');
+  var BUILD = metaEl ? metaEl.getAttribute('content') : null;
+  if (!BUILD) return; // No meta = no reliable comparison; skip check entirely.
   function checkForUpdate(){
-    fetch(location.pathname + '?_bust=' + Date.now(), {cache:'no-store', method:'HEAD'})
-      .then(function(r){ return fetch(location.pathname + '?_bust=' + Date.now(), {cache:'no-store'}); })
+    fetch(location.pathname + '?_bust=' + Date.now(), {cache:'no-store'})
       .then(function(r){ return r.text(); })
       .then(function(html){
         var m = html.match(/name="build-version"\s+content="([^"]+)"/);
