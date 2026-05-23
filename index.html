@@ -3512,6 +3512,55 @@ body.hero-visible #ferry-chip{
 /* ── PROGRESSIVE LOAD: hide below-fold until ready ── */
 .deferred-content{opacity:0;transition:opacity .3s ease}
 .deferred-content.loaded{opacity:1}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   Ferry status strip — namespaced .fs-* to avoid collisions with .stop-* etc.
+   Hidden by default; JS reveals it on Jun 25–Jul 10 only.
+   ───────────────────────────────────────────────────────────────────────────── */
+.fs-strip{
+  display:none;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:8px;
+  margin:8px 0 12px;
+  font-family:'Crimson Pro',serif;
+  font-size:13px;
+  line-height:1.4;
+  color:rgba(17,29,43,.72);
+}
+.fs-strip.is-shown{ display:flex; }
+.fs-badge{
+  display:inline-block;
+  padding:2px 8px;
+  border-radius:999px;
+  font-family:'Inter','Helvetica Neue',Arial,sans-serif;
+  font-size:11px;
+  font-weight:600;
+  letter-spacing:.4px;
+  text-transform:uppercase;
+  background:rgba(33,148,124,.12);
+  color:var(--teal,#1f7a64);
+  border:1px solid rgba(33,148,124,.25);
+}
+.fs-strip.is-disrupted .fs-badge{
+  background:var(--amber-dim,rgba(232,148,28,.15));
+  color:var(--amber,#E8941C);
+  border-color:rgba(232,148,28,.35);
+}
+.fs-meta{ color:rgba(17,29,43,.55); font-size:12px; }
+.fs-link{
+  color:var(--amber,#E8941C);
+  font-weight:600;
+  text-decoration:none;
+  border-bottom:1px solid rgba(232,148,28,.4);
+}
+.fs-link:hover{ border-bottom-color:var(--amber,#E8941C); }
+.fs-strip.is-error{ color:rgba(17,29,43,.55); }
+.fs-strip.is-error a{
+  color:rgba(17,29,43,.7);
+  text-decoration:underline;
+  text-decoration-color:rgba(17,29,43,.25);
+}
 </style>
 </head>
 <body>
@@ -4187,6 +4236,7 @@ function dismissWelcome() {
       <article class="stop is-ferry" role="listitem">
         <div class="stop-time">Evening <span class="stop-time-badge badge-ferry">⛴ Overnight Ferry</span></div>
         <h3 class="stop-title ferry-title">Marine Atlantic · North Sydney → Port aux Basques</h3>
+        <div class="fs-strip" data-fs-strip="day4"></div>
         <p class="stop-body">Board the Marine Atlantic ferry for the overnight crossing to Newfoundland. The crossing takes approximately 6–8 hours. Your cabin is booked — sleep through it and wake up in Newfoundland.</p>
         <div class="stop-meta">
           <span class="meta-chip" data-popup data-popup-title="Marine Atlantic — North Sydney to Port aux Basques" data-popup-body="Marine Atlantic operates the essential ferry link between Nova Scotia and Newfoundland. The crossing from North Sydney to Port aux Basques takes 6-8 hours. Ships have cabins, berths, recliner lounges, a cafeteria, and a gift shop. Summer sailings include day and overnight options." data-popup-tip="Book a private cabin for overnight crossings — worth every penny. Check in 2 hours early. Reserve at marineatlantic.ca well in advance for peak summer." data-popup-link="https://www.marineatlantic.ca/" data-popup-link-label="Marine Atlantic Website">⛴ Marine Atlantic</span>
@@ -4562,6 +4612,7 @@ function dismissWelcome() {
       <article class="stop is-ferry" role="listitem">
         <div class="stop-time">Evening <span class="stop-time-badge badge-ferry">⛴ Overnight Ferry</span></div>
         <h3 class="stop-title ferry-title">Marine Atlantic · Port aux Basques → North Sydney</h3>
+        <div class="fs-strip" data-fs-strip="day9"></div>
         <p class="stop-body">Board the overnight ferry back to Nova Scotia. Another night sleeping on the water.</p>
         <div class="stop-meta">
           <span class="meta-chip" data-popup data-popup-title="Marine Atlantic — Return Crossing" data-popup-body="The return overnight ferry from Port aux Basques back to North Sydney. Same 6-8 hour crossing. You'll arrive in Nova Scotia early morning, ready for the drive to Pictou." data-popup-tip="Book a cabin again for the return. Morning arrival means you can drive to Pictou at a relaxed pace." data-popup-link="https://www.marineatlantic.ca/" data-popup-link-label="Marine Atlantic Website">⛴ Marine Atlantic</span>
@@ -9967,6 +10018,95 @@ requestAnimationFrame(function(){
   // Check 20 s after load, then every 3 minutes
   setTimeout(checkForUpdate, 20000);
   setInterval(checkForUpdate, 180000);
+})();
+</script>
+
+<script>
+/* ─────────────────────────────────────────────────────────────────────────────
+   Ferry status strip controller
+   - Renders only between Jun 25 and Jul 10 (inclusive), using local device date
+   - Fetches /api/ferry-status once on load
+   - Updates two strips: data-fs-strip="day4" and data-fs-strip="day9"
+   ───────────────────────────────────────────────────────────────────────────── */
+(function(){
+  function inWindow(){
+    var d = new Date();
+    var m = d.getMonth() + 1;
+    var day = d.getDate();
+    if (m === 6 && day >= 25) return true;
+    if (m === 7 && day <= 10) return true;
+    return false;
+  }
+
+  if (!inWindow()) return;
+
+  var strips = document.querySelectorAll('[data-fs-strip]');
+  if (!strips.length) return;
+
+  strips.forEach(function(s){ s.classList.add('is-shown'); s.setAttribute('aria-live','polite'); });
+
+  function minutesAgo(iso){
+    if (!iso) return null;
+    var t = Date.parse(iso);
+    if (isNaN(t)) return null;
+    return Math.max(0, Math.round((Date.now() - t) / 60000));
+  }
+
+  function escapeHtml(s){
+    return String(s)
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+      .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  }
+
+  function render(strip, data){
+    if (!data || data.status === 'UNAVAILABLE'){
+      var mins = data ? minutesAgo(data.updated) : null;
+      var checked = mins == null ? '' : ' · Last checked ' + mins + ' min ago';
+      strip.classList.add('is-error');
+      strip.innerHTML =
+        '<span class="fs-meta">Status unavailable — </span>' +
+        '<a class="fs-link" href="https://www.marineatlantic.ca/travel-advisory" target="_blank" rel="noopener">check marineatlantic.ca</a>' +
+        '<span class="fs-meta">' + checked + '</span>';
+      return;
+    }
+
+    var status = String(data.status || '').toUpperCase();
+    var isOnTime = status === 'ON TIME';
+    if (!isOnTime) strip.classList.add('is-disrupted');
+
+    var parts = [];
+    parts.push('<span class="fs-badge">' + escapeHtml(status) + '</span>');
+    if (data.departure) parts.push('<span class="fs-meta">' + escapeHtml(data.departure) + '</span>');
+
+    var mins = minutesAgo(data.updated);
+    if (mins != null){
+      parts.push('<span class="fs-meta">Last updated ' + mins + ' min ago</span>');
+    }
+
+    if (!isOnTime){
+      parts.push('<a class="fs-link" href="#section-planb" data-fs-planb>→ See Plan B</a>');
+    }
+
+    strip.innerHTML = parts.join(' ');
+  }
+
+  function showError(){
+    strips.forEach(function(s){ render(s, null); });
+  }
+
+  fetch('/api/ferry-status', { cache: 'no-store' })
+    .then(function(r){ if (!r.ok) throw new Error('http ' + r.status); return r.json(); })
+    .then(function(data){ strips.forEach(function(s){ render(s, data); }); })
+    .catch(showError);
+
+  document.addEventListener('click', function(e){
+    var a = e.target.closest && e.target.closest('a[data-fs-planb]');
+    if (!a) return;
+    var target = document.getElementById('section-planb');
+    if (!target) return;
+    e.preventDefault();
+    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
 })();
 </script>
 
