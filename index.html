@@ -10096,26 +10096,50 @@ requestAnimationFrame(function(){
 <script>
 /* ─────────────────────────────────────────────────────────────────────────────
    Ferry status strip controller
-   - Renders only between Jun 25 and Jul 10 (inclusive), using local device date
-   - Fetches /api/ferry-status once on load
-   - Updates two strips: data-fs-strip="day4" and data-fs-strip="day9"
+
+   Behaves like the weather cards: always visible, but presentation
+   shifts based on where we are relative to the trip.
+
+   - Before Jun 25  → PREVIEW mode: shows current Marine Atlantic
+     status with a "current status · trip starts <date>" framing so
+     viewers know this is upcoming, not live in-trip.
+   - Jun 25 – Jul 10 → LIVE mode: in-window in-trip status with
+     "Last updated X min ago" and a Plan B link on disruption.
+   - After Jul 10   → hides itself (trip is over).
+
+   Fetches /api/ferry-status once on load. Updates both strips:
+   data-fs-strip="day4" and data-fs-strip="day9".
    ───────────────────────────────────────────────────────────────────────────── */
 (function(){
-  function inWindow(){
-    var d = new Date();
-    var m = d.getMonth() + 1;
-    var day = d.getDate();
-    if (m === 6 && day >= 25) return true;
-    if (m === 7 && day <= 10) return true;
-    return false;
-  }
+  // Trip window. Use local device time.
+  var TRIP_START = { m: 6, d: 25 };   // Jun 25 (inclusive)
+  var TRIP_END   = { m: 7, d: 10 };   // Jul 10 (inclusive)
+  // Friendly start label used in preview copy.
+  var TRIP_START_LABEL = 'Jun 27';
 
-  if (!inWindow()) return;
+  function mode(){
+    var now = new Date();
+    var m = now.getMonth() + 1, d = now.getDate();
+    var afterStart = (m > TRIP_START.m) || (m === TRIP_START.m && d >= TRIP_START.d);
+    var beforeEnd  = (m < TRIP_END.m)   || (m === TRIP_END.m   && d <= TRIP_END.d);
+    if (afterStart && beforeEnd) return 'live';
+    // After window closes for the year: hide entirely.
+    if (m > TRIP_END.m) return 'hidden';
+    if (m === TRIP_END.m && d > TRIP_END.d) return 'hidden';
+    return 'preview';
+  }
 
   var strips = document.querySelectorAll('[data-fs-strip]');
   if (!strips.length) return;
 
-  strips.forEach(function(s){ s.classList.add('is-shown'); s.setAttribute('aria-live','polite'); });
+  var current = mode();
+  if (current === 'hidden') return;
+
+  // Reveal both strips. Content fills in async.
+  strips.forEach(function(s){
+    s.classList.add('is-shown');
+    s.setAttribute('aria-live', 'polite');
+  });
 
   function minutesAgo(iso){
     if (!iso) return null;
@@ -10131,6 +10155,7 @@ requestAnimationFrame(function(){
   }
 
   function render(strip, data){
+    // ---- Failure / UNAVAILABLE: identical treatment in preview and live.
     if (!data || data.status === 'UNAVAILABLE'){
       var mins = data ? minutesAgo(data.updated) : null;
       var checked = mins == null ? '' : ' · Last checked ' + mins + ' min ago';
@@ -10148,15 +10173,25 @@ requestAnimationFrame(function(){
 
     var parts = [];
     parts.push('<span class="fs-badge">' + escapeHtml(status) + '</span>');
-    if (data.departure) parts.push('<span class="fs-meta">' + escapeHtml(data.departure) + '</span>');
 
-    var mins = minutesAgo(data.updated);
-    if (mins != null){
-      parts.push('<span class="fs-meta">Last updated ' + mins + ' min ago</span>');
-    }
-
-    if (!isOnTime){
-      parts.push('<a class="fs-link" href="#section-planb" data-fs-planb>→ See Plan B</a>');
+    if (current === 'preview'){
+      // Pre-trip framing so viewers know this is a preview, not live in-trip.
+      parts.push('<span class="fs-meta">Current status · trip starts ' + TRIP_START_LABEL + '</span>');
+      // Surface departure if Worker provides one.
+      if (data.departure) parts.push('<span class="fs-meta">' + escapeHtml(data.departure) + '</span>');
+      if (!isOnTime){
+        parts.push('<a class="fs-link" href="#section-planb" data-fs-planb>→ See Plan B</a>');
+      }
+    } else {
+      // Live in-trip framing (Jun 25 – Jul 10).
+      if (data.departure) parts.push('<span class="fs-meta">' + escapeHtml(data.departure) + '</span>');
+      var mins = minutesAgo(data.updated);
+      if (mins != null){
+        parts.push('<span class="fs-meta">Last updated ' + mins + ' min ago</span>');
+      }
+      if (!isOnTime){
+        parts.push('<a class="fs-link" href="#section-planb" data-fs-planb>→ See Plan B</a>');
+      }
     }
 
     strip.innerHTML = parts.join(' ');
