@@ -2712,25 +2712,26 @@ body:not(.welcomed) #feedback-backdrop{display:none!important}
 .hero-bid{
   display:inline-flex;
   align-items:center;
-  gap:7px;
-  background:#ffffff;
-  color:#172741;
+  gap:6px;
+  background:transparent;
+  color:#ffffff;
   font-family:'Cormorant Garamond',Georgia,serif;
   font-style:normal;
   font-weight:500;
-  font-size:clamp(10px,2.2vw,12px);
+  font-size:clamp(8px,1.65vw,9px);
   letter-spacing:0.02em;
-  padding:5px 11px 5px 8px;
-  border-radius:5px;
-  box-shadow:0 2px 6px rgba(0,0,0,.25);
+  padding:0;
+  border-radius:0;
+  box-shadow:none;
   margin-top:4px;
-  text-shadow:none;
+  text-shadow:0 1px 4px rgba(0,0,0,.4);
 }
 .hero-bid img{
-  height:22px;
+  height:17px;
   width:auto;
   display:block;
   flex:0 0 auto;
+  filter:drop-shadow(0 1px 3px rgba(0,0,0,.4));
 }
 .hero-bid .hero-bid-text{
   display:inline-flex;
@@ -3810,7 +3811,7 @@ function dismissWelcome() {
   <div class="hero-inner">
     <div class="hero-eyebrow">A 12-Day Road Trip · Portland → Fogo Island → Home</div>
     <h1 class="hero-title" aria-label="Newfoundland & Nova Scotia">Newfoundland<br>&amp; Nova Scotia</h1>
-    <div class="hero-subtitle"><span class="hero-bid"><img src="assets/bid-compass.png" alt="Barrier Island Digital" width="480" height="470"><span class="hero-bid-text"><span class="hero-bid-eyebrow">powered by</span><span class="hero-bid-name">Barrier Island Digital,<span class="hero-bid-llc">LLC</span></span></span></span></div>
+    <div class="hero-subtitle"><span class="hero-bid"><img src="assets/bid-compass-white.png" alt="Barrier Island Digital" width="480" height="470"><span class="hero-bid-text"><span class="hero-bid-eyebrow">powered by</span><span class="hero-bid-name">Barrier Island Digital,<span class="hero-bid-llc">LLC</span></span></span></span></div>
     <div class="hero-dates">June 27 – July 8, 2026</div>
     <div class="hero-actions">
       <button class="hero-btn hero-btn-primary" onclick="navTo('section-condensed',null)">Explore the Itinerary</button>
