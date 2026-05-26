@@ -2658,57 +2658,107 @@ body:not(.welcomed) #feedback-backdrop{display:none!important}
   font-family:'Cormorant Garamond',Georgia,serif;
   font-style:normal;
   font-weight:500;
-  font-size:0.95rem;
+  font-size:0.85rem;
   letter-spacing:0.02em;
   color:#172741;
   text-align:center;
   background:#ffffff;
-  padding:18px 24px;
+  padding:14px 22px;
   margin:20px auto 0;
-  max-width:520px;
+  max-width:540px;
   border-radius:8px;
   box-shadow:0 1px 3px rgba(0,0,0,.15);
+}
+.alterra-lockup{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  margin-top:4px;
+}
+.alterra-lockup img{
+  height:42px;
+  width:auto;
+  display:block;
+  flex:0 0 auto;
 }
 .alterra-powered .alterra-name{
   font-family:'Cormorant Garamond',Georgia,serif;
   font-style:normal;
-  font-weight:600;
-  font-size:1.2rem;
-  letter-spacing:0.015em;
+  font-weight:500;
+  font-size:1.35rem;
+  letter-spacing:0.005em;
   color:#172741;
+  line-height:1;
 }
 .alterra-powered .alterra-name .alterra-llc{
-  font-size:0.7em;
-  font-weight:600;
+  font-size:0.62em;
+  font-weight:500;
   letter-spacing:0.04em;
-  margin-left:0.18em;
+  margin-left:0.2em;
   color:#172741;
+  vertical-align:baseline;
+}
+.alterra-powered .alterra-tagline{
+  display:block;
+  font-size:0.78rem;
+  font-weight:400;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  color:rgba(23,39,65,0.55);
+  margin-bottom:2px;
+  font-family:'DM Mono',monospace;
 }
 .hero-bid{
-  display:inline-block;
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
   background:#ffffff;
   color:#172741;
   font-family:'Cormorant Garamond',Georgia,serif;
   font-style:normal;
   font-weight:500;
-  font-size:clamp(14px,3.4vw,18px);
+  font-size:clamp(13px,3vw,16px);
   letter-spacing:0.02em;
-  padding:8px 18px;
+  padding:8px 16px 8px 12px;
   border-radius:6px;
-  box-shadow:0 1px 3px rgba(0,0,0,.2);
+  box-shadow:0 2px 6px rgba(0,0,0,.25);
   margin-top:6px;
   text-shadow:none;
 }
+.hero-bid img{
+  height:34px;
+  width:auto;
+  display:block;
+  flex:0 0 auto;
+}
+.hero-bid .hero-bid-text{
+  display:inline-flex;
+  flex-direction:column;
+  align-items:flex-start;
+  line-height:1.1;
+}
+.hero-bid .hero-bid-eyebrow{
+  font-family:'DM Mono',monospace;
+  font-size:0.62em;
+  font-weight:400;
+  letter-spacing:0.14em;
+  text-transform:uppercase;
+  color:rgba(23,39,65,0.6);
+  margin-bottom:1px;
+}
 .hero-bid .hero-bid-name{
-  font-weight:600;
-  font-size:1.1em;
-  letter-spacing:0.015em;
+  font-family:'Cormorant Garamond',Georgia,serif;
+  font-weight:500;
+  font-size:1.25em;
+  letter-spacing:0.005em;
+  line-height:1;
 }
 .hero-bid .hero-bid-llc{
-  font-size:0.7em;
-  font-weight:600;
+  font-size:0.62em;
+  font-weight:500;
   letter-spacing:0.04em;
-  margin-left:0.18em;
+  margin-left:0.2em;
 }
 
 /* ── MAP TAB ────────────────────────────────────── */
@@ -3760,7 +3810,7 @@ function dismissWelcome() {
   <div class="hero-inner">
     <div class="hero-eyebrow">A 12-Day Road Trip · Portland → Fogo Island → Home</div>
     <h1 class="hero-title" aria-label="Newfoundland & Nova Scotia">Newfoundland<br>&amp; Nova Scotia</h1>
-    <div class="hero-subtitle"><span class="hero-bid">powered by <span class="hero-bid-name">Barrier Island Digital,<span class="hero-bid-llc">LLC</span></span></span></div>
+    <div class="hero-subtitle"><span class="hero-bid"><img src="assets/bid-compass.png" alt="Barrier Island Digital" width="480" height="470"><span class="hero-bid-text"><span class="hero-bid-eyebrow">powered by</span><span class="hero-bid-name">Barrier Island Digital,<span class="hero-bid-llc">LLC</span></span></span></span></div>
     <div class="hero-dates">June 27 – July 8, 2026</div>
     <div class="hero-actions">
       <button class="hero-btn hero-btn-primary" onclick="navTo('section-condensed',null)">Explore the Itinerary</button>
@@ -5869,9 +5919,13 @@ function dismissWelcome() {
     <a class="footer-btn" href="https://fogoislandinn.ca" target="_blank" rel="noopener">⭐ Fogo Island Inn</a>
     <button class="footer-btn" id="footer-top-btn">↑ Back to Top</button>
   </div>
-  <p class="alterra-powered">
-    powered by <span class="alterra-name">Barrier Island Digital,<span class="alterra-llc">LLC</span></span>
-  </p>
+  <div class="alterra-powered">
+    <span class="alterra-tagline">Powered by</span>
+    <div class="alterra-lockup">
+      <img src="assets/bid-compass.png" alt="Barrier Island Digital" width="480" height="470">
+      <span class="alterra-name">Barrier Island Digital,<span class="alterra-llc">LLC</span></span>
+    </div>
+  </div>
   <p class="footer-pplx"><a href="https://www.perplexity.ai/computer" target="_blank" rel="noopener noreferrer">Created with Perplexity Computer</a></p>
 </footer>
 
