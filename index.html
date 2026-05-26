@@ -2658,27 +2658,57 @@ body:not(.welcomed) #feedback-backdrop{display:none!important}
   font-family:'Cormorant Garamond',Georgia,serif;
   font-style:normal;
   font-weight:500;
-  font-size:0.9rem;
+  font-size:0.95rem;
   letter-spacing:0.02em;
-  color:rgba(220,225,235,0.7);
+  color:#172741;
   text-align:center;
-  padding:20px 0;
-  margin:0;
+  background:#ffffff;
+  padding:18px 24px;
+  margin:20px auto 0;
+  max-width:520px;
+  border-radius:8px;
+  box-shadow:0 1px 3px rgba(0,0,0,.15);
 }
 .alterra-powered .alterra-name{
   font-family:'Cormorant Garamond',Georgia,serif;
   font-style:normal;
   font-weight:600;
-  font-size:1.15rem;
+  font-size:1.2rem;
   letter-spacing:0.015em;
-  color:#E8ECF3;
+  color:#172741;
 }
 .alterra-powered .alterra-name .alterra-llc{
   font-size:0.7em;
   font-weight:600;
   letter-spacing:0.04em;
   margin-left:0.18em;
-  color:#E8ECF3;
+  color:#172741;
+}
+.hero-bid{
+  display:inline-block;
+  background:#ffffff;
+  color:#172741;
+  font-family:'Cormorant Garamond',Georgia,serif;
+  font-style:normal;
+  font-weight:500;
+  font-size:clamp(14px,3.4vw,18px);
+  letter-spacing:0.02em;
+  padding:8px 18px;
+  border-radius:6px;
+  box-shadow:0 1px 3px rgba(0,0,0,.2);
+  margin-top:6px;
+  text-shadow:none;
+}
+.hero-bid .hero-bid-name{
+  font-weight:600;
+  font-size:1.1em;
+  letter-spacing:0.015em;
+}
+.hero-bid .hero-bid-llc{
+  font-size:0.7em;
+  font-weight:600;
+  letter-spacing:0.04em;
+  margin-left:0.18em;
 }
 
 /* ── MAP TAB ────────────────────────────────────── */
@@ -3730,7 +3760,7 @@ function dismissWelcome() {
   <div class="hero-inner">
     <div class="hero-eyebrow">A 12-Day Road Trip · Portland → Fogo Island → Home</div>
     <h1 class="hero-title" aria-label="Newfoundland & Nova Scotia">Newfoundland<br>&amp; Nova Scotia</h1>
-    <div class="hero-subtitle">powered by <span style="font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;font-style:normal;font-size:1.1em;letter-spacing:.01em">Barrier Island Digital,<span style="font-size:.7em;font-weight:600;margin-left:.18em">LLC</span></span></div>
+    <div class="hero-subtitle"><span class="hero-bid">powered by <span class="hero-bid-name">Barrier Island Digital,<span class="hero-bid-llc">LLC</span></span></span></div>
     <div class="hero-dates">June 27 – July 8, 2026</div>
     <div class="hero-actions">
       <button class="hero-btn hero-btn-primary" onclick="navTo('section-condensed',null)">Explore the Itinerary</button>
