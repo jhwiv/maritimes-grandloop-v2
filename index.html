@@ -24,7 +24,7 @@
 <link rel="preload" as="image" href="https://images.unsplash.com/photo-1668139225815-75a91275edb2?w=1400&q=80&auto=format">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Cormorant+Garamond:wght@500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <!-- Non-critical: map library (needed later) -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
@@ -2653,35 +2653,32 @@ body:not(.welcomed) #feedback-backdrop{display:none!important}
   border-color:rgba(200,168,75,.35);
 }
 
-/* ── ALTERRA BRANDING ──────────────────────────── */
+/* ── BARRIER ISLAND DIGITAL BRANDING ─────────────── */
 .alterra-powered{
-  font-family:'Playfair Display',serif;
-  font-style:italic;
-  font-size:0.85rem;
-  letter-spacing:0.04em;
-  color:rgba(150,150,150,0.6);
+  font-family:'Cormorant Garamond',Georgia,serif;
+  font-style:normal;
+  font-weight:500;
+  font-size:0.9rem;
+  letter-spacing:0.02em;
+  color:rgba(220,225,235,0.7);
   text-align:center;
   padding:20px 0;
   margin:0;
 }
 .alterra-powered .alterra-name{
-  font-family:'Playfair Display',serif;
-  font-style:italic;
-  font-size:1.1rem;
-  letter-spacing:0.06em;
-  background:linear-gradient(135deg,#C9A84C,#B8704B);
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-  background-clip:text;
-}
-.alterra-powered .alterra-digital{
-  font-family:sans-serif;
+  font-family:'Cormorant Garamond',Georgia,serif;
   font-style:normal;
-  font-weight:300;
-  font-size:0.7rem;
-  letter-spacing:0.15em;
-  color:rgba(150,150,150,0.4);
-  text-transform:lowercase;
+  font-weight:600;
+  font-size:1.15rem;
+  letter-spacing:0.015em;
+  color:#E8ECF3;
+}
+.alterra-powered .alterra-name .alterra-llc{
+  font-size:0.7em;
+  font-weight:600;
+  letter-spacing:0.04em;
+  margin-left:0.18em;
+  color:#E8ECF3;
 }
 
 /* ── MAP TAB ────────────────────────────────────── */
@@ -3733,7 +3730,7 @@ function dismissWelcome() {
   <div class="hero-inner">
     <div class="hero-eyebrow">A 12-Day Road Trip · Portland → Fogo Island → Home</div>
     <h1 class="hero-title" aria-label="Newfoundland & Nova Scotia">Newfoundland<br>&amp; Nova Scotia</h1>
-    <div class="hero-subtitle">powered by <span style="font-family:'Playfair Display',serif;font-weight:700;font-style:normal;font-size:1.05em">Barrier Island Digital, LLC</span></div>
+    <div class="hero-subtitle">powered by <span style="font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;font-style:normal;font-size:1.1em;letter-spacing:.01em">Barrier Island Digital,<span style="font-size:.7em;font-weight:600;margin-left:.18em">LLC</span></span></div>
     <div class="hero-dates">June 27 – July 8, 2026</div>
     <div class="hero-actions">
       <button class="hero-btn hero-btn-primary" onclick="navTo('section-condensed',null)">Explore the Itinerary</button>
@@ -5843,7 +5840,7 @@ function dismissWelcome() {
     <button class="footer-btn" id="footer-top-btn">↑ Back to Top</button>
   </div>
   <p class="alterra-powered">
-    powered by <span class="alterra-name">Barrier Island Digital, LLC</span>
+    powered by <span class="alterra-name">Barrier Island Digital,<span class="alterra-llc">LLC</span></span>
   </p>
   <p class="footer-pplx"><a href="https://www.perplexity.ai/computer" target="_blank" rel="noopener noreferrer">Created with Perplexity Computer</a></p>
 </footer>
