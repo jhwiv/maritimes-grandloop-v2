@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="build-version" content="20260503_print_qc_fixes">
+<meta name="build-version" content="20260601_link_and_wx_fixes">
 <meta name="theme-color" content="#111D2B">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -4036,7 +4036,7 @@ function dismissWelcome() {
         <div class="lodging-actions">
           <a class="lodging-btn" href="https://www.flightaware.com/live/flight/DAL2359" target="_blank" rel="noopener">🛫 DL2359 Live (PDX→MSP)</a>
           <a class="lodging-btn" href="https://www.flightaware.com/live/flight/DAL1766" target="_blank" rel="noopener">🛫 DL1766 Live (MSP→PWM)</a>
-          <a class="lodging-btn" href="https://www.delta.com/flightinfo/searchByConfirmationNumber" target="_blank" rel="noopener">Delta.com</a>
+          <a class="lodging-btn" href="https://www.delta.com/mytrips/" target="_blank" rel="noopener">Delta.com</a>
           <a class="lodging-btn" href="https://maps.google.com/maps?q=Portland+International+Jetport+PWM" target="_blank" rel="noopener">🗺 PWM Airport</a>
         </div>
       </div>
@@ -4135,13 +4135,13 @@ function dismissWelcome() {
         <h3 class="stop-title ferry-title">MV Fundy Rose · Saint John → Digby<button class="stop-pron" onclick="speakWord('Fundy','en-CA')">🔊 FUN-dee</button></h3>
         <p class="stop-body">Board the Fundy Rose for the 2.5-hour crossing of the Bay of Fundy. Arrive Digby at approximately 4:45 PM Atlantic Time. Beautiful views of the bay and coast.</p>
         <div class="stop-meta">
-          <span class="meta-chip" data-popup data-popup-title="Bay Ferries — Fundy Rose" data-popup-body="The MV Fundy Rose is a high-speed catamaran operated by Bay Ferries, crossing the Bay of Fundy between Saint John, NB and Digby, NS. The 2.5-hour crossing runs daily in summer with morning and afternoon sailings. The ship has a cafeteria, lounge, outdoor deck, and vehicle deck." data-popup-tip="Book online at fundyrose.ca. Arrive at the terminal 60-90 min before departure. Vehicles board first, then walk-ons." data-popup-link="https://www.fundyrose.ca/" data-popup-link-label="Bay Ferries Website">⛴ Bay Ferries</span>
+          <span class="meta-chip" data-popup data-popup-title="Bay Ferries — Fundy Rose" data-popup-body="The MV Fundy Rose is a high-speed catamaran operated by Bay Ferries, crossing the Bay of Fundy between Saint John, NB and Digby, NS. The 2.5-hour crossing runs daily in summer with morning and afternoon sailings. The ship has a cafeteria, lounge, outdoor deck, and vehicle deck." data-popup-tip="Book online at ferries.ca/nb-ns-ferry. Arrive at the terminal 60-90 min before departure. Vehicles board first, then walk-ons." data-popup-link="https://www.ferries.ca/nb-ns-ferry" data-popup-link-label="Bay Ferries Website">⛴ Bay Ferries</span>
           <span class="meta-chip" data-popup data-popup-title="Fundy Rose Ferry: 2.5 Hours" data-popup-body="The Fundy Rose catamaran crosses the Bay of Fundy from Saint John, NB to Digby, NS. It&#39;s a comfortable crossing with a cafeteria, lounge seating, and outdoor decks." data-popup-tip="Book in advance during peak season. Arrive 60-90 min before departure for vehicle loading.">⏱ 2.5 hours</span>
           <a class="meta-chip meta-link" href="tel:+18777627245">📞 1-877-762-7245</a>
         </div>
         <p class="stop-note">Departs 2:15 PM AT · Arrives ~4:45 PM AT · Check-in at least 1 hour before departure</p>
         <div class="stop-actions">
-          <button class="btn-primary" data-popup data-popup-title="Bay Ferries — Fundy Rose" data-popup-body="The MV Fundy Rose is a high-speed catamaran operated by Bay Ferries, crossing the Bay of Fundy between Saint John, NB and Digby, NS. The 2.5-hour crossing runs daily in summer with morning and afternoon sailings. The ship has a cafeteria, lounge, outdoor deck, and vehicle deck." data-popup-tip="Book online at fundyrose.ca. Arrive at the terminal 60-90 min before departure. Vehicles board first, then walk-ons." data-popup-link="https://www.fundyrose.ca/" data-popup-link-label="Bay Ferries Website">🌐 Fundy Rose</button>
+          <button class="btn-primary" data-popup data-popup-title="Bay Ferries — Fundy Rose" data-popup-body="The MV Fundy Rose is a high-speed catamaran operated by Bay Ferries, crossing the Bay of Fundy between Saint John, NB and Digby, NS. The 2.5-hour crossing runs daily in summer with morning and afternoon sailings. The ship has a cafeteria, lounge, outdoor deck, and vehicle deck." data-popup-tip="Book online at ferries.ca/nb-ns-ferry. Arrive at the terminal 60-90 min before departure. Vehicles board first, then walk-ons." data-popup-link="https://www.ferries.ca/nb-ns-ferry" data-popup-link-label="Bay Ferries Website">🌐 Fundy Rose</button>
           <a class="btn-call" href="tel:+18777627245">📞 Call Ferry</a>
         </div>
       </article>
@@ -5074,7 +5074,7 @@ function dismissWelcome() {
           Confirmation <strong>GC3DXR</strong> · Ticket 0062428911469 · Main Classic
         </div>
         <div class="lodging-actions">
-          <a class="lodging-btn" href="https://www.delta.com/flightinfo/searchByConfirmationNumber" target="_blank" rel="noopener">🛫 Delta Status</a>
+          <a class="lodging-btn" href="https://www.delta.com/mytrips/" target="_blank" rel="noopener">🛫 Delta Status</a>
           <a class="lodging-btn" href="https://maps.google.com/maps?q=Portland+International+Jetport+PWM" target="_blank" rel="noopener">🗺 PWM Airport</a>
         </div>
       </div>
@@ -5163,7 +5163,7 @@ function dismissWelcome() {
       <table class="rtbl" aria-label="Ferry reservation details">
         <thead><tr><th>Ferry</th><th>Route</th><th>Contact</th><th>Website</th></tr></thead>
         <tbody>
-          <tr><td>MV Fundy Rose</td><td>Saint John ↔ Digby</td><td><a href="tel:+18777627245" style="color:var(--blue)">1-877-762-7245</a></td><td><a href="https://www.fundyrose.ca" target="_blank" style="color:var(--blue)">fundyrose.ca</a></td></tr>
+          <tr><td>MV Fundy Rose</td><td>Saint John ↔ Digby</td><td><a href="tel:+18777627245" style="color:var(--blue)">1-877-762-7245</a></td><td><a href="https://www.ferries.ca/nb-ns-ferry" target="_blank" style="color:var(--blue)">ferries.ca</a></td></tr>
           <tr><td>Marine Atlantic</td><td>N. Sydney ↔ Port aux Basques</td><td><a href="tel:+18003417981" style="color:var(--blue)">1-800-341-7981</a></td><td><a href="https://www.marineatlantic.ca" target="_blank" style="color:var(--blue)">marineatlantic.ca</a></td></tr>
 	          <tr><td>Fogo Island Ferry</td><td>Farewell ↔ Fogo Island</td><td><a href="tel:+18886385454" style="color:var(--blue)">1-888-638-5454</a></td><td><a href="https://www.gov.nl.ca/ti/ferryservices/schedules/c-fogo/" target="_blank" style="color:var(--blue)">NL ferry schedule</a></td></tr>
         </tbody>
@@ -7871,6 +7871,16 @@ if ('serviceWorker' in navigator) {
   var startDate = allDates[0];
   var endDate = allDates[allDates.length - 1];
 
+  // Open-Meteo's daily forecast only covers ~16 days. If the trip is further
+  // out, skip the trip-date fetch (the next IIFE populates the cards with
+  // current conditions as a seasonal preview). This prevents 400 errors.
+  var __now = new Date();
+  var __tripStart = new Date('2026-06-27');
+  var __daysUntilTrip = Math.ceil((__tripStart - __now) / 86400000);
+  if (__daysUntilTrip > 14) {
+    return; // exit IIFE early; second IIFE handles out-of-range case
+  }
+
   Object.keys(groups).forEach(function(key) {
     var g = groups[key];
     var url = 'https://api.open-meteo.com/v1/forecast'
@@ -9020,13 +9030,30 @@ if ('serviceWorker' in navigator) {
     closeBtn.classList.add('open');
     document.body.style.overflow = 'hidden';
     requestAnimationFrame(function(){requestAnimationFrame(function(){overlay.classList.remove('entering');});});
-    var api = 'https://api.open-meteo.com/v1/forecast'
-      + '?latitude=' + lat + '&longitude=' + lng
-      + '&hourly=temperature_2m,weather_code,apparent_temperature'
-      + '&daily=weather_code,temperature_2m_max,temperature_2m_min,apparent_temperature_max'
-      + '&temperature_unit=fahrenheit&wind_speed_unit=mph'
-      + '&timezone=' + encodeURIComponent(tz)
-      + '&start_date=' + dateStr + '&end_date=' + dateStr;
+    // Open-Meteo only has a ~16-day forecast horizon. For dates further out,
+    // fall back to current conditions to avoid 400 errors.
+    var __mNow = new Date();
+    var __mTarget = new Date(dateStr);
+    var __mDaysUntil = Math.ceil((__mTarget - __mNow) / 86400000);
+    var __mUseForecast = __mDaysUntil <= 14;
+    var api;
+    if (__mUseForecast) {
+      api = 'https://api.open-meteo.com/v1/forecast'
+        + '?latitude=' + lat + '&longitude=' + lng
+        + '&hourly=temperature_2m,weather_code,apparent_temperature'
+        + '&daily=weather_code,temperature_2m_max,temperature_2m_min,apparent_temperature_max'
+        + '&temperature_unit=fahrenheit&wind_speed_unit=mph'
+        + '&timezone=' + encodeURIComponent(tz)
+        + '&start_date=' + dateStr + '&end_date=' + dateStr;
+    } else {
+      api = 'https://api.open-meteo.com/v1/forecast'
+        + '?latitude=' + lat + '&longitude=' + lng
+        + '&hourly=temperature_2m,weather_code,apparent_temperature'
+        + '&daily=weather_code,temperature_2m_max,temperature_2m_min,apparent_temperature_max'
+        + '&temperature_unit=fahrenheit&wind_speed_unit=mph'
+        + '&timezone=' + encodeURIComponent(tz)
+        + '&forecast_days=1';
+    }
     fetch(api).then(function(r){return r.json();}).then(function(data) {
       if(!data.daily||!data.hourly) return;
       var hi=Math.round(data.daily.temperature_2m_max[0]);
