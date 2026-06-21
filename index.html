@@ -7747,18 +7747,46 @@ window.getItineraryCity = function() {
 </script>
 
 <script>
-// ── SERVICE WORKER CLEANUP ─────────────────────────────
-// Unregister any old service workers and clear caches
-// so users always get the latest version
+// ── SERVICE WORKER · NETWORK-FIRST HTML FOR FRESHNESS ──
+// sw.js uses a network-first strategy for HTML so the itinerary is
+// always live, and cache-first for static assets so the site loads
+// fast and works offline. On a new deploy, the SW activates
+// immediately and we reload once so the user sees the fresh page
+// without a second visit.
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.getRegistrations().then(function(registrations) {
-    registrations.forEach(function(reg) { reg.unregister(); });
-  });
-  if ('caches' in window) {
-    caches.keys().then(function(names) {
-      names.forEach(function(name) { caches.delete(name); });
+  // Clean up any legacy registrations that point at a different SW.
+  navigator.serviceWorker.getRegistrations().then(function(regs) {
+    regs.forEach(function(r) {
+      if (!r.active || !r.active.scriptURL.endsWith('/sw.js')) {
+        r.unregister();
+      }
     });
-  }
+  }).catch(function() {});
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('/sw.js').then(function(reg) {
+      var refreshing = false;
+      navigator.serviceWorker.addEventListener('controllerchange', function() {
+        if (refreshing) return;
+        refreshing = true;
+        window.location.reload();
+      });
+      if (reg.waiting) reg.waiting.postMessage('SKIP_WAITING');
+      reg.addEventListener('updatefound', function() {
+        var nw = reg.installing;
+        if (!nw) return;
+        nw.addEventListener('statechange', function() {
+          if (nw.state === 'installed' && navigator.serviceWorker.controller) {
+            nw.postMessage('SKIP_WAITING');
+          }
+        });
+      });
+      document.addEventListener('visibilitychange', function() {
+        if (document.visibilityState === 'visible') {
+          reg.update().catch(function() {});
+        }
+      });
+    }).catch(function() { /* SW registration failed — site still works */ });
+  });
 }
 </script>
 
