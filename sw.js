@@ -2,7 +2,7 @@
 // Network-first for HTML so users always see the latest itinerary.
 // Cache-first for static assets (icons, images) for offline + performance.
 
-const VERSION = 'mgl-2026-06-24-02-picks';
+const VERSION = 'mgl-2026-06-24-03-blackspoon';
 const HTML_CACHE = `${VERSION}-html`;
 const ASSET_CACHE = `${VERSION}-assets`;
 
