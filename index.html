@@ -4137,7 +4137,8 @@ function dismissWelcome() {
     <div class="cond-day">
       <div class="cond-day-label"><span class="cond-flag">⛴</span> Tue Jun 30 · Lunenburg → North Sydney → Ferry</div>
       <div class="cond-row"><span class="cond-time">Morning</span><span class="cond-what">Drive the Cabot Trail section north</span></div>
-      <div class="cond-row"><span class="cond-time">Late PM</span><span class="cond-what"><strong>North Sydney</strong> — board Marine Atlantic overnight ferry</span></div>
+      <div class="cond-row" data-event-iso="2026-06-30T19:00:00-03:00" data-event-tz="America/Halifax"><span class="cond-time">7:00 PM</span><span class="cond-what"><strong>Dinner · Black Spoon Bistro</strong> — Sydney (pre-ferry) <span class="cond-badge">✓ Confirmed</span></span></div>
+      <div class="cond-row"><span class="cond-time">9:45 PM</span><span class="cond-what"><strong>North Sydney</strong> — ferry check-in (2 hrs before sailing)</span></div>
       <div class="cond-row"><span class="cond-time">Overnight</span><span class="cond-what"><strong>Marine Atlantic</strong> — cabins to Port aux Basques, NL <span class="cond-badge ferry">⛴ overnight</span></span></div>
     </div>
 
@@ -4590,6 +4591,12 @@ function dismissWelcome() {
             <span class="drive-info-value">~5.5 hrs</span>
             <span class="drive-info-detail">to North Sydney terminal</span>
           </div>
+          <div class="drive-info-row">
+            <span class="drive-info-icon">🍽</span>
+            <span class="drive-info-label">Dinner</span>
+            <span class="drive-info-value">7:00 PM <small style="opacity:.7;font-weight:500">ADT</small></span>
+            <span class="drive-info-detail">Black Spoon Bistro, Sydney · ✓ Confirmed</span>
+          </div>
           <div class="drive-info-row drive-info-dest-row">
             <span class="drive-info-icon">⛴</span>
             <span class="drive-info-label">Lodging</span>
@@ -4642,6 +4649,18 @@ function dismissWelcome() {
           <a class="btn-call" href="tel:+18003417981">📞 Call Ferry</a>
         </div>
       </article>
+    </div>
+
+    <div class="lodging-card">
+      <div class="lodging-icon">🍽</div>
+      <div class="lodging-info">
+        <div class="lodging-label">Confirmed Dinner · Tue Jun 30 · 7:00 PM ADT (Atlantic Time)</div>
+        <div class="lodging-name">Black Spoon Bistro</div>
+        <div class="lodging-addr">320 Esplanade, Sydney, NS · pre-ferry (~12 min from North Sydney terminal)</div>
+        <div class="lodging-actions">
+          <a class="lodging-btn" href="https://maps.google.com/maps?q=Black+Spoon+Bistro+320+Esplanade+Sydney+NS" target="_blank" rel="noopener">🗺 Map</a>
+        </div>
+      </div>
     </div>
 
     <div class="lodging-card">
@@ -6250,7 +6269,7 @@ function dismissWelcome() {
 <footer id="site-footer" role="contentinfo">
   <p class="footer-quote">May every ferry be on time, every iceberg majestic, and every mile a memory.</p>
   <p class="footer-sub">Portland → Nova Scotia → Newfoundland → Fogo Island → Home</p>
-  <p class="footer-meta">Maritimes · Summer 2026 · v5.1 · Updated 24 June 2026</p>
+  <p class="footer-meta">Maritimes · Summer 2026 · v5.2 · Updated 24 June 2026</p>
   <div class="footer-actions">
     <a class="footer-btn" href="https://www.marineatlantic.ca" target="_blank" rel="noopener">⛴ Marine Atlantic</a>
     <a class="footer-btn" href="https://fogoislandinn.ca" target="_blank" rel="noopener">⭐ Fogo Island Inn</a>
@@ -6494,7 +6513,8 @@ var drivingDirectionsPacket = [
     steps:[
       'Leave Lunenburg early enough to protect the Marine Atlantic check-in window.',
       'Use Mahone Bay, Chester, Halifax, Truro, or Baddeck only if the ferry timing still has a safe buffer.',
-      'Arrive at the North Sydney terminal 2 hours before sailing with vehicle documents and reservation details handy.',
+      'Dinner confirmed at Black Spoon Bistro, Sydney at 7:00 PM ADT (Atlantic Time) — about 12 minutes from the North Sydney terminal. Aim to finish by 8:30 PM.',
+      'Arrive at the North Sydney terminal by 9:45 PM ADT (2 hours before sailing) with vehicle documents and reservation details handy.',
       'Board the overnight Marine Atlantic ferry to Port aux Basques.',
       'Pack an overnight ferry bag before boarding so you do not need the car deck.'
     ]
@@ -6682,7 +6702,7 @@ var roadBookDays = [
   { day:'Day 1 · Sat Jun 27', route:'Portland, ME', timing:'Arrival / evening', overnight:'Courtyard Portland Downtown/Waterfront', note:'Print ferry and hotel confirmations. Download offline maps for Maine, New Brunswick, Nova Scotia, and Newfoundland.' },
   { day:'Day 2 · Sun Jun 28', route:'Portland → Saint John → Fundy Rose → Digby', timing:'Depart 7:00 AM EDT · ~10 hr door-to-door day', overnight:'Fundy Complex Dockside Suites, Digby (1 room)', note:'Passports out before Calais/St. Stephen. Arrive Fundy Rose terminal 1 hour early. Expect weak signal north of Bangor and rural NB.' },
   { day:'Day 3 · Mon Jun 29', route:'Digby → Annapolis Royal → Lunenburg', timing:'Depart 9:00 AM ADT · ~2.5-3 hrs', overnight:'Smugglers Cove Inn, Lunenburg (1 room)', note:'Easy day. Annapolis Royal is the natural leg-stretcher; park once in Lunenburg and walk the waterfront. Dinner confirmed: Beach Pea Kitchen & Bar, 8:00 PM ADT.' },
-  { day:'Day 4 · Tue Jun 30', route:'Lunenburg → Halifax/Baddeck corridor → North Sydney ferry', timing:'Depart 8:00 AM ADT · ~5.5 hrs', overnight:'Marine Atlantic ferry cabin', note:'Protect ferry check-in. Arrive North Sydney 2 hours before sailing. Pack overnight ferry bag before boarding.' },
+  { day:'Day 4 · Tue Jun 30', route:'Lunenburg → Halifax/Baddeck corridor → North Sydney ferry', timing:'Depart 8:00 AM ADT · ~5.5 hrs', overnight:'Marine Atlantic ferry cabin', note:'Dinner confirmed: Black Spoon Bistro, Sydney, 7:00 PM ADT. Protect ferry check-in (9:45 PM, 2 hrs before sailing). Pack overnight ferry bag before boarding.' },
   { day:'Day 5 · Wed Jul 1', route:'Port aux Basques → Deer Lake → Twillingate', timing:'Start after ferry · ~7 hrs', overnight:'Anchor Inn Hotel & Suites, Twillingate (2 rooms)', note:'Newfoundland dead zones. Fuel at Corner Brook / Deer Lake. Avoid driving after dark because of moose risk.' },
   { day:'Day 6 · Thu Jul 2', route:'Twillingate → Farewell ferry → Fogo Island Inn', timing:'Depart 8:00 AM NDT · ~2.5 hrs if ferry aligns', overnight:'Fogo Island Inn', note:'Check Fogo ferry status before leaving Wi-Fi. Assume little to no cell service approaching Farewell and on Fogo.' },
   { day:'Days 7-8 · Fri Jul 3-Sat Jul 4', route:'Fogo Island', timing:'Stay put', overnight:'Fogo Island Inn', note:'Use inn concierge and printed packet. Confirm return ferry timing before the last night.' },
@@ -7140,7 +7160,9 @@ onScroll();
     ['2026-06-29T20:00-03:00', 'section-day3', 1], // Dinner: Beach Pea Kitchen & Bar (8 PM ADT)
     // Day 4: Lunenburg → North Sydney → Ferry
     ['2026-06-30T08:00-03:00', 'section-day4', 0],
-    ['2026-06-30T18:00-03:00', 'section-day4', 1], // Overnight ferry
+    ['2026-06-30T19:00-03:00', 'section-day4', 1], // Dinner: Black Spoon Bistro (7 PM ADT pre-ferry)
+    ['2026-06-30T21:45-03:00', 'section-day4', 1], // Ferry check-in
+    ['2026-06-30T23:45-03:00', 'section-day4', 1], // Marine Atlantic departs
     // Day 5: Port aux Basques → Twillingate
     ['2026-07-01T07:00-02:30', 'section-day5', 0],
     ['2026-07-01T12:00-02:30', 'section-day5', 2], // Deer Lake
@@ -7220,8 +7242,10 @@ onScroll();
       detail:'Fundy Complex Dockside Suites, 34 Water St (1 room)', popDay:'Day 2 · June 28' },
     { day:'3', lat:44.3764, lng:-64.3118, name:'Lunenburg, NS', type:'overnight',
       detail:'Smugglers Cove Inn, 139 Montague St · UNESCO (1 room) · Dinner: Beach Pea Kitchen & Bar 8:00 PM ADT', popDay:'Day 3 · June 29' },
+    { day:'4', lat:46.1351, lng:-60.1831, name:'Black Spoon Bistro, Sydney, NS', type:'dining',
+      detail:'Dinner 7:00 PM ADT · 320 Esplanade · ✓ Confirmed', popDay:'Day 4 · June 30' },
     { day:'4', lat:46.2170, lng:-60.2488, name:'North Sydney, NS', type:'waypoint',
-      detail:'Marine Atlantic terminal · Overnight ferry', popDay:'Day 4 · June 30' },
+      detail:'Marine Atlantic terminal · Overnight ferry · Dinner: Black Spoon Bistro 7:00 PM ADT', popDay:'Day 4 · June 30' },
     { day:'4', lat:47.5719, lng:-59.1354, name:'Port aux Basques, NL', type:'waypoint',
       detail:'Marine Atlantic arrival', popDay:'Day 4-5 · June 30-July 1' },
     { day:'5', lat:48.9509, lng:-57.9531, name:'Corner Brook, NL', type:'waypoint',
