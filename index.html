@@ -3687,6 +3687,221 @@ body.hero-visible #ferry-chip{
 @media (prefers-reduced-motion: reduce){
   .fs-strip.is-loading .fs-badge::before{ animation:none; }
 }
+
+/* ── Itinerary picks ───── */
+/* ── Itinerary "Your picks" ─────────────────────────────────────────── */
+
+/* Add-to-itinerary pill (used inside chat + extras-strip) */
+.pick-add-pill-wrap{
+  display:inline-block;
+  margin:0 4px;
+  vertical-align:baseline;
+  white-space:nowrap;
+}
+.pick-add-pill{
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  font-family:'DM Mono',monospace;
+  font-size:11px;
+  font-weight:600;
+  letter-spacing:.04em;
+  padding:2px 8px 2px 6px;
+  border-radius:999px;
+  background:var(--cream2);
+  color:var(--gold-text);
+  border:1px solid rgba(115,86,15,.28);
+  cursor:pointer;
+  line-height:1.4;
+  transition:background .15s,color .15s,border-color .15s,transform .05s;
+}
+.pick-add-pill:hover{
+  background:rgba(115,86,15,.10);
+  border-color:rgba(115,86,15,.55);
+}
+.pick-add-pill:active{ transform:scale(.95); }
+.pick-add-pill:focus-visible{ outline:2px solid var(--gold-text); outline-offset:2px; }
+
+/* Per-day "Your picks" container */
+.picks-container{
+  display:none;
+  margin:18px 0 6px;
+  padding:14px 16px;
+  background:linear-gradient(180deg, rgba(115,86,15,.04), rgba(115,86,15,.01));
+  border:1px solid rgba(115,86,15,.18);
+  border-radius:10px;
+}
+.picks-container.is-shown{ display:block; }
+.picks-header{
+  display:flex;align-items:baseline;justify-content:space-between;
+  margin-bottom:10px;
+}
+.picks-eyebrow{
+  font-family:'DM Mono',monospace;
+  font-size:12px;font-weight:600;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:var(--gold-text);
+}
+.picks-count{
+  font-family:'DM Mono',monospace;
+  font-size:11px;color:var(--steel);
+  letter-spacing:.04em;
+}
+.picks-list{
+  list-style:none;margin:0;padding:0;
+  display:flex;flex-direction:column;gap:8px;
+}
+.pick-item{
+  background:#fff;
+  border:1px solid var(--divider);
+  border-radius:8px;
+  padding:10px 12px;
+}
+.pick-row{
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+}
+.pick-icon{
+  font-size:18px;line-height:1;flex:none;
+  margin-top:1px;
+}
+.pick-body{ flex:1; min-width:0; }
+.pick-title-row{
+  display:flex;align-items:baseline;
+  gap:8px;flex-wrap:wrap;
+}
+.pick-title{
+  font-family:'Playfair Display',serif;
+  font-size:15px;font-weight:700;
+  color:var(--navy);line-height:1.3;
+}
+.pick-time{
+  font-family:'DM Mono',monospace;
+  font-size:11px;font-weight:600;
+  letter-spacing:.04em;
+  padding:2px 7px;border-radius:4px;
+  background:var(--cream2);
+  color:var(--gold-text);
+}
+.pick-desc{
+  font-family:'Crimson Pro',serif;
+  font-size:14px;color:var(--steel);
+  line-height:1.5;
+  margin-top:3px;
+}
+.pick-actions{
+  display:flex;flex-wrap:wrap;
+  gap:6px 12px;
+  margin-top:8px;
+  align-items:center;
+}
+.pick-link{
+  font-family:'DM Mono',monospace;
+  font-size:11px;font-weight:600;
+  color:var(--gold-text);
+  text-decoration:none;
+  border-bottom:1px solid rgba(115,86,15,.35);
+}
+.pick-link:hover,.pick-link:focus-visible{ border-bottom-color:var(--gold-text); outline:none; }
+.pick-btn{
+  font-family:'DM Mono',monospace;
+  font-size:11px;font-weight:500;
+  background:transparent;
+  color:var(--steel);
+  border:1px solid var(--divider);
+  border-radius:4px;
+  padding:2px 8px;
+  cursor:pointer;
+  letter-spacing:.02em;
+}
+.pick-btn:hover{ background:var(--cream2); color:var(--navy); }
+.pick-btn:focus-visible{ outline:2px solid var(--gold-text); outline-offset:1px; }
+.pick-btn-danger{ color:#a44; }
+.pick-btn-danger:hover{ background:rgba(193,57,43,.08); color:#c1392b; border-color:rgba(193,57,43,.3); }
+
+/* Briefly highlight a just-added pick when 'View →' jumps to it */
+.pick-item.is-flash{
+  animation: pick-flash 1.6s ease-out 1;
+}
+@keyframes pick-flash{
+  0%   { background:rgba(115,86,15,.18); box-shadow:0 0 0 4px rgba(115,86,15,.18); }
+  100% { background:#fff;                box-shadow:0 0 0 0 rgba(115,86,15,0); }
+}
+@media (prefers-reduced-motion: reduce){
+  .pick-item.is-flash{ animation:none; }
+}
+
+/* Toast */
+.picks-toast{
+  position:fixed;
+  bottom:max(96px,env(safe-area-inset-bottom,12px));
+  left:50%;
+  transform:translateX(-50%) translateY(20px);
+  opacity:0;pointer-events:none;
+  z-index:9100;
+  max-width:min(420px,calc(100vw - 32px));
+  background:var(--navy);
+  color:var(--cream);
+  border-radius:10px;
+  box-shadow:0 12px 30px rgba(0,0,0,.25),0 4px 10px rgba(0,0,0,.15);
+  transition:opacity .2s,transform .2s;
+  font-family:'DM Mono',monospace;
+  font-size:13px;
+}
+.picks-toast.is-shown{
+  opacity:1;
+  transform:translateX(-50%) translateY(0);
+  pointer-events:auto;
+}
+.picks-toast-inner{
+  display:flex;align-items:center;flex-wrap:wrap;
+  gap:8px 12px;
+  padding:10px 14px;
+}
+.picks-toast-msg{ font-weight:600; letter-spacing:.02em; flex:1 1 auto; min-width:0; }
+.picks-toast-move{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:11px;color:rgba(250,247,242,.7);
+  letter-spacing:.04em;
+}
+.picks-toast-move select{
+  font-family:'DM Mono',monospace;
+  font-size:11px;
+  background:rgba(255,255,255,.08);
+  color:var(--cream);
+  border:1px solid rgba(255,255,255,.15);
+  border-radius:4px;
+  padding:2px 4px;
+  max-width:160px;
+}
+.picks-toast-jump{
+  font-family:'DM Mono',monospace;
+  font-size:11px;font-weight:700;
+  letter-spacing:.06em;
+  background:var(--gold);
+  color:var(--navy);
+  border:none;
+  border-radius:4px;
+  padding:4px 10px;
+  cursor:pointer;
+}
+.picks-toast-jump:hover{ background:var(--gold2); }
+.picks-toast-jump:focus-visible{ outline:2px solid var(--cream); outline-offset:2px; }
+
+@media (max-width:480px){
+  .picks-toast{ max-width:calc(100vw - 24px); }
+  .picks-toast-inner{ padding:10px 12px; flex-direction:column; align-items:stretch; }
+  .picks-toast-msg,.picks-toast-move,.picks-toast-jump{ width:100%; }
+  .picks-toast-move{ justify-content:space-between; }
+  .picks-toast-move select{ flex:1; max-width:none; }
+  .picks-toast-jump{ padding:8px 12px; }
+}
+@media (prefers-reduced-motion:reduce){
+  .picks-toast,.pick-add-pill{ transition:none; }
+}
+
 </style>
 </head>
 <body>
@@ -10620,5 +10835,510 @@ requestAnimationFrame(function(){
 })();
 </script>
 
+
+<script>
+/* ──────────────────────────────────────────────────────────────────────
+   Itinerary Picks — lets the user save concierge or app recommendations
+   into a per-day "Your picks" list, persisted in localStorage. No backend.
+
+   Public surface (added at the bottom of index.html, inside one IIFE):
+
+   - Adds a "Your picks for today" container into each <section id="section-dayN">
+     that becomes visible only when that day has saved picks.
+   - Listens for any <a> with a maps.google.com href inside a chat message
+     bubble (.chat-msg-assistant) and injects an "＋ Add" pill next to it.
+   - Walks each .extras-strip looking for <strong>Restaurant Name</strong>
+     patterns and adds the same pill next to each.
+   - Shows a small confirmation toast on add, with a day dropdown so the
+     user can correct the inferred day, plus a time picker.
+   - Each saved pick can be edited (time) or removed inline.
+
+   localStorage key: "mgl.picks.v1"
+   shape: { "section-day3": [Pick, ...], ... }
+   Pick: { id, kind, title, desc, time, mapUrl, addedAt, source }
+   ────────────────────────────────────────────────────────────────────── */
+(function () {
+  'use strict';
+
+  var STORAGE_KEY = 'mgl.picks.v1';
+  var ALL_DAYS = [
+    { id: 'section-day1',  label: 'Day 1 · Portland · Sat Jun 27' },
+    { id: 'section-day2',  label: 'Day 2 · Digby · Sun Jun 28' },
+    { id: 'section-day3',  label: 'Day 3 · Lunenburg · Mon Jun 29' },
+    { id: 'section-day4',  label: 'Day 4 · Ferry (North Sydney) · Tue Jun 30' },
+    { id: 'section-day5',  label: 'Day 5 · Twillingate · Wed Jul 1' },
+    { id: 'section-fogo',  label: 'Days 6–8 · Fogo Island · Jul 2–4' },
+    { id: 'section-day9',  label: 'Day 9 · Return Ferry · Sun Jul 5' },
+    { id: 'section-day10', label: 'Day 10 · Pictou · Mon Jul 6' },
+    { id: 'section-day11', label: 'Day 11 · Fredericton · Tue Jul 7' },
+    { id: 'section-day12', label: 'Day 12 · Home · Wed Jul 8' },
+  ];
+
+  // ── Storage ────────────────────────────────────────────────────────
+  function loadAll() {
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}') || {}; }
+    catch (e) { return {}; }
+  }
+  function saveAll(state) {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {}
+  }
+  function getPicks(dayId) { return (loadAll()[dayId] || []).slice(); }
+  function setPicks(dayId, picks) {
+    var state = loadAll();
+    if (picks && picks.length) state[dayId] = picks; else delete state[dayId];
+    saveAll(state);
+  }
+  function newId() { return 'p_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5); }
+
+  function escapeHtml(s) {
+    return String(s == null ? '' : s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+
+  // ── Day inference ──────────────────────────────────────────────────
+  // Best-guess the day a pick belongs to, based on:
+  //   1. The currently visible day section (active nav-chip)
+  //   2. Text mentions of place names mapped to days
+  //   3. Default: Day 1
+  var PLACE_TO_DAY = [
+    { re: /\b(north sydney|sydney(?!\s+ns?)|sydney ns|marine atlantic terminal|cape breton terminal|pre[- ]ferry)\b/i, day: 'section-day4' },
+    { re: /\b(port aux basques)\b/i, day: 'section-day9' },
+    { re: /\b(lunenburg|mahone bay|chester(?!\s+ave))\b/i, day: 'section-day3' },
+    { re: /\b(digby|annapolis|saint john)\b/i, day: 'section-day2' },
+    { re: /\b(portland|maine)\b/i, day: 'section-day1' },
+    { re: /\b(twillingate)\b/i, day: 'section-day5' },
+    { re: /\b(fogo)\b/i, day: 'section-fogo' },
+    { re: /\b(pictou)\b/i, day: 'section-day10' },
+    { re: /\b(fredericton)\b/i, day: 'section-day11' },
+  ];
+
+  function inferDay(text, fallback) {
+    if (text) {
+      for (var i = 0; i < PLACE_TO_DAY.length; i++) {
+        if (PLACE_TO_DAY[i].re.test(text)) return PLACE_TO_DAY[i].day;
+      }
+    }
+    return fallback || activeDayId() || 'section-day1';
+  }
+
+  function activeDayId() {
+    var sections = document.querySelectorAll('section[id^="section-day"], section#section-fogo');
+    var top = window.scrollY + window.innerHeight * 0.3;
+    var best = null;
+    var bestDelta = Infinity;
+    for (var i = 0; i < sections.length; i++) {
+      var rect = sections[i].getBoundingClientRect();
+      var sectionTop = rect.top + window.scrollY;
+      if (sectionTop <= top + 80) {
+        var d = top - sectionTop;
+        if (d < bestDelta) { bestDelta = d; best = sections[i].id; }
+      }
+    }
+    return best;
+  }
+
+  function dayLabel(id) {
+    for (var i = 0; i < ALL_DAYS.length; i++) if (ALL_DAYS[i].id === id) return ALL_DAYS[i].label;
+    return id;
+  }
+  function shortDayLabel(id) {
+    // "Day 4 · Ferry · Jun 30" → "Day 4 · Ferry"
+    var L = dayLabel(id);
+    var parts = L.split(' · ');
+    return parts.slice(0, 2).join(' · ');
+  }
+
+  // ── Mount: inject the "Your picks" container into every day section ──
+  // Prefer to append INSIDE .content-section (the cream content panel) so the
+  // box renders on the same cream background as the day's content, not on the
+  // navy spacer between days.
+  function mountContainers() {
+    var sections = document.querySelectorAll('section[id^="section-day"], section#section-fogo');
+    for (var i = 0; i < sections.length; i++) {
+      var sec = sections[i];
+      if (sec.querySelector('.picks-container')) continue;
+      var box = document.createElement('div');
+      box.className = 'picks-container';
+      box.setAttribute('data-picks-for', sec.id);
+      box.innerHTML =
+        '<div class="picks-header">' +
+          '<span class="picks-eyebrow">⭐ Your picks</span>' +
+          '<span class="picks-count" aria-live="polite"></span>' +
+        '</div>' +
+        '<ul class="picks-list" role="list"></ul>';
+      var contentSection = sec.querySelector('.content-section');
+      (contentSection || sec).appendChild(box);
+    }
+  }
+
+  // ── Render ─────────────────────────────────────────────────────────
+  function renderDay(dayId) {
+    var box = document.querySelector('.picks-container[data-picks-for="' + dayId + '"]');
+    if (!box) return;
+    var picks = getPicks(dayId);
+    var list = box.querySelector('.picks-list');
+    var count = box.querySelector('.picks-count');
+    if (!picks.length) {
+      box.classList.remove('is-shown');
+      list.innerHTML = '';
+      count.textContent = '';
+      return;
+    }
+    box.classList.add('is-shown');
+    count.textContent = picks.length + (picks.length === 1 ? ' pick' : ' picks');
+    list.innerHTML = picks.map(function (p) {
+      var iconChar = p.kind === 'dining' ? '🍽' : (p.kind === 'sight' ? '📍' : '⭐');
+      var timeStr = p.time ? '<span class="pick-time">' + escapeHtml(p.time) + '</span>' : '';
+      var mapLink = p.mapUrl
+        ? '<a class="pick-link" href="' + escapeHtml(p.mapUrl) + '" target="_blank" rel="noopener">Open in Maps ↗</a>'
+        : '';
+      return (
+        '<li class="pick-item" data-pick-id="' + escapeHtml(p.id) + '">' +
+          '<div class="pick-row">' +
+            '<span class="pick-icon" aria-hidden="true">' + iconChar + '</span>' +
+            '<div class="pick-body">' +
+              '<div class="pick-title-row">' +
+                '<span class="pick-title">' + escapeHtml(p.title) + '</span>' +
+                timeStr +
+              '</div>' +
+              (p.desc ? '<div class="pick-desc">' + escapeHtml(p.desc) + '</div>' : '') +
+              '<div class="pick-actions">' +
+                mapLink +
+                '<button type="button" class="pick-btn" data-pick-action="time">⏱ Set time</button>' +
+                '<button type="button" class="pick-btn pick-btn-danger" data-pick-action="remove">Remove</button>' +
+              '</div>' +
+            '</div>' +
+          '</div>' +
+        '</li>'
+      );
+    }).join('');
+  }
+
+  function renderAll() {
+    var state = loadAll();
+    Object.keys(state).forEach(renderDay);
+    // Also re-render any that were just emptied
+    document.querySelectorAll('.picks-container').forEach(function (b) {
+      var id = b.getAttribute('data-picks-for');
+      if (!state[id]) renderDay(id);
+    });
+  }
+
+  // ── Add / remove ───────────────────────────────────────────────────
+  function addPick(dayId, pick) {
+    var picks = getPicks(dayId);
+    // Dedupe by title within day
+    if (picks.some(function (p) { return p.title === pick.title; })) {
+      showToast('Already in ' + shortDayLabel(dayId), dayId);
+      return;
+    }
+    pick.id = pick.id || newId();
+    pick.addedAt = pick.addedAt || new Date().toISOString();
+    picks.push(pick);
+    setPicks(dayId, picks);
+    renderDay(dayId);
+    showToast('Added to ' + shortDayLabel(dayId), dayId, pick);
+  }
+
+  function removePick(dayId, pickId) {
+    var picks = getPicks(dayId).filter(function (p) { return p.id !== pickId; });
+    setPicks(dayId, picks);
+    renderDay(dayId);
+  }
+
+  function setPickTime(dayId, pickId, time) {
+    var picks = getPicks(dayId).map(function (p) {
+      return p.id === pickId ? Object.assign({}, p, { time: time }) : p;
+    });
+    setPicks(dayId, picks);
+    renderDay(dayId);
+  }
+
+  // ── Toast with day selector + jump-to action ───────────────────────
+  var toastEl = null, toastTimer = null;
+  function showToast(message, dayId, lastPick) {
+    if (!toastEl) {
+      toastEl = document.createElement('div');
+      toastEl.className = 'picks-toast';
+      toastEl.setAttribute('role', 'status');
+      toastEl.setAttribute('aria-live', 'polite');
+      document.body.appendChild(toastEl);
+    }
+    var options = ALL_DAYS.map(function (d) {
+      var sel = d.id === dayId ? ' selected' : '';
+      return '<option value="' + d.id + '"' + sel + '>' + escapeHtml(d.label) + '</option>';
+    }).join('');
+    var moveSelect = lastPick
+      ? '<label class="picks-toast-move">' +
+          '<span>Move to:</span>' +
+          '<select data-toast-move>' + options + '</select>' +
+        '</label>'
+      : '';
+    toastEl.innerHTML =
+      '<div class="picks-toast-inner">' +
+        '<span class="picks-toast-msg">' + escapeHtml(message) + '</span>' +
+        moveSelect +
+        '<button type="button" class="picks-toast-jump" data-toast-jump="' + escapeHtml(dayId) + '">View →</button>' +
+      '</div>';
+    toastEl.classList.add('is-shown');
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { toastEl.classList.remove('is-shown'); }, 6000);
+
+    if (lastPick) {
+      var sel = toastEl.querySelector('[data-toast-move]');
+      sel.addEventListener('change', function () {
+        var newDay = sel.value;
+        if (newDay === dayId) return;
+        // Move the pick to the new day
+        var current = getPicks(dayId).filter(function (p) { return p.id !== lastPick.id; });
+        setPicks(dayId, current);
+        renderDay(dayId);
+        addPick(newDay, lastPick);
+      });
+    }
+  }
+
+  document.addEventListener('click', function (e) {
+    // Toast jump button
+    var jumpBtn = e.target.closest('[data-toast-jump]');
+    if (jumpBtn) {
+      var id = jumpBtn.getAttribute('data-toast-jump');
+      var el = document.getElementById(id);
+      if (el) {
+        toastEl && toastEl.classList.remove('is-shown');
+        // If the chat overlay is open, close it via the existing close button.
+        var chatClose = document.getElementById('chat-close');
+        var chatPanel = document.getElementById('chat-panel');
+        var chatIsOpen = chatPanel && chatPanel.classList.contains('open');
+        if (chatIsOpen && chatClose) chatClose.click();
+        var chip = document.querySelector('.nav-chip[data-target="' + id + '"]');
+        if (chip) chip.click();
+        setTimeout(function () {
+          var container = el.querySelector('.picks-container');
+          (container || el).scrollIntoView({ behavior: 'smooth', block: 'start' });
+          // Flash the most recently added item
+          var picks = getPicks(id);
+          if (picks.length) {
+            var lastId = picks[picks.length - 1].id;
+            var node = container && container.querySelector('[data-pick-id="' + lastId + '"]');
+            if (node) {
+              node.classList.remove('is-flash');
+              // Force a reflow before re-adding so the animation restarts
+              void node.offsetWidth;
+              node.classList.add('is-flash');
+            }
+          }
+        }, 200);
+      }
+      return;
+    }
+
+    // Pick action buttons inside a pick item
+    var actionBtn = e.target.closest('[data-pick-action]');
+    if (actionBtn) {
+      var item = actionBtn.closest('.pick-item');
+      var container = actionBtn.closest('.picks-container');
+      if (!item || !container) return;
+      var pickId = item.getAttribute('data-pick-id');
+      var dayId2 = container.getAttribute('data-picks-for');
+      var action = actionBtn.getAttribute('data-pick-action');
+      if (action === 'remove') {
+        removePick(dayId2, pickId);
+      } else if (action === 'time') {
+        var current = (getPicks(dayId2).find(function (p) { return p.id === pickId; }) || {}).time || '';
+        var t = window.prompt('Set time for this pick (e.g. "7:00 PM" or leave blank to clear):', current);
+        if (t !== null) setPickTime(dayId2, pickId, t.trim());
+      }
+      return;
+    }
+
+    // "+ Add" pill anywhere on the page (chat or extras-strip)
+    var addBtn = e.target.closest('[data-add-pick]');
+    if (addBtn) {
+      e.preventDefault();
+      e.stopPropagation();
+      try {
+        var payload = JSON.parse(addBtn.getAttribute('data-add-pick'));
+        var inferred = inferDay(
+          (payload.title || '') + ' ' + (payload.desc || '') + ' ' + (payload.context || ''),
+          activeDayId()
+        );
+        var p = {
+          kind: payload.kind || 'dining',
+          title: payload.title,
+          desc: payload.desc || '',
+          time: payload.time || '',
+          mapUrl: payload.mapUrl || '',
+          source: payload.source || 'manual',
+        };
+        addPick(inferred, p);
+      } catch (err) {
+        console.error('Bad add-pick payload', err);
+      }
+    }
+  });
+
+  // ── Pill renderer (shared) ─────────────────────────────────────────
+  function pillHtml(payload) {
+    var data = JSON.stringify(payload).replace(/"/g, '&quot;');
+    return '<button type="button" class="pick-add-pill" data-add-pick="' + data + '" aria-label="Add ' + escapeHtml(payload.title) + ' to itinerary">＋ Add</button>';
+  }
+
+  // ── Concierge chat: inject pills next to each maps.google.com link ──
+  // Strategy: observe DOM mutations on the chat-messages container. When
+  // an assistant message finishes streaming, scan its anchors and inject
+  // a pill after each.
+  function enhanceChatMessage(msgWrap) {
+    if (!msgWrap || msgWrap.dataset.picksEnhanced === '1') return;
+    var anchors = msgWrap.querySelectorAll('a[href*="maps.google.com"]');
+    if (!anchors.length) return;
+    var fullText = msgWrap.textContent || '';
+    anchors.forEach(function (a) {
+      if (a.dataset.picksEnhanced === '1') return;
+      var title = (a.textContent || '').trim();
+      if (!title) return;
+      // Description = the prose right after this link, up to next link, line
+      // break, or numbered-list start ("1. ", "2. " etc.)
+      var desc = '';
+      var sib = a.nextSibling;
+      while (sib && desc.length < 180) {
+        if (sib.nodeType === 1 && sib.tagName === 'BR') break;
+        if (sib.nodeType === 3) desc += sib.nodeValue;
+        else if (sib.nodeType === 1) {
+          if (sib.tagName === 'A' && /maps\.google\.com/.test(sib.getAttribute('href') || '')) break;
+          desc += sib.textContent || '';
+        }
+        sib = sib.nextSibling;
+      }
+      // Stop at the next list marker (e.g. "2." starting a new item)
+      desc = desc.split(/\n+|\s+\d+\.\s+/)[0] || '';
+      desc = desc.replace(/^[\s\u2014\u2013:.,;\-]+/, '').replace(/\s+/g, ' ').trim();
+      if (desc) desc = desc.charAt(0).toUpperCase() + desc.slice(1);
+      if (desc.length > 160) desc = desc.slice(0, 157) + '…';
+      var payload = {
+        kind: 'dining',
+        title: title,
+        desc: desc,
+        mapUrl: a.href,
+        context: fullText.slice(0, 600),
+        source: 'concierge',
+      };
+      var pill = document.createElement('span');
+      pill.className = 'pick-add-pill-wrap';
+      pill.innerHTML = pillHtml(payload);
+      a.insertAdjacentElement('afterend', pill);
+      a.dataset.picksEnhanced = '1';
+    });
+    msgWrap.dataset.picksEnhanced = '1';
+  }
+
+  function watchChat() {
+    var container = document.getElementById('chat-messages');
+    if (!container) return;
+    var BUBBLE_SEL = '.chat-msg.assistant';
+    container.querySelectorAll(BUBBLE_SEL).forEach(enhanceChatMessage);
+    var pending = new Set();
+    function scheduleEnhance(node) {
+      if (!node || pending.has(node)) return;
+      pending.add(node);
+      setTimeout(function () {
+        pending.delete(node);
+        node.dataset.picksEnhanced = '';
+        enhanceChatMessage(node);
+      }, 350); // wait for stream to settle so the full link text is present
+    }
+    var mo = new MutationObserver(function (mutations) {
+      mutations.forEach(function (m) {
+        // New bubble added
+        m.addedNodes && m.addedNodes.forEach(function (n) {
+          if (n.nodeType !== 1) return;
+          if (n.matches && n.matches(BUBBLE_SEL)) scheduleEnhance(n);
+          n.querySelectorAll && n.querySelectorAll(BUBBLE_SEL).forEach(scheduleEnhance);
+        });
+        // Existing bubble being streamed into
+        var bubble = m.target && m.target.closest && m.target.closest(BUBBLE_SEL);
+        if (bubble) scheduleEnhance(bubble);
+      });
+    });
+    mo.observe(container, { childList: true, subtree: true, characterData: true });
+  }
+
+  // ── Static extras-strip pills (auto-injection) ─────────────────────
+  // For every <strong>Name</strong> inside .extras-strip that looks like
+  // a restaurant or place, insert a pill right after it.
+  function enhanceExtrasStrip() {
+    var strips = document.querySelectorAll('.extras-strip');
+    strips.forEach(function (strip) {
+      if (strip.dataset.picksEnhanced === '1') return;
+      // Find the day section this strip belongs to so we can pre-fill context
+      var dayId = (strip.closest('section[id^="section-day"]') || {}).id || '';
+      var dayContextLabel = dayId ? dayLabel(dayId) : '';
+      // Find every <strong> inside it — these are place/restaurant names
+      var strongs = strip.querySelectorAll('strong');
+      strongs.forEach(function (s) {
+        var title = (s.textContent || '').trim();
+        if (!title || title.length > 80) return;
+        // Skip if it looks like a sentence header, not a name
+        if (/^(reservation|✓|note|tip|warning)/i.test(title)) return;
+        // Description: text immediately after this <strong>, until next <strong>
+        var desc = '';
+        var sib = s.nextSibling;
+        while (sib && desc.length < 220) {
+          if (sib.nodeType === 1 && sib.tagName === 'STRONG') break;
+          if (sib.nodeType === 1 && sib.tagName === 'BUTTON') { sib = sib.nextSibling; continue; }
+          if (sib.nodeType === 3) desc += sib.nodeValue;
+          else if (sib.nodeType === 1) desc += sib.textContent || '';
+          sib = sib.nextSibling;
+        }
+        desc = desc.replace(/^[\s\u2014\u2013:.,;\-]+/, '').replace(/\s+/g, ' ').trim();
+        if (desc) desc = desc.charAt(0).toUpperCase() + desc.slice(1);
+        if (desc.length > 200) desc = desc.slice(0, 197) + '…';
+        var payload = {
+          kind: 'dining',
+          title: title,
+          desc: desc,
+          context: dayContextLabel + ' ' + (strip.textContent || '').slice(0, 400),
+          source: 'extras',
+        };
+        // Insert pill right after the strong (or after its menu button if present)
+        var insertAfter = s;
+        var maybeBtn = s.nextElementSibling;
+        if (maybeBtn && maybeBtn.classList && maybeBtn.classList.contains('btn-menu')) insertAfter = maybeBtn;
+        var wrap = document.createElement('span');
+        wrap.className = 'pick-add-pill-wrap';
+        wrap.innerHTML = pillHtml(payload);
+        insertAfter.insertAdjacentElement('afterend', wrap);
+      });
+      strip.dataset.picksEnhanced = '1';
+    });
+  }
+
+  // ── Init ───────────────────────────────────────────────────────────
+  function init() {
+    mountContainers();
+    renderAll();
+    enhanceExtrasStrip();
+    watchChat();
+    // Re-render after any storage change in another tab (rare but cheap)
+    window.addEventListener('storage', function (e) {
+      if (e.key === STORAGE_KEY) renderAll();
+    });
+    // Debug handle
+    window.__picks = {
+      load: loadAll,
+      addPick: addPick,
+      clearAll: function () { localStorage.removeItem(STORAGE_KEY); renderAll(); },
+    };
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+
+</script>
 </body>
 </html>
