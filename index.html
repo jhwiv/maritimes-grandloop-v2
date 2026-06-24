@@ -36,14 +36,15 @@
   --navy:  #1B2838;  /* Deep slate */
   --navy2: #111D2B;  /* Midnight hull */
   --navy3: #243344;  /* Charcoal sea */
-  --gold:  #C9A96E;  /* Antique brass — primary accent */
+  --gold:  #C9A96E;  /* Antique brass — primary accent (chips, hero) */
   --gold2: #DDBF8A;  /* Warm sand */
   --gold3: rgba(201,169,110,.12);
+  --gold-text:#73560F; /* Burnished bronze — label TEXT, WCAG AA */
   --cream: #FAF7F2;  /* Aged ivory */
   --cream2:#F0EBE1;  /* Parchment */
-  --steel: #6B7B8D;  /* Pewter */
+  --steel: #43505F;  /* Pewter — darkened from #6B7B8D for WCAG AA */
   --body:  #2C3340;  /* Ink */
-  --muted: #8E99A4;  /* Weathered wood */
+  --muted: #4E586A;  /* Weathered wood — darkened from #8E99A4 for WCAG AA */
   --divider:#D5CFC5; /* Hemp rope */
   --divider2:rgba(213,207,197,.4);
   --green: #4A7C6F;  /* Sea moss */
@@ -150,12 +151,12 @@ img{display:block;max-width:100%}
 .drive-info-dest-row{
   padding-top:6px;
 }
-/* Responsive */
-@media(max-width:420px){
+/* Responsive — covers iPhone SE through iPhone 14/15 Pro Max */
+@media(max-width:480px){
   .drive-info-panel{padding:10px 12px}
   .drive-info-row{font-size:15px;gap:8px;flex-wrap:wrap}
-  .drive-info-detail{font-size:12px;margin-left:0;flex-basis:100%;padding-left:32px;text-align:left}
-  .drive-info-label{min-width:50px;font-size:10px}
+  .drive-info-detail{font-size:13px;margin-left:0;flex-basis:100%;padding-left:32px;text-align:left;white-space:normal}
+  .drive-info-label{min-width:58px;font-size:11px}
 }
 
 /* ── STICKY HEADER ──────────────────────────────── */
@@ -1112,8 +1113,8 @@ img{display:block;max-width:100%}
 .stop:last-child{border-bottom:none}
 .stop-time{
   font-family:'DM Mono',monospace;
-  font-size:9px;letter-spacing:.1em;color:var(--gold);
-  font-weight:500;margin-bottom:var(--sp8);
+  font-size:11px;letter-spacing:.1em;color:var(--gold-text);
+  font-weight:600;margin-bottom:var(--sp8);
   display:flex;align-items:center;gap:var(--sp8);
 }
 .stop-time-badge{
@@ -1165,12 +1166,12 @@ img{display:block;max-width:100%}
 .meta-link:active{transform:scale(.96);transition-duration:.05s}
 .meta-chip{
   display:inline-flex;align-items:center;gap:var(--sp4);
-  font-family:'DM Mono',monospace;font-size:8px;
-  letter-spacing:.08em;text-transform:uppercase;
-  color:var(--steel);
+  font-family:'DM Mono',monospace;font-size:11px;
+  letter-spacing:.06em;text-transform:uppercase;
+  color:var(--steel);font-weight:500;
   background:var(--cream2);
   border:1px solid var(--divider);
-  padding:3px 9px;border-radius:20px;
+  padding:4px 10px;border-radius:20px;
 }
 /* action row */
 /* ── Navigation app buttons (Google Maps / Waze / Apple Maps) ── */
@@ -1349,9 +1350,10 @@ img{display:block;max-width:100%}
 .lodging-icon{color:var(--gold);font-size:18px;flex-shrink:0;margin-top:2px}
 .lodging-info{flex:1}
 .lodging-label{
-  font-family:'DM Mono',monospace;font-size:8px;
-  letter-spacing:.2em;text-transform:uppercase;
-  color:var(--gold);margin-bottom:var(--sp4);
+  font-family:'DM Mono',monospace;font-size:11px;
+  letter-spacing:.18em;text-transform:uppercase;
+  color:var(--gold-text);font-weight:600;
+  margin-bottom:var(--sp4);
 }
 .lodging-name{
   font-family:'Playfair Display',serif;
@@ -1360,8 +1362,8 @@ img{display:block;max-width:100%}
   margin-bottom:var(--sp4);
 }
 .lodging-addr{
-  font-family:'Crimson Pro',serif;font-size:13px;
-  color:rgba(10,21,37,.55);line-height:1.5;
+  font-family:'Crimson Pro',serif;font-size:14px;
+  color:var(--steel);line-height:1.5;
 }
 .lodging-actions{
   display:flex;gap:var(--sp8);flex-wrap:wrap;
@@ -1447,9 +1449,10 @@ img{display:block;max-width:100%}
   padding:var(--sp12) var(--sp16);
 }
 .extras-label{
-  font-family:'DM Mono',monospace;font-size:8px;
-  letter-spacing:.2em;text-transform:uppercase;
-  color:var(--gold);margin-bottom:var(--sp4);
+  font-family:'DM Mono',monospace;font-size:11px;
+  letter-spacing:.18em;text-transform:uppercase;
+  color:var(--gold-text);font-weight:600;
+  margin-bottom:var(--sp4);
 }
 .extras-text{
   font-family:'Crimson Pro',serif;
@@ -2363,7 +2366,7 @@ body:has(#search-card.open) #a2hs-banner{display:none!important}
   font-size:34px;font-weight:700;
   color:var(--navy);line-height:1;
 }
-.wx-lo{font-size:13px;color:var(--steel)}
+.wx-lo{font-size:14px;color:var(--steel);font-weight:500}
 .wx-cond{
   font-family:'Crimson Pro',serif;font-size:15px;
   color:var(--body);margin-top:var(--sp8);line-height:1.45;
@@ -2388,13 +2391,13 @@ body:has(#search-card.open) #a2hs-banner{display:none!important}
   border-top:1px solid var(--divider);flex-wrap:wrap;
 }
 .wx-stat{
-  font-family:'DM Mono',monospace;font-size:8px;
-  color:var(--muted);letter-spacing:.04em;
+  font-family:'DM Mono',monospace;font-size:11px;
+  color:var(--muted);letter-spacing:.04em;font-weight:500;
 }
 .wx-tap{
-  font-family:'DM Mono',monospace;font-size:7px;
-  color:var(--gold);margin-top:var(--sp8);
-  letter-spacing:.08em;opacity:.75;
+  font-family:'DM Mono',monospace;font-size:11px;
+  color:var(--gold-text);margin-top:var(--sp8);
+  letter-spacing:.08em;font-weight:600;
 }
 .wx-c{display:none}
 @media(max-width:600px){
@@ -3195,7 +3198,7 @@ body.map-fullscreen #map-back-btn{display:flex}
   width:min(340px,calc(100vw - 48px));height:min(680px,calc(100vh - 140px));
 }
 .wx-card{cursor:pointer}
-.wx-card .wx-tap{color:var(--gold)}
+.wx-card .wx-tap{color:var(--gold-text)}
 
 /* ── STREET VIEW SECTION ───────────────────── */
 .sv-img-panel{
@@ -4132,7 +4135,7 @@ function dismissWelcome() {
           </div>
           <div class="drive-info-row drive-info-dest-row">
             <span class="drive-info-icon">🏨</span>
-            <span class="drive-info-label">Tonight</span>
+            <span class="drive-info-label">Lodging</span>
             <a class="drive-info-dest-link" href="https://www.fundyrestaurant.com/suites" target="_blank" rel="noopener">Fundy Complex Dockside Suites <span class="drive-info-arrow">→</span></a>
           </div>
         </div>
@@ -4264,7 +4267,7 @@ function dismissWelcome() {
           </div>
           <div class="drive-info-row drive-info-dest-row">
             <span class="drive-info-icon">🏨</span>
-            <span class="drive-info-label">Tonight</span>
+            <span class="drive-info-label">Lodging</span>
             <a class="drive-info-dest-link" href="https://smugglerscoveinn.ca/" target="_blank" rel="noopener">Smugglers Cove Inn <span class="drive-info-arrow">→</span></a>
           </div>
         </div>
@@ -4374,7 +4377,7 @@ function dismissWelcome() {
           </div>
           <div class="drive-info-row drive-info-dest-row">
             <span class="drive-info-icon">⛴</span>
-            <span class="drive-info-label">Tonight</span>
+            <span class="drive-info-label">Lodging</span>
             <a class="drive-info-dest-link" href="https://www.marineatlantic.ca/" target="_blank" rel="noopener">Marine Atlantic Terminal <span class="drive-info-arrow">→</span></a>
           </div>
         </div>
@@ -4474,7 +4477,7 @@ function dismissWelcome() {
           </div>
           <div class="drive-info-row drive-info-dest-row">
             <span class="drive-info-icon">🏨</span>
-            <span class="drive-info-label">Tonight</span>
+            <span class="drive-info-label">Lodging</span>
             <a class="drive-info-dest-link" href="https://twillingate.com/" target="_blank" rel="noopener">Anchor Inn Hotel & Suites <span class="drive-info-arrow">→</span></a>
           </div>
         </div>
@@ -4603,7 +4606,7 @@ function dismissWelcome() {
           </div>
           <div class="drive-info-row drive-info-dest-row">
             <span class="drive-info-icon">🏨</span>
-            <span class="drive-info-label">Tonight</span>
+            <span class="drive-info-label">Lodging</span>
             <a class="drive-info-dest-link" href="https://fogoislandinn.ca/" target="_blank" rel="noopener">Fogo Island Inn <span class="drive-info-arrow">→</span></a>
           </div>
         </div>
@@ -4731,7 +4734,7 @@ function dismissWelcome() {
           </div>
           <div class="drive-info-row drive-info-dest-row">
             <span class="drive-info-icon">⛴</span>
-            <span class="drive-info-label">Tonight</span>
+            <span class="drive-info-label">Lodging</span>
             <a class="drive-info-dest-link" href="https://www.marineatlantic.ca/" target="_blank" rel="noopener">Marine Atlantic Terminal <span class="drive-info-arrow">→</span></a>
           </div>
         </div>
@@ -4849,7 +4852,7 @@ function dismissWelcome() {
           </div>
           <div class="drive-info-row drive-info-dest-row">
             <span class="drive-info-icon">🏨</span>
-            <span class="drive-info-label">Tonight</span>
+            <span class="drive-info-label">Lodging</span>
             <a class="drive-info-dest-link" href="https://scotsmaninn.com/" target="_blank" rel="noopener">The Scotsman Inn <span class="drive-info-arrow">→</span></a>
           </div>
         </div>
@@ -4955,7 +4958,7 @@ function dismissWelcome() {
           </div>
           <div class="drive-info-row drive-info-dest-row">
             <span class="drive-info-icon">🏨</span>
-            <span class="drive-info-label">Tonight</span>
+            <span class="drive-info-label">Lodging</span>
             <a class="drive-info-dest-link" href="https://www.marriott.com/en-us/hotels/yfcdf-delta-hotels-fredericton/overview/" target="_blank" rel="noopener">Delta Hotels by Marriott <span class="drive-info-arrow">→</span></a>
           </div>
         </div>
@@ -5061,7 +5064,7 @@ function dismissWelcome() {
           </div>
           <div class="drive-info-row drive-info-dest-row">
             <span class="drive-info-icon">🏨</span>
-            <span class="drive-info-label">Tonight</span>
+            <span class="drive-info-label">Lodging</span>
             <a class="drive-info-dest-link" href="https://www.marriott.com/en-us/hotels/pwmcd-courtyard-portland-downtown-waterfront/overview/" target="_blank" rel="noopener">Courtyard by Marriott Portland <span class="drive-info-arrow">→</span></a>
           </div>
         </div>
