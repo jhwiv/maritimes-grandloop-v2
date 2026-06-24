@@ -3608,7 +3608,9 @@ body.hero-visible #ferry-chip{
 }
 .fs-strip.is-shown{ display:flex; }
 .fs-badge{
-  display:inline-block;
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
   padding:2px 8px;
   border-radius:999px;
   font-family:'Inter','Helvetica Neue',Arial,sans-serif;
@@ -3619,25 +3621,68 @@ body.hero-visible #ferry-chip{
   background:rgba(33,148,124,.12);
   color:var(--teal,#1f7a64);
   border:1px solid rgba(33,148,124,.25);
+  white-space:nowrap;
+}
+.fs-badge::before{
+  content:"";
+  width:6px;height:6px;
+  border-radius:50%;
+  background:currentColor;
+  flex:none;
 }
 .fs-strip.is-disrupted .fs-badge{
   background:var(--amber-dim,rgba(232,148,28,.15));
   color:var(--amber,#E8941C);
   border-color:rgba(232,148,28,.35);
 }
+.fs-strip.is-cancelled .fs-badge{
+  background:rgba(193,57,43,.12);
+  color:#c1392b;
+  border-color:rgba(193,57,43,.35);
+  animation:fs-pulse 2.4s ease-in-out infinite;
+}
+@keyframes fs-pulse{
+  0%,100%{ box-shadow:0 0 0 0 rgba(193,57,43,.0); }
+  50%   { box-shadow:0 0 0 4px rgba(193,57,43,.18); }
+}
+@media (prefers-reduced-motion: reduce){
+  .fs-strip.is-cancelled .fs-badge{ animation:none; }
+}
 .fs-meta{ color:rgba(17,29,43,.55); font-size:12px; }
+.fs-detail{
+  flex-basis:100%;
+  font-size:12.5px;
+  color:rgba(17,29,43,.78);
+  margin-top:2px;
+  line-height:1.45;
+}
+.fs-detail strong{ color:rgba(17,29,43,.92); font-weight:600; }
+.fs-detail .fs-row{ display:block; margin-top:2px; }
+.fs-detail .fs-row + .fs-row{ margin-top:1px; }
 .fs-link{
   color:var(--amber,#E8941C);
   font-weight:600;
   text-decoration:none;
   border-bottom:1px solid rgba(232,148,28,.4);
 }
-.fs-link:hover{ border-bottom-color:var(--amber,#E8941C); }
+.fs-link:hover,.fs-link:focus-visible{ border-bottom-color:var(--amber,#E8941C); outline:none; }
 .fs-strip.is-error{ color:rgba(17,29,43,.55); }
 .fs-strip.is-error a{
   color:rgba(17,29,43,.7);
   text-decoration:underline;
   text-decoration-color:rgba(17,29,43,.25);
+}
+.fs-strip.is-loading .fs-badge{
+  background:rgba(17,29,43,.05);
+  color:rgba(17,29,43,.5);
+  border-color:rgba(17,29,43,.12);
+}
+.fs-strip.is-loading .fs-badge::before{
+  animation:fs-blink 1.1s ease-in-out infinite;
+}
+@keyframes fs-blink{ 0%,100%{ opacity:.3 } 50%{ opacity:1 } }
+@media (prefers-reduced-motion: reduce){
+  .fs-strip.is-loading .fs-badge::before{ animation:none; }
 }
 </style>
 </head>
@@ -10323,11 +10368,35 @@ requestAnimationFrame(function(){
    data-fs-strip="day4" and data-fs-strip="day9".
    ───────────────────────────────────────────────────────────────────────────── */
 (function(){
-  // Trip window. Use local device time.
-  var TRIP_START = { m: 6, d: 25 };   // Jun 25 (inclusive)
-  var TRIP_END   = { m: 7, d: 10 };   // Jul 10 (inclusive)
-  // Friendly start label used in preview copy.
+  var API = 'https://cloudflare-worker.jhwiv-online.workers.dev/api/ferry-status';
+  var ADVISORY_URL = 'https://www.marineatlantic.ca/travel-advisory';
+  var REFRESH_MS = 15 * 60 * 1000;   // 15 min, matches Worker KV TTL
+  var FETCH_TIMEOUT_MS = 8000;
+  var RETRY_DELAY_MS = 30 * 1000;    // one retry 30s after a hard failure
+
+  // Trip window. Outside this window the strip hides itself.
+  var TRIP_START = { m: 6, d: 25 };  // Jun 25 (inclusive)
+  var TRIP_END   = { m: 7, d: 10 };  // Jul 10 (inclusive)
   var TRIP_START_LABEL = 'Jun 27';
+
+  // Per-strip configuration. Each strip filters advisory rows by route +
+  // calendar date so the user only sees what applies to THIS sailing.
+  var STRIP_CONFIG = {
+    day4: {
+      label: 'Day 4 · Jun 30',
+      // Booked sailing departs North Sydney late evening of Jun 30 ADT,
+      // arrives Port aux Basques morning of Jul 1 NDT.
+      routeRe: /north sydney to port aux basques/i,
+      relevantDates: ['2026-06-30', '2026-07-01'],
+      scheduledDeparture: 'Scheduled 11:45 PM ADT · check-in 9:45 PM',
+    },
+    day9: {
+      label: 'Day 9 · Jul 5',
+      routeRe: /port aux basques to north sydney/i,
+      relevantDates: ['2026-07-05', '2026-07-06'],
+      scheduledDeparture: 'Scheduled 11:45 PM NDT · check-in 9:45 PM',
+    },
+  };
 
   function mode(){
     var now = new Date();
@@ -10335,7 +10404,6 @@ requestAnimationFrame(function(){
     var afterStart = (m > TRIP_START.m) || (m === TRIP_START.m && d >= TRIP_START.d);
     var beforeEnd  = (m < TRIP_END.m)   || (m === TRIP_END.m   && d <= TRIP_END.d);
     if (afterStart && beforeEnd) return 'live';
-    // After window closes for the year: hide entirely.
     if (m > TRIP_END.m) return 'hidden';
     if (m === TRIP_END.m && d > TRIP_END.d) return 'hidden';
     return 'preview';
@@ -10343,15 +10411,21 @@ requestAnimationFrame(function(){
 
   var strips = document.querySelectorAll('[data-fs-strip]');
   if (!strips.length) return;
+  var currentMode = mode();
+  if (currentMode === 'hidden') return;
 
-  var current = mode();
-  if (current === 'hidden') return;
-
-  // Reveal both strips. Content fills in async.
   strips.forEach(function(s){
-    s.classList.add('is-shown');
+    s.classList.add('is-shown', 'is-loading');
     s.setAttribute('aria-live', 'polite');
+    s.setAttribute('aria-atomic', 'true');
+    s.innerHTML = '<span class="fs-badge">Checking status…</span>';
   });
+
+  function escapeHtml(s){
+    return String(s == null ? '' : s)
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+      .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  }
 
   function minutesAgo(iso){
     if (!iso) return null;
@@ -10360,63 +10434,166 @@ requestAnimationFrame(function(){
     return Math.max(0, Math.round((Date.now() - t) / 60000));
   }
 
-  function escapeHtml(s){
-    return String(s)
-      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-      .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  // Pick the rows from the advisory payload that apply to THIS strip's
+  // sailing. Match on route direction AND on either calendar date a single
+  // overnight crossing can span.
+  function rowsForStrip(advisory, cfg){
+    var pick = function(rows){
+      if (!rows) return [];
+      return rows.filter(function(r){
+        if (!cfg.routeRe.test(r.route || '')) return false;
+        if (!r.iso) return true;
+        var dateOnly = r.iso.slice(0, 10);
+        return cfg.relevantDates.indexOf(dateOnly) !== -1;
+      });
+    };
+    return {
+      cancelled:   pick(advisory && advisory.cancelled   && advisory.cancelled.rows),
+      rescheduled: pick(advisory && advisory.rescheduled && advisory.rescheduled.rows),
+    };
   }
 
-  function render(strip, data){
-    // ---- Failure / UNAVAILABLE: identical treatment in preview and live.
-    if (!data || data.status === 'UNAVAILABLE'){
-      var mins = data ? minutesAgo(data.updated) : null;
-      var checked = mins == null ? '' : ' · Last checked ' + mins + ' min ago';
-      strip.classList.add('is-error');
-      strip.innerHTML =
-        '<span class="fs-meta">Status unavailable — </span>' +
-        '<a class="fs-link" href="https://www.marineatlantic.ca/travel-advisory" target="_blank" rel="noopener">check marineatlantic.ca</a>' +
-        '<span class="fs-meta">' + checked + '</span>';
-      return;
+  function formatRevisedTime(r){
+    var tz = r.terminalTz || '';
+    if (r.revisedTime){
+      return 'now ' + escapeHtml(r.revisedTime) + (tz ? ' ' + tz : '') +
+        (r.checkIn ? ' · check-in ' + escapeHtml(r.checkIn) : '');
     }
+    return escapeHtml(r.time || '') + (tz ? ' ' + tz : '');
+  }
 
-    var status = String(data.status || '').toUpperCase();
-    var isOnTime = status === 'ON TIME';
-    if (!isOnTime) strip.classList.add('is-disrupted');
+  function renderError(strip, opts){
+    var lastChecked = opts && opts.lastChecked;
+    var mins = lastChecked ? minutesAgo(lastChecked) : null;
+    var checked = mins == null ? '' : ' · Last checked ' + mins + ' min ago';
+    strip.classList.remove('is-loading','is-disrupted','is-cancelled');
+    strip.classList.add('is-error');
+    strip.innerHTML =
+      '<span class="fs-meta">Status unavailable — </span>' +
+      '<a class="fs-link" href="' + ADVISORY_URL + '" target="_blank" rel="noopener">check marineatlantic.ca</a>' +
+      '<span class="fs-meta">' + checked + '</span>';
+  }
+
+  function renderStrip(strip, advisory){
+    var key = strip.getAttribute('data-fs-strip');
+    var cfg = STRIP_CONFIG[key];
+    if (!cfg){ renderError(strip); return; }
+
+    var rows = rowsForStrip(advisory, cfg);
+    var hasCancelled = rows.cancelled.length > 0;
+    var hasRescheduled = rows.rescheduled.length > 0;
+    var hasIssue = hasCancelled || hasRescheduled;
+
+    strip.classList.remove('is-loading','is-disrupted','is-cancelled','is-error');
+    if (hasCancelled) strip.classList.add('is-cancelled');
+    else if (hasRescheduled) strip.classList.add('is-disrupted');
+
+    var badgeText;
+    if (hasCancelled) badgeText = 'Sailing cancelled';
+    else if (hasRescheduled) badgeText = 'Rescheduled';
+    else badgeText = 'On schedule';
 
     var parts = [];
-    parts.push('<span class="fs-badge">' + escapeHtml(status) + '</span>');
+    parts.push('<span class="fs-badge">' + escapeHtml(badgeText) + '</span>');
 
-    if (current === 'preview'){
-      // Pre-trip framing so viewers know this is a preview, not live in-trip.
+    if (currentMode === 'preview' && !hasIssue){
       parts.push('<span class="fs-meta">Current status · trip starts ' + TRIP_START_LABEL + '</span>');
-      // Surface departure if Worker provides one.
-      if (data.departure) parts.push('<span class="fs-meta">' + escapeHtml(data.departure) + '</span>');
-      if (!isOnTime){
-        parts.push('<a class="fs-link" href="#section-planb" data-fs-planb>→ See Plan B</a>');
-      }
-    } else {
-      // Live in-trip framing (Jun 25 – Jul 10).
-      if (data.departure) parts.push('<span class="fs-meta">' + escapeHtml(data.departure) + '</span>');
-      var mins = minutesAgo(data.updated);
-      if (mins != null){
-        parts.push('<span class="fs-meta">Last updated ' + mins + ' min ago</span>');
-      }
-      if (!isOnTime){
-        parts.push('<a class="fs-link" href="#section-planb" data-fs-planb>→ See Plan B</a>');
-      }
+    } else if (!hasIssue){
+      parts.push('<span class="fs-meta">' + escapeHtml(cfg.scheduledDeparture) + '</span>');
+    }
+
+    var mins = minutesAgo(advisory && advisory.fetchedAt);
+    if (mins != null){
+      parts.push('<span class="fs-meta">Updated ' + mins + ' min ago</span>');
+    }
+
+    if (hasIssue){
+      parts.push('<a class="fs-link" href="#section-planb" data-fs-planb>→ See Plan B</a>');
+      var detailRows = [];
+      rows.cancelled.forEach(function(r){
+        detailRows.push(
+          '<span class="fs-row"><strong>Cancelled:</strong> ' +
+          escapeHtml(r.date) + ' · ' + escapeHtml(r.vessel || 'vessel TBD') +
+          ' · ' + escapeHtml(r.time) + (r.terminalTz ? ' ' + escapeHtml(r.terminalTz) : '') +
+          '</span>'
+        );
+      });
+      rows.rescheduled.forEach(function(r){
+        detailRows.push(
+          '<span class="fs-row"><strong>Rescheduled:</strong> ' +
+          escapeHtml(r.date) + ' · ' + escapeHtml(r.vessel || 'vessel TBD') +
+          ' · was ' + escapeHtml(r.time) + (r.terminalTz ? ' ' + escapeHtml(r.terminalTz) : '') +
+          ' → ' + formatRevisedTime(r) +
+          '</span>'
+        );
+      });
+      detailRows.push(
+        '<span class="fs-row fs-meta"><a class="fs-link" href="' + ADVISORY_URL +
+        '" target="_blank" rel="noopener">View Marine Atlantic advisory ↗</a></span>'
+      );
+      parts.push('<div class="fs-detail">' + detailRows.join('') + '</div>');
     }
 
     strip.innerHTML = parts.join(' ');
   }
 
-  function showError(){
-    strips.forEach(function(s){ render(s, null); });
+  // ── Fetch orchestration ─────────────────────────────────────────────
+  var inFlight = null;
+  var refreshTimer = null;
+  var lastSuccessAt = null;
+  var retryScheduled = false;
+
+  function fetchWithTimeout(url){
+    var controller = ('AbortController' in window) ? new AbortController() : null;
+    var timer = setTimeout(function(){ if (controller) controller.abort(); }, FETCH_TIMEOUT_MS);
+    return fetch(url, {
+      cache: 'no-store',
+      signal: controller ? controller.signal : undefined,
+    }).then(function(r){
+      clearTimeout(timer);
+      if (!r.ok) throw new Error('http ' + r.status);
+      return r.json();
+    }, function(err){
+      clearTimeout(timer);
+      throw err;
+    });
   }
 
-  fetch('/api/ferry-status', { cache: 'no-store' })
-    .then(function(r){ if (!r.ok) throw new Error('http ' + r.status); return r.json(); })
-    .then(function(data){ strips.forEach(function(s){ render(s, data); }); })
-    .catch(showError);
+  function refresh(){
+    if (inFlight) return inFlight;
+    inFlight = fetchWithTimeout(API)
+      .then(function(advisory){
+        lastSuccessAt = new Date().toISOString();
+        strips.forEach(function(s){ renderStrip(s, advisory); });
+        retryScheduled = false;
+      })
+      .catch(function(){
+        strips.forEach(function(s){ renderError(s, { lastChecked: lastSuccessAt }); });
+        if (!retryScheduled){
+          retryScheduled = true;
+          setTimeout(function(){
+            retryScheduled = false;
+            if (document.visibilityState === 'visible') refresh();
+          }, RETRY_DELAY_MS);
+        }
+      })
+      .then(function(){ inFlight = null; });
+    return inFlight;
+  }
+
+  function startTimer(){
+    if (refreshTimer) clearInterval(refreshTimer);
+    refreshTimer = setInterval(function(){
+      if (document.visibilityState === 'visible') refresh();
+    }, REFRESH_MS);
+  }
+
+  // Refresh when tab regains focus (phones background the PWA frequently)
+  document.addEventListener('visibilitychange', function(){
+    if (document.visibilityState !== 'visible') return;
+    var stale = !lastSuccessAt || (Date.now() - Date.parse(lastSuccessAt)) > REFRESH_MS;
+    if (stale) refresh();
+  });
 
   document.addEventListener('click', function(e){
     var a = e.target.closest && e.target.closest('a[data-fs-planb]');
@@ -10426,6 +10603,17 @@ requestAnimationFrame(function(){
     e.preventDefault();
     target.scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
+
+  refresh();
+  startTimer();
+
+  // Console debug handle
+  window.__ferryStatus = {
+    refresh: refresh,
+    api: API,
+    config: STRIP_CONFIG,
+    mode: function(){ return currentMode; },
+  };
 })();
 </script>
 
