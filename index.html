@@ -7150,8 +7150,11 @@ onScroll();
   // Maritimes trip schedule: [ISO time, section, stop index (0-based)]
   var schedule = [
     // Day 1: Portland (activate at 6 AM so the app opens to today's card
-    // from the start of the day, matching the 8-9 AM triggers on all other days)
-    ['2026-06-27T06:00-04:00', 'section-day1', 0],
+    // from the start of the day, matching the 8-9 AM triggers on all other days).
+    // stopIdx -1 = scroll to the TOP of the day's section (date banner + overview).
+    // Day 1 is an arrival day whose first stop is "Afternoon", so landing on the
+    // section top (not stop 0) shows the start of today rather than the afternoon.
+    ['2026-06-27T06:00-04:00', 'section-day1', -1],
     // Day 2: Portland → Saint John → Digby
     ['2026-06-28T08:00-04:00', 'section-day2', 0],
     ['2026-06-28T14:00-03:00', 'section-day2', 2], // Ferry
@@ -7204,10 +7207,18 @@ onScroll();
       }
       var section = document.getElementById(target);
       if (!section) return;
-      var stops = section.querySelectorAll('.stop');
-      var stop = stops[stopIdx] || stops[stops.length - 1] || section;
       var hdr = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--hdr')) || 80;
-      var top = stop.getBoundingClientRect().top + window.pageYOffset - hdr - 12;
+      // stopIdx === -1 means "scroll to the top of the day's section" (date
+      // banner + day overview) rather than to a specific stop. This is correct
+      // for arrival days whose first stop is not in the morning.
+      var anchorEl;
+      if (stopIdx < 0) {
+        anchorEl = section;
+      } else {
+        var stops = section.querySelectorAll('.stop');
+        anchorEl = stops[stopIdx] || stops[stops.length - 1] || section;
+      }
+      var top = anchorEl.getBoundingClientRect().top + window.pageYOffset - hdr - 12;
       window.scrollTo(0, top);
     });
   }
