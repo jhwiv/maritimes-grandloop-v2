@@ -4153,7 +4153,7 @@ function dismissWelcome() {
 
     <!-- DAYS 6–8: FOGO ISLAND -->
     <div class="cond-day">
-      <div class="cond-day-label"><span class="cond-flag">⭐</span> Thu Jul 2 – Sat Jul 5 · Fogo Island</div>
+      <div class="cond-day-label"><span class="cond-flag">⭐</span> Thu Jul 2 – Sat Jul 4 · Fogo Island</div>
       <div class="cond-row"><span class="cond-time">Thu AM</span><span class="cond-what">Fogo Island ferry from Farewell <span class="cond-badge ferry">⛴ 45 min</span></span></div>
       <div class="cond-row"><span class="cond-time">Thu–Sat</span><span class="cond-what"><strong>Fogo Island Inn</strong> — 3 nights on the island</span></div>
       <div class="cond-row"><span class="cond-time">Explore</span><span class="cond-what">Brimstone Head, Fogo Town, hiking, boat tours, art studios</span></div>
@@ -7749,19 +7749,65 @@ onScroll();
 </script>
 
 <script>
+// ── SHARED LOCAL-DATE HELPERS ─────────────────────────
+// Single source of truth for "what trip day is it RIGHT NOW".
+//
+// CRITICAL: all date math uses the DEVICE'S LOCAL calendar date, never UTC.
+// Earlier code mixed `new Date().toISOString()` (UTC) with local parsing,
+// which rolled the trip day forward ~4 hours early every evening for users
+// in US Eastern (and worse further west). These helpers fix that by reading
+// local Y/M/D components, exactly like the map's working DATE_TO_DAY logic.
+(function(){
+  // Local 'YYYY-MM-DD' for any Date, in the device's own timezone.
+  function localDateStr(d){
+    d = d || new Date();
+    return d.getFullYear() + '-'
+      + String(d.getMonth() + 1).padStart(2, '0') + '-'
+      + String(d.getDate()).padStart(2, '0');
+  }
+
+  // Canonical trip-day map: local date -> { day, city }.
+  // `day` is the 1-based trip day; `city` is the nearest supported concierge
+  // dataset key (only portland/halifax/lunenburg/stjohns/fogoisland exist).
+  // City is chosen as the geographically nearest hub to where you physically
+  // are that day (see comments), so concierge "nearby" answers stay sensible.
+  var TRIP_DAYS = {
+    '2026-06-27': { day: 1,  city: 'portland'   }, // Portland, ME
+    '2026-06-28': { day: 2,  city: 'lunenburg'  }, // Digby, NS -> nearest NS coastal hub
+    '2026-06-29': { day: 3,  city: 'lunenburg'  }, // Lunenburg, NS
+    '2026-06-30': { day: 4,  city: 'halifax'    }, // Lunenburg -> North Sydney (central NS en route)
+    '2026-07-01': { day: 5,  city: 'stjohns'    }, // Twillingate, NL -> nearest NL hub
+    '2026-07-02': { day: 6,  city: 'fogoisland' }, // Fogo Island
+    '2026-07-03': { day: 7,  city: 'fogoisland' }, // Fogo Island
+    '2026-07-04': { day: 8,  city: 'fogoisland' }, // Fogo Island
+    '2026-07-05': { day: 9,  city: 'halifax'    }, // Return ferry -> North Sydney, NS
+    '2026-07-06': { day: 10, city: 'halifax'    }, // Pictou, NS -> nearest NS hub
+    '2026-07-07': { day: 11, city: 'halifax'    }, // Fredericton, NB -> nearest hub (Maritimes)
+    '2026-07-08': { day: 12, city: 'portland'   }  // Fredericton -> Portland, ME
+  };
+
+  // Returns { dateStr, day, city } for a given Date (defaults to now), or
+  // { dateStr, day:null, city:null } when outside the trip window.
+  function tripDayInfo(d){
+    var ds = localDateStr(d);
+    var info = TRIP_DAYS[ds];
+    if (!info) return { dateStr: ds, day: null, city: null };
+    return { dateStr: ds, day: info.day, city: info.city };
+  }
+
+  window.__trip = {
+    localDateStr: localDateStr,
+    tripDayInfo: tripDayInfo,
+    TRIP_DAYS: TRIP_DAYS
+  };
+})();
+
 // ── ITINERARY CITY HOOK ──────────────────────────────
+// Returns the nearest supported concierge-city key for today, or null when
+// off-trip. Uses the shared local-date helper so it never rolls early.
 window.getItineraryCity = function() {
-  var now = new Date();
-  // Maritimes trip: Jun 27 - Jul 8, 2026
-  var start = new Date('2026-06-27');
-  var end = new Date('2026-07-09');
-  if (now < start || now > end) return null;
-  var day = Math.floor((now - start) / 86400000) + 1;
-  if (day <= 1) return 'portland';
-  if (day <= 4) return 'lunenburg';    // Nova Scotia
-  if (day <= 8) return 'fogoisland';   // Newfoundland / Fogo
-  if (day <= 10) return 'halifax';     // Return via NS
-  return 'portland'; // heading home
+  var info = window.__trip.tripDayInfo();
+  return info.city; // null when outside the trip window
 };
 </script>
 
@@ -10515,7 +10561,16 @@ if ('serviceWorker' in navigator) {
   ];
 
   function getPhase() {
-    var today = new Date().toISOString().slice(0, 10);
+    // Use the device's LOCAL calendar date (shared helper), never UTC.
+    // Previously this read new Date().toISOString().slice(0,10) which is UTC,
+    // so the timezone pill flipped to the next phase ~4 hours early each
+    // evening for US Eastern users. localDateStr keeps it aligned with the
+    // itinerary day the traveler is actually living.
+    var today = (window.__trip && window.__trip.localDateStr)
+      ? window.__trip.localDateStr()
+      : (new Date().getFullYear() + '-'
+          + String(new Date().getMonth() + 1).padStart(2, '0') + '-'
+          + String(new Date().getDate()).padStart(2, '0'));
     for (var i = 0; i < TRIP_ZONES.length; i++) {
       if (today >= TRIP_ZONES[i].start && today <= TRIP_ZONES[i].end) return TRIP_ZONES[i];
     }
