@@ -25,7 +25,7 @@ function extractSchedule() {
   const start = html.indexOf('[', open + 'var schedule = '.length - 1);
   const close = html.indexOf('];', start);
   const body = html.slice(start + 1, close);
-  const re = /\[\s*'([^']+)'\s*,\s*(null|'[^']+')\s*,\s*(\d+)\s*\]/g;
+  const re = /\[\s*'([^']+)'\s*,\s*(null|'[^']+')\s*,\s*(-?\d+)\s*\]/g;
   const out = [];
   let m;
   while ((m = re.exec(body)) !== null) {
@@ -66,6 +66,12 @@ eq('09:00 AM EDT Jun 27 -> section-day1', pick(T('2026-06-27T09:00-04:00')).targ
 eq('06:00 AM EDT Jun 27 (exact) -> section-day1', pick(T('2026-06-27T06:00-04:00')).target, 'section-day1');
 eq('05:59 AM EDT Jun 27 -> null (top, before activation)', pick(T('2026-06-27T05:59-04:00')).target, null);
 eq('12:30 PM EDT Jun 27 still -> section-day1', pick(T('2026-06-27T12:30-04:00')).target, 'section-day1');
+
+// 1b. Day 1's first .stop is "Afternoon" (arrival day), so stopIdx must be -1
+// (= scroll to the day's date banner/overview), not 0 (= the afternoon).
+console.log('\n1b) Day 1 lands on section top (stopIdx -1), not afternoon:');
+eq('09:00 AM EDT Jun 27 -> stopIdx -1', pick(T('2026-06-27T09:00-04:00')).stopIdx, -1);
+eq('Day 1 config stopIdx is -1', schedule[0][2], -1);
 
 // ── 2. Day 1 entry value is exactly the new time ────────────────
 console.log('\n2) Config value:');
