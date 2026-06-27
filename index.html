@@ -7149,8 +7149,9 @@ onScroll();
 
   // Maritimes trip schedule: [ISO time, section, stop index (0-based)]
   var schedule = [
-    // Day 1: Portland
-    ['2026-06-27T12:00-04:00', 'section-day1', 0],
+    // Day 1: Portland (activate at 6 AM so the app opens to today's card
+    // from the start of the day, matching the 8-9 AM triggers on all other days)
+    ['2026-06-27T06:00-04:00', 'section-day1', 0],
     // Day 2: Portland → Saint John → Digby
     ['2026-06-28T08:00-04:00', 'section-day2', 0],
     ['2026-06-28T14:00-03:00', 'section-day2', 2], // Ferry
