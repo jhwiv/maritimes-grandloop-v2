@@ -7795,10 +7795,69 @@ onScroll();
     return { dateStr: ds, day: info.day, city: info.city };
   }
 
+  // ── GPS-AWARE CONCIERGE RESOLUTION ──────────────────────────────
+  // The concierge has 5 location datasets. When the device reports real
+  // GPS coordinates we snap to the NEAREST dataset by great-circle distance
+  // so "nearby" answers reflect where you actually are (plan-change proof,
+  // and correct even if you linger/leave early). When GPS is denied or
+  // unavailable (common in NL/NB cell dead zones) we fall back to the
+  // date-based city for today, then to null so the caller can use the tab.
+  var CITY_COORDS = {
+    portland:   { lat: 43.6591, lng: -70.2568 },
+    halifax:    { lat: 44.6488, lng: -63.5752 },
+    lunenburg:  { lat: 44.3726, lng: -64.3101 },
+    stjohns:    { lat: 47.5615, lng: -52.7126 },
+    fogoisland: { lat: 49.7167, lng: -54.1833 }
+  };
+
+  function haversineKm(aLat, aLng, bLat, bLng) {
+    var R = 6371; // km
+    var toRad = function(x){ return x * Math.PI / 180; };
+    var dLat = toRad(bLat - aLat);
+    var dLng = toRad(bLng - aLng);
+    var s = Math.sin(dLat / 2) * Math.sin(dLat / 2)
+      + Math.cos(toRad(aLat)) * Math.cos(toRad(bLat))
+      * Math.sin(dLng / 2) * Math.sin(dLng / 2);
+    return 2 * R * Math.asin(Math.min(1, Math.sqrt(s)));
+  }
+
+  // Nearest supported concierge-city key to a coordinate, or null if coords
+  // are invalid. Returns { city, distanceKm }.
+  function nearestCity(lat, lng) {
+    if (typeof lat !== 'number' || typeof lng !== 'number'
+        || isNaN(lat) || isNaN(lng)) return null;
+    var best = null, bestD = Infinity;
+    Object.keys(CITY_COORDS).forEach(function(k){
+      var d = haversineKm(lat, lng, CITY_COORDS[k].lat, CITY_COORDS[k].lng);
+      if (d < bestD) { bestD = d; best = k; }
+    });
+    return best ? { city: best, distanceKm: bestD } : null;
+  }
+
+  // Resolve the concierge city with GPS priority.
+  //   gps:  null OR { lat, lng } (e.g. window._gpsCache.get())
+  //   date: optional Date for the date fallback (defaults to now)
+  // Returns { city, source } where source is 'gps' | 'date' | null.
+  // city is always a supported key or null (never an unknown key).
+  function resolveConciergeCity(gps, date) {
+    if (gps && typeof gps.lat === 'number' && typeof gps.lng === 'number'
+        && !isNaN(gps.lat) && !isNaN(gps.lng)) {
+      var n = nearestCity(gps.lat, gps.lng);
+      if (n) return { city: n.city, source: 'gps', distanceKm: n.distanceKm };
+    }
+    var info = tripDayInfo(date || new Date());
+    if (info.city) return { city: info.city, source: 'date' };
+    return { city: null, source: null };
+  }
+
   window.__trip = {
     localDateStr: localDateStr,
     tripDayInfo: tripDayInfo,
-    TRIP_DAYS: TRIP_DAYS
+    TRIP_DAYS: TRIP_DAYS,
+    CITY_COORDS: CITY_COORDS,
+    haversineKm: haversineKm,
+    nearestCity: nearestCity,
+    resolveConciergeCity: resolveConciergeCity
   };
 })();
 
@@ -7875,9 +7934,15 @@ window.getItineraryCity = function() {
   };
 
   function getActiveCity() {
-    // Itinerary dates take priority over active tab
-    var ic = window.getItineraryCity && window.getItineraryCity();
-    if (ic && cities[ic]) return cities[ic];
+    // Priority: (1) real GPS position snapped to nearest dataset,
+    //           (2) today's date-based city, (3) active section/tab.
+    // resolveConciergeCity handles GPS->date; the tab is the last resort
+    // when off-trip AND GPS is unavailable.
+    if (window.__trip && window.__trip.resolveConciergeCity) {
+      var gps = (window._gpsCache && window._gpsCache.get) ? window._gpsCache.get() : null;
+      var r = window.__trip.resolveConciergeCity(gps, new Date());
+      if (r && r.city && cities[r.city]) return cities[r.city];
+    }
     // Fallback: use active section/tab
     var sec = (typeof lastActiveSection !== 'undefined') ? lastActiveSection : 'hero';
     if (sec === 'section-day1' || sec === 'hero') return cities.portland;

@@ -87,6 +87,52 @@ function getPhase(d) {
   return 'ATLANTIC'; // documented default before/after trip
 }
 
+// ── Extract CITY_COORDS from index.html (GPS-aware concierge) ────
+function extractCityCoords() {
+  const start = html.indexOf('var CITY_COORDS = {');
+  if (start === -1) throw new Error('CITY_COORDS not found in index.html');
+  const open = html.indexOf('{', start);
+  const close = html.indexOf('};', open);
+  const body = html.slice(open + 1, close);
+  const coords = {};
+  const re = /([a-z]+)\s*:\s*\{\s*lat:\s*(-?\d+\.?\d*)\s*,\s*lng:\s*(-?\d+\.?\d*)\s*\}/g;
+  let m;
+  while ((m = re.exec(body)) !== null) {
+    coords[m[1]] = { lat: Number(m[2]), lng: Number(m[3]) };
+  }
+  if (Object.keys(coords).length === 0) throw new Error('Failed to parse CITY_COORDS');
+  return coords;
+}
+const CITY_COORDS = extractCityCoords();
+
+// ── Re-create the SHIPPED GPS resolution behaviour ──────────────
+function haversineKm(aLat, aLng, bLat, bLng) {
+  const R = 6371, toRad = x => x * Math.PI / 180;
+  const dLat = toRad(bLat - aLat), dLng = toRad(bLng - aLng);
+  const s = Math.sin(dLat / 2) ** 2
+    + Math.cos(toRad(aLat)) * Math.cos(toRad(bLat)) * Math.sin(dLng / 2) ** 2;
+  return 2 * R * Math.asin(Math.min(1, Math.sqrt(s)));
+}
+function nearestCity(lat, lng) {
+  if (typeof lat !== 'number' || typeof lng !== 'number' || isNaN(lat) || isNaN(lng)) return null;
+  let best = null, bestD = Infinity;
+  for (const k of Object.keys(CITY_COORDS)) {
+    const d = haversineKm(lat, lng, CITY_COORDS[k].lat, CITY_COORDS[k].lng);
+    if (d < bestD) { bestD = d; best = k; }
+  }
+  return best ? { city: best, distanceKm: bestD } : null;
+}
+function resolveConciergeCity(gps, date) {
+  if (gps && typeof gps.lat === 'number' && typeof gps.lng === 'number'
+      && !isNaN(gps.lat) && !isNaN(gps.lng)) {
+    const n = nearestCity(gps.lat, gps.lng);
+    if (n) return { city: n.city, source: 'gps', distanceKm: n.distanceKm };
+  }
+  const info = tripDayInfo(date || new Date());
+  if (info.city) return { city: info.city, source: 'date' };
+  return { city: null, source: null };
+}
+
 // ── Guard: every shipped concierge city key must be one the app has ──
 const SUPPORTED_CITIES = ['portland', 'halifax', 'lunenburg', 'stjohns', 'fogoisland'];
 
@@ -159,7 +205,78 @@ for (const k of Object.keys(TRIP_DAYS)) {
 eq('all city keys supported', badKey, null);
 eq('trip spans exactly 12 days', Object.keys(TRIP_DAYS).length, 12);
 
-// ── Summary ──────────────────────────────────────────────────────
+// ── GPS-aware concierge suites (sections 6-8) ──
+runGpsSuites();
+
+function runGpsSuites() {
+// Real coordinates of the places visited (independent of dataset hubs),
+// used to simulate a device GPS fix on each day.
+const GPS_FIX = {
+  portlandME:   { lat: 43.6591, lng: -70.2568 }, // Day 1/12
+  digby:        { lat: 44.6217, lng: -65.7573 }, // Day 2
+  lunenburg:    { lat: 44.3716, lng: -64.3093 }, // Day 3
+  northSydney:  { lat: 46.2170, lng: -60.2490 }, // Day 4/9
+  twillingate:  { lat: 49.6500, lng: -54.7667 }, // Day 5
+  fogo:         { lat: 49.7167, lng: -54.1833 }, // Day 6-8
+  pictou:       { lat: 45.6793, lng: -62.7108 }, // Day 10
+  fredericton:  { lat: 45.9636, lng: -66.6431 }  // Day 11
+};
+
+// 6. GPS GRANTED: snap to nearest dataset, source = 'gps'
+console.log('\n6) GPS granted -> nearest dataset wins (source=gps):');
+function gpsCase(label, fix, expectCity) {
+  const offDate = D(2026, 5, 27, 16, 0); // would be 'portland' by date
+  const r = resolveConciergeCity(fix, offDate);
+  eq(label + ' -> city', r.city, expectCity);
+  eq(label + ' -> source', r.source, 'gps');
+}
+gpsCase('Portland fix',     GPS_FIX.portlandME,  'portland');
+gpsCase('Digby fix',        GPS_FIX.digby,       'lunenburg');   // nearest hub
+gpsCase('Lunenburg fix',    GPS_FIX.lunenburg,   'lunenburg');
+gpsCase('North Sydney fix', GPS_FIX.northSydney, 'halifax');     // nearest hub
+gpsCase('Twillingate fix',  GPS_FIX.twillingate, 'fogoisland');  // nearest hub (NL)
+gpsCase('Fogo fix',         GPS_FIX.fogo,        'fogoisland');
+gpsCase('Pictou fix',       GPS_FIX.pictou,      'halifax');     // nearest hub
+// Fredericton, NB: by great-circle distance the nearest dataset is
+// Lunenburg (254 km) vs Halifax (281 km) -- verified, not assumed.
+gpsCase('Fredericton fix',  GPS_FIX.fredericton, 'lunenburg');
+
+console.log('\n   GPS overrides date when they disagree:');
+{
+  const r = resolveConciergeCity(GPS_FIX.fogo, D(2026,5,27,16,0)); // date=Day1 Portland
+  eq('Fogo GPS on Day-1 date -> city', r.city, 'fogoisland');
+  eq('Fogo GPS on Day-1 date -> source', r.source, 'gps');
+}
+
+// 7. GPS DENIED / UNAVAILABLE: fall back to date logic
+console.log('\n7) GPS denied/unavailable -> date fallback (source=date):');
+function deniedCase(label, gps, date, expectCity, expectSource) {
+  const r = resolveConciergeCity(gps, date);
+  eq(label + ' -> city', r.city, expectCity);
+  eq(label + ' -> source', r.source, expectSource);
+}
+const day5 = D(2026,6,1,16,0);  // Twillingate day -> date city 'stjohns'
+deniedCase('null GPS on Day 5',        null,              day5, 'stjohns', 'date');
+deniedCase('undefined GPS on Day 5',   undefined,         day5, 'stjohns', 'date');
+deniedCase('empty object on Day 5',    {},                day5, 'stjohns', 'date');
+deniedCase('NaN coords on Day 5',      {lat:NaN,lng:NaN}, day5, 'stjohns', 'date');
+deniedCase('string coords on Day 5',   {lat:'x',lng:'y'}, day5, 'stjohns', 'date');
+deniedCase('null GPS on Day 1',        null, D(2026,5,27,16,0), 'portland', 'date');
+// Late-evening + GPS denied must STILL use local date (no UTC rollover):
+deniedCase('null GPS Jun27 21:00 EDT', null, D(2026,5,28,1,0), 'portland', 'date');
+// Off-trip + GPS denied -> null (caller uses tab fallback):
+deniedCase('null GPS pre-trip',  null, D(2026,5,26,16,0), null, null);
+deniedCase('null GPS post-trip', null, D(2026,6,9,16,0),  null, null);
+
+// 8. Distance sanity
+console.log('\n8) nearestCity distance sanity:');
+eq('Fogo fix distance < 5 km', nearestCity(GPS_FIX.fogo.lat, GPS_FIX.fogo.lng).distanceKm < 5, true);
+eq('Lunenburg fix distance < 5 km', nearestCity(GPS_FIX.lunenburg.lat, GPS_FIX.lunenburg.lng).distanceKm < 5, true);
+eq('invalid coords -> null', nearestCity('a', 'b'), null);
+eq('every CITY_COORDS key is supported',
+   Object.keys(CITY_COORDS).every(function(k){ return SUPPORTED_CITIES.includes(k); }), true);
+}
+
 console.log(`\n${'='.repeat(48)}`);
 console.log(`RESULT: ${pass} passed, ${fail} failed`);
 console.log('='.repeat(48));
