@@ -63,8 +63,8 @@ const T = iso => new Date(iso);
 // ── 1. The requested verification: 09:00 AM EDT opens to Day 1 ───
 console.log('1) Day 1 activation (after lowering to 06:00 EDT):');
 eq('09:00 AM EDT Jun 27 -> section-day1', pick(T('2026-06-27T09:00-04:00')).target, 'section-day1');
-eq('06:00 AM EDT Jun 27 (exact) -> section-day1', pick(T('2026-06-27T06:00-04:00')).target, 'section-day1');
-eq('05:59 AM EDT Jun 27 -> null (top, before activation)', pick(T('2026-06-27T05:59-04:00')).target, null);
+eq('00:00 EDT Jun 27 (exact) -> section-day1', pick(T('2026-06-27T00:00-04:00')).target, 'section-day1');
+eq('05:59 AM EDT Jun 27 -> section-day1 (after midnight activation)', pick(T('2026-06-27T05:59-04:00')).target, 'section-day1');
 eq('12:30 PM EDT Jun 27 still -> section-day1', pick(T('2026-06-27T12:30-04:00')).target, 'section-day1');
 
 // 1b. Day 1's first .stop is "Afternoon" (arrival day), so stopIdx must be -1
@@ -73,9 +73,24 @@ console.log('\n1b) Day 1 lands on section top (stopIdx -1), not afternoon:');
 eq('09:00 AM EDT Jun 27 -> stopIdx -1', pick(T('2026-06-27T09:00-04:00')).stopIdx, -1);
 eq('Day 1 config stopIdx is -1', schedule[0][2], -1);
 
+// 1c. Early-morning opens (before old 7-9 AM triggers) must show TODAY,
+// not yesterday. Each day now activates at 00:00 local.
+console.log('\n1c) Early-morning opens land on the correct day (00:00 activation):');
+eq('Sun Jun 28 06:25 EDT -> section-day2', pick(T('2026-06-28T06:25-04:00')).target, 'section-day2');
+eq('Sun Jun 28 00:30 EDT -> section-day2', pick(T('2026-06-28T00:30-04:00')).target, 'section-day2');
+eq('Mon Jun 29 05:00 ADT -> section-day3', pick(T('2026-06-29T05:00-03:00')).target, 'section-day3');
+eq('Tue Jun 30 06:00 ADT -> section-day4', pick(T('2026-06-30T06:00-03:00')).target, 'section-day4');
+eq('Wed Jul 1 06:00 NDT -> section-day5', pick(T('2026-07-01T06:00-02:30')).target, 'section-day5');
+eq('Thu Jul 2 06:00 NDT -> section-fogo', pick(T('2026-07-02T06:00-02:30')).target, 'section-fogo');
+eq('Mon Jul 6 06:00 ADT -> section-day10', pick(T('2026-07-06T06:00-03:00')).target, 'section-day10');
+eq('Tue Jul 7 06:00 ADT -> section-day11', pick(T('2026-07-07T06:00-03:00')).target, 'section-day11');
+eq('Wed Jul 8 06:00 EDT -> section-day12', pick(T('2026-07-08T06:00-04:00')).target, 'section-day12');
+// Boundary: 23:59 the night before must still be the PRIOR day.
+eq('Sat Jun 27 23:59 EDT -> section-day1', pick(T('2026-06-27T23:59-04:00')).target, 'section-day1');
+
 // ── 2. Day 1 entry value is exactly the new time ────────────────
 console.log('\n2) Config value:');
-eq('Day 1 ISO is 06:00 EDT', schedule[0][0], '2026-06-27T06:00-04:00');
+eq('Day 1 ISO is 00:00 EDT', schedule[0][0], '2026-06-27T00:00-04:00');
 eq('Day 1 section unchanged', schedule[0][1], 'section-day1');
 
 // ── 3. Regression: later days still activate at their times ─────
