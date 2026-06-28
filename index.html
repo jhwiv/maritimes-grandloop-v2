@@ -1992,6 +1992,20 @@ section[id]{
   transition:all .15s;
 }
 .chat-header-close:hover{color:#fff;background:rgba(255,255,255,.1)}
+.chat-header-new{
+  position:absolute;top:12px;left:12px;
+  height:28px;padding:0 12px;
+  display:none;align-items:center;justify-content:center;
+  border-radius:14px;
+  font-family:'DM Mono',monospace;font-size:10px;
+  letter-spacing:.08em;text-transform:uppercase;
+  color:rgba(255,255,255,.6);
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.14);cursor:pointer;
+  transition:all .15s;
+}
+.chat-header-new.is-shown{display:flex}
+.chat-header-new:hover{color:#fff;background:rgba(255,255,255,.14)}
 .chat-messages{
   overflow-y:auto;
   padding:12px 16px;
@@ -3721,6 +3735,16 @@ body.hero-visible #ferry-chip{
 }
 .pick-add-pill:active{ transform:scale(.95); }
 .pick-add-pill:focus-visible{ outline:2px solid var(--gold-text); outline-offset:2px; }
+.pick-add-pill.is-added{
+  background:rgba(46,110,64,.12);
+  color:#2e6e40;
+  border-color:rgba(46,110,64,.45);
+  cursor:default;
+}
+.pick-add-pill.is-added:hover{
+  background:rgba(46,110,64,.12);
+  border-color:rgba(46,110,64,.45);
+}
 
 /* Per-day "Your picks" container */
 .picks-container{
@@ -7657,6 +7681,7 @@ onScroll();
   <div class="chat-header">
     <span class="chat-header-title">Trip Concierge</span>
     <span class="chat-header-sub">Ask about your itinerary, weather<br>or what to do next</span>
+    <button class="chat-header-new" id="chat-new" aria-label="Start a new chat">New chat</button>
     <button class="chat-header-close" id="chat-close" aria-label="Close chat">✕</button>
   </div>
   <div class="chat-suggestions" id="chat-suggestions">
@@ -8644,13 +8669,22 @@ if ('serviceWorker' in navigator) {
   var chatFab = document.getElementById('chat-fab');
   var chatPanel = document.getElementById('chat-panel');
   var chatClose = document.getElementById('chat-close');
+  var chatNew = document.getElementById('chat-new');
   var chatMessages = document.getElementById('chat-messages');
   var chatInput = document.getElementById('chat-input');
   var chatSend = document.getElementById('chat-send');
   var chatSuggestions = document.getElementById('chat-suggestions');
   if (!chatFab || !chatPanel) return;
 
+  var CHAT_HISTORY_KEY = 'mgl.chat.history.v1';
   var chatHistory = [];
+  try {
+    var _saved = JSON.parse(sessionStorage.getItem(CHAT_HISTORY_KEY) || '[]');
+    if (Array.isArray(_saved)) chatHistory = _saved;
+  } catch (e) {}
+  function persistHistory() {
+    try { sessionStorage.setItem(CHAT_HISTORY_KEY, JSON.stringify(chatHistory.slice(-40))); } catch (e) {}
+  }
   var chatGpsResolve = null; // resolves the first-message await
   function getActiveTabLabel() {
     var active = document.querySelector('.nav-chip.active');
@@ -8672,12 +8706,45 @@ if ('serviceWorker' in navigator) {
 
   var chatOverlay = document.getElementById('chat-overlay');
 
-  function openChat() {
-    // Reset conversation on every open
+  // Rebuild the visible message list from saved history (used on reopen so the
+  // conversation persists instead of vanishing). Action chips/pills are
+  // re-injected by the picks watcher and the streaming-complete handler.
+  function renderHistory() {
+    chatMessages.innerHTML = '';
+    for (var i = 0; i < chatHistory.length; i++) {
+      var m = chatHistory[i];
+      if (m && (m.role === 'user' || m.role === 'assistant')) {
+        addMessage(m.role, m.content || '');
+      }
+    }
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+
+  function startNewChat() {
     chatMessages.innerHTML = '';
     chatHistory = [];
+    persistHistory();
     isFirstMessage = true;
     chatSuggestions.style.display = '';
+    chatInput.value = '';
+    if (chatNew) chatNew.classList.remove('is-shown');
+    chatInput.style.height = 'auto';
+  }
+
+  function openChat() {
+    var hasHistory = chatHistory.length > 0;
+    if (hasHistory) {
+      // Restore the prior conversation instead of wiping it
+      renderHistory();
+      chatSuggestions.style.display = 'none';
+      isFirstMessage = false;
+      if (chatNew) chatNew.classList.add('is-shown');
+    } else {
+      chatMessages.innerHTML = '';
+      isFirstMessage = true;
+      chatSuggestions.style.display = '';
+      if (chatNew) chatNew.classList.remove('is-shown');
+    }
     chatInput.value = '';
     chatPanel.classList.add('open');
     chatPanel.style.display = 'flex';
@@ -8757,6 +8824,7 @@ if ('serviceWorker' in navigator) {
     if (isChatOpen()) { closeChat(); } else { openChat(); }
   });
   onTap(chatClose, function(e) { e.stopPropagation(); closeChat(); });
+  if (chatNew) onTap(chatNew, function(e) { e.stopPropagation(); startNewChat(); });
   if (chatOverlay) onTap(chatOverlay, function(e) { e.stopPropagation(); closeChat(); });
 
   chatInput.addEventListener('input', function() {
@@ -8852,6 +8920,8 @@ if ('serviceWorker' in navigator) {
 
     addMessage('user', text);
     chatHistory.push({ role: 'user', content: text });
+    persistHistory();
+    if (chatNew) chatNew.classList.add('is-shown');
     showTyping();
 
     // On first message, wait briefly for GPS to resolve
@@ -8894,6 +8964,7 @@ if ('serviceWorker' in navigator) {
         return reader.read().then(function(result) {
           if (result.done) {
             chatHistory.push({ role: 'assistant', content: fullText });
+            persistHistory();
             // Append action chips if response contains map recommendations
             if (/maps\.google\.com/.test(fullText)) {
               var chipRow = document.createElement('div');
@@ -11189,7 +11260,7 @@ requestAnimationFrame(function(){
       '</div>';
     toastEl.classList.add('is-shown');
     if (toastTimer) clearTimeout(toastTimer);
-    toastTimer = setTimeout(function () { toastEl.classList.remove('is-shown'); }, 6000);
+    toastTimer = setTimeout(function () { toastEl.classList.remove('is-shown'); }, 9000);
 
     if (lastPick) {
       var sel = toastEl.querySelector('[data-toast-move]');
@@ -11264,26 +11335,52 @@ requestAnimationFrame(function(){
     if (addBtn) {
       e.preventDefault();
       e.stopPropagation();
-      try {
-        var payload = JSON.parse(addBtn.getAttribute('data-add-pick'));
-        var inferred = inferDay(
-          (payload.title || '') + ' ' + (payload.desc || '') + ' ' + (payload.context || ''),
-          activeDayId()
-        );
-        var p = {
-          kind: payload.kind || 'dining',
-          title: payload.title,
-          desc: payload.desc || '',
-          time: payload.time || '',
-          mapUrl: payload.mapUrl || '',
-          source: payload.source || 'manual',
-        };
-        addPick(inferred, p);
-      } catch (err) {
-        console.error('Bad add-pick payload', err);
-      }
+      handleAddPick(addBtn);
     }
   });
+
+  // Mirror the add-pill handler on touchend so taps register reliably on
+  // mobile, where a parent's touchend+preventDefault can suppress the
+  // synthetic click that the delegated click handler relies on. Guard with a
+  // short cooldown flag on the element to prevent a double-add from the
+  // follow-up click event.
+  document.addEventListener('touchend', function (e) {
+    var addBtn = e.target.closest && e.target.closest('[data-add-pick]');
+    if (!addBtn) return;
+    e.preventDefault();
+    e.stopPropagation();
+    if (addBtn._addCooldown) return;
+    addBtn._addCooldown = true;
+    setTimeout(function () { addBtn._addCooldown = false; }, 600);
+    handleAddPick(addBtn);
+  }, { passive: false });
+
+  function handleAddPick(addBtn) {
+    if (addBtn.classList.contains('is-added')) return;
+    try {
+      var payload = JSON.parse(addBtn.getAttribute('data-add-pick'));
+      var inferred = inferDay(
+        (payload.title || '') + ' ' + (payload.desc || '') + ' ' + (payload.context || ''),
+        activeDayId()
+      );
+      var p = {
+        kind: payload.kind || 'dining',
+        title: payload.title,
+        desc: payload.desc || '',
+        time: payload.time || '',
+        mapUrl: payload.mapUrl || '',
+        source: payload.source || 'manual',
+      };
+      addPick(inferred, p);
+      // Persistent inline confirmation on the tapped pill so the user sees it
+      // "passed through" even after the toast fades.
+      addBtn.classList.add('is-added');
+      addBtn.innerHTML = '\u2713 Added';
+      addBtn.setAttribute('aria-label', escapeHtml(p.title) + ' added to ' + shortDayLabel(inferred));
+    } catch (err) {
+      console.error('Bad add-pick payload', err);
+    }
+  }
 
   // ── Pill renderer (shared) ─────────────────────────────────────────
   function pillHtml(payload) {
