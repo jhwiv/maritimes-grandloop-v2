@@ -7148,39 +7148,54 @@ onScroll();
   if (window.location.hash) return;
 
   // Maritimes trip schedule: [ISO time, section, stop index (0-based)]
+  // Auto-nav picks the LAST entry whose time is <= now, so the app always
+  // lands on the event card closest to the current time. Each day has a
+  // 00:00 entry (so very early morning lands on the first event) plus one
+  // checkpoint per stop, timestamped at that stop's real local time, so the
+  // landing advances through the day as the clock advances. Times use each
+  // day's correct UTC offset (EDT -04, ADT -03, NDT -02:30).
   var schedule = [
-    // Day 1: Portland (activate at 6 AM so the app opens to today's card
-    // from the start of the day, matching the 8-9 AM triggers on all other days).
-    // stopIdx -1 = scroll to the TOP of the day's section (date banner + overview).
-    // Day 1 is an arrival day whose first stop is "Afternoon", so landing on the
-    // section top (not stop 0) shows the start of today rather than the afternoon.
-    ['2026-06-27T00:00-04:00', 'section-day1', -1],
-    // Day 2: Portland → Saint John → Digby
-    ['2026-06-28T00:00-04:00', 'section-day2', 0],
-    ['2026-06-28T14:00-03:00', 'section-day2', 2], // Ferry
-    // Day 3: Digby → Lunenburg
-    ['2026-06-29T00:00-03:00', 'section-day3', 0],
-    ['2026-06-29T13:00-03:00', 'section-day3', 1], // Explore Lunenburg
-    ['2026-06-29T20:00-03:00', 'section-day3', 1], // Dinner: Beach Pea Kitchen & Bar (8 PM ADT)
-    // Day 4: Lunenburg → North Sydney → Ferry
-    ['2026-06-30T00:00-03:00', 'section-day4', 0],
-    ['2026-06-30T19:00-03:00', 'section-day4', 1], // Dinner: Black Spoon Bistro (7 PM ADT pre-ferry)
-    ['2026-06-30T21:45-03:00', 'section-day4', 1], // Ferry check-in
-    ['2026-06-30T23:45-03:00', 'section-day4', 1], // Marine Atlantic departs
-    // Day 5: Port aux Basques → Twillingate
-    ['2026-07-01T00:00-02:30', 'section-day5', 0],
-    ['2026-07-01T12:00-02:30', 'section-day5', 2], // Deer Lake
-    ['2026-07-01T18:00-02:30', 'section-day5', 3], // Arrive Twillingate
-    // Days 6-8: Fogo Island
-    ['2026-07-02T00:00-02:30', 'section-fogo', 0],
-    // Day 9: Fogo → Return ferry
-    ['2026-07-05T00:00-02:30', 'section-day9', 0],
-    // Day 10: North Sydney → Pictou
-    ['2026-07-06T00:00-03:00', 'section-day10', 0],
-    // Day 11: Pictou → Fredericton
-    ['2026-07-07T00:00-03:00', 'section-day11', 0],
-    // Day 12: Fredericton → Portland (Home)
-    ['2026-07-08T00:00-04:00', 'section-day12', 0],
+    // Day 1: Portland — arrival day (Afternoon, Evening). -1 = section top.
+    ['2026-06-27T00:00-04:00', 'section-day1', -1], // start of day -> overview
+    ['2026-06-27T13:00-04:00', 'section-day1', 0],  // Afternoon: Meet Molly & Bonie
+    ['2026-06-27T18:00-04:00', 'section-day1', 1],  // Evening: Dinner in Portland
+    // Day 2: Portland → Saint John → Digby (Morning, En Route, Ferry, Arrive)
+    ['2026-06-28T00:00-04:00', 'section-day2', 0],  // Morning: drive begins
+    ['2026-06-28T11:00-04:00', 'section-day2', 1],  // En Route: suggested stops
+    ['2026-06-28T14:15-03:00', 'section-day2', 2],  // 2:15 PM AT ferry
+    ['2026-06-28T17:00-03:00', 'section-day2', 3],  // ~5:00 PM ADT arrive Digby
+    // Day 3: Digby → Lunenburg (Morning, Afternoon + 8 PM dinner)
+    ['2026-06-29T00:00-03:00', 'section-day3', 0],  // Morning
+    ['2026-06-29T13:00-03:00', 'section-day3', 1],  // Afternoon: explore Lunenburg
+    ['2026-06-29T20:00-03:00', 'section-day3', 1],  // Dinner: Beach Pea (8 PM ADT)
+    // Day 4: Lunenburg → North Sydney → Ferry (Early Start, Evening ferry)
+    ['2026-06-30T00:00-03:00', 'section-day4', 0],  // 8 AM early start
+    ['2026-06-30T18:00-03:00', 'section-day4', 1],  // Evening: dinner + overnight ferry
+    // Day 5: Port aux Basques → Twillingate (Morning, Mid-Morning, Lunch, Evening)
+    ['2026-07-01T00:00-02:30', 'section-day5', 0],  // Morning: arrive Port aux Basques
+    ['2026-07-01T10:00-02:30', 'section-day5', 1],  // Mid-Morning
+    ['2026-07-01T12:30-02:30', 'section-day5', 2],  // Lunch: Deer Lake
+    ['2026-07-01T18:00-02:30', 'section-day5', 3],  // Evening: arrive Twillingate
+    // Days 6-8: Fogo Island (Day6 Morning ferry, Arrival, Days 6-8)
+    ['2026-07-02T00:00-02:30', 'section-fogo', 0],  // Morning ferry to Fogo
+    ['2026-07-02T13:00-02:30', 'section-fogo', 1],  // Arrival
+    ['2026-07-03T00:00-02:30', 'section-fogo', 2],  // Days 6-8 on the island
+    // Day 9: Fogo → Return ferry (Morning ferry, All Day, En Route, Evening ferry)
+    ['2026-07-05T00:00-02:30', 'section-day9', 0],  // Morning ferry off Fogo
+    ['2026-07-05T11:00-02:30', 'section-day9', 1],  // All Day
+    ['2026-07-05T15:00-02:30', 'section-day9', 2],  // En Route
+    ['2026-07-05T18:00-02:30', 'section-day9', 3],  // Evening overnight ferry
+    // Day 10: North Sydney → Pictou (Morning, Afternoon)
+    ['2026-07-06T00:00-03:00', 'section-day10', 0], // Morning
+    ['2026-07-06T14:00-03:00', 'section-day10', 1], // Afternoon: Pictou
+    // Day 11: Pictou → Fredericton (Morning, En Route, Afternoon)
+    ['2026-07-07T00:00-03:00', 'section-day11', 0], // Morning
+    ['2026-07-07T11:00-03:00', 'section-day11', 1], // En Route
+    ['2026-07-07T14:00-03:00', 'section-day11', 2], // Afternoon: Fredericton
+    // Day 12: Fredericton → Portland / Home (Morning, En Route, Afternoon)
+    ['2026-07-08T00:00-04:00', 'section-day12', 0], // Morning
+    ['2026-07-08T11:00-04:00', 'section-day12', 1], // En Route
+    ['2026-07-08T14:00-04:00', 'section-day12', 2], // Afternoon: arrive Portland
     // Trip over
     ['2026-07-08T20:00-04:00', null, 0]
   ];

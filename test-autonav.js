@@ -88,6 +88,24 @@ eq('Wed Jul 8 06:00 EDT -> section-day12', pick(T('2026-07-08T06:00-04:00')).tar
 // Boundary: 23:59 the night before must still be the PRIOR day.
 eq('Sat Jun 27 23:59 EDT -> section-day1', pick(T('2026-06-27T23:59-04:00')).target, 'section-day1');
 
+// 1d. TIME-OF-DAY tracking: within a day, landing advances to the event
+// card closest to (at or before) the current time.
+console.log('\n1d) Landing tracks time-of-day within a day:');
+function at(iso){ var p = pick(T(iso)); return p.target + '#' + p.stopIdx; }
+// Day 2 (Sun): Morning(0) -> En Route(1 @11:00) -> Ferry(2 @14:15 ADT) -> Arrive(3 @17:00 ADT)
+eq('Sun 06:33 EDT -> Day2 stop0 (Morning)',  at('2026-06-28T06:33-04:00'), 'section-day2#0');
+eq('Sun 11:30 EDT -> Day2 stop1 (En Route)', at('2026-06-28T11:30-04:00'), 'section-day2#1');
+eq('Sun 14:30 ADT -> Day2 stop2 (Ferry)',    at('2026-06-28T14:30-03:00'), 'section-day2#2');
+eq('Sun 19:00 ADT -> Day2 stop3 (Arrive)',   at('2026-06-28T19:00-03:00'), 'section-day2#3');
+// Day 1 (arrival): section top(-1) -> Afternoon(0 @13:00) -> Evening(1 @18:00)
+eq('Sat 07:00 EDT -> Day1 top(-1)',          at('2026-06-27T07:00-04:00'), 'section-day1#-1');
+eq('Sat 15:00 EDT -> Day1 stop0 (Afternoon)',at('2026-06-27T15:00-04:00'), 'section-day1#0');
+eq('Sat 19:30 EDT -> Day1 stop1 (Evening)',  at('2026-06-27T19:30-04:00'), 'section-day1#1');
+// Day 5 (NDT): Morning(0)->MidMorn(1 @10)->Lunch(2 @12:30)->Evening(3 @18)
+eq('Wed 09:00 NDT -> Day5 stop0',            at('2026-07-01T09:00-02:30'), 'section-day5#0');
+eq('Wed 13:00 NDT -> Day5 stop2 (Lunch)',    at('2026-07-01T13:00-02:30'), 'section-day5#2');
+eq('Wed 20:00 NDT -> Day5 stop3 (Evening)',  at('2026-07-01T20:00-02:30'), 'section-day5#3');
+
 // ── 2. Day 1 entry value is exactly the new time ────────────────
 console.log('\n2) Config value:');
 eq('Day 1 ISO is 00:00 EDT', schedule[0][0], '2026-06-27T00:00-04:00');
@@ -98,6 +116,37 @@ console.log('\n3) Other days unchanged:');
 eq('Jun 28 09:00 EDT -> section-day2', pick(T('2026-06-28T09:00-04:00')).target, 'section-day2');
 eq('Jun 29 20:30 ADT -> section-day3', pick(T('2026-06-29T20:30-03:00')).target, 'section-day3');
 eq('Jul 8 21:00 EDT (trip over) -> null', pick(T('2026-07-08T21:00-04:00')).target, null);
+
+// ── 4. Integrity: every scheduled stopIdx exists in its section ──
+console.log('\n4) Every scheduled stopIdx is valid for its section:');
+function stopCount(sectionId) {
+  const re = new RegExp('<section id="' + sectionId + '"');
+  const m = re.exec(html);
+  if (!m) return null;
+  const start = m.index;
+  // next <section id="..."> after start
+  const after = html.slice(start + 10);
+  const nextRel = after.search(/<section id="section-/);
+  const block = nextRel === -1 ? html.slice(start) : html.slice(start, start + 10 + nextRel);
+  // Match the DOM's .stop selector: count elements whose class list contains
+  // 'stop' as a standalone token (so class="stop is-ferry" counts, but
+  // class="stop-time" does not) -- exactly what querySelectorAll('.stop') does.
+  let n = 0;
+  const classAttrs = block.match(/class="[^"]*"/g) || [];
+  for (const ca of classAttrs) {
+    const tokens = ca.slice(7, -1).split(/\s+/);
+    if (tokens.includes('stop')) n++;
+  }
+  return n;
+}
+let badIdx = null;
+for (const [iso, sec, idx] of schedule) {
+  if (sec === null) continue;
+  const n = stopCount(sec);
+  // idx -1 (section top) is always valid; otherwise must be < stop count
+  if (idx !== -1 && (n === null || idx >= n)) { badIdx = `${sec} idx ${idx} but ${n} stops`; break; }
+}
+eq('all scheduled stop indices valid', badIdx, null);
 
 console.log(`\n${'='.repeat(48)}`);
 console.log(`RESULT: ${pass} passed, ${fail} failed`);
