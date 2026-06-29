@@ -92,8 +92,9 @@ eq('Sat Jun 27 23:59 EDT -> section-day1', pick(T('2026-06-27T23:59-04:00')).tar
 // card closest to (at or before) the current time.
 console.log('\n1d) Landing tracks time-of-day within a day:');
 function at(iso){ var p = pick(T(iso)); return p.target + '#' + p.stopIdx; }
-// Day 2 (Sun): Morning(0) -> En Route(1 @11:00) -> Ferry(2 @14:15 ADT) -> Arrive(3 @17:00 ADT)
-eq('Sun 06:33 EDT -> Day2 stop0 (Morning)',  at('2026-06-28T06:33-04:00'), 'section-day2#0');
+// Day 2 (Sun): top(-1) -> Morning(0 @07:00 EDT) -> En Route(1 @11:00) -> Ferry(2 @14:15 ADT) -> Arrive(3 @17:00 ADT)
+eq('Sun 06:33 EDT -> Day2 top(-1) pre-departure', at('2026-06-28T06:33-04:00'), 'section-day2#-1');
+eq('Sun 07:00 EDT -> Day2 stop0 (Morning, depart)', at('2026-06-28T07:00-04:00'), 'section-day2#0');
 eq('Sun 11:30 EDT -> Day2 stop1 (En Route)', at('2026-06-28T11:30-04:00'), 'section-day2#1');
 eq('Sun 14:30 ADT -> Day2 stop2 (Ferry)',    at('2026-06-28T14:30-03:00'), 'section-day2#2');
 eq('Sun 19:00 ADT -> Day2 stop3 (Arrive)',   at('2026-06-28T19:00-03:00'), 'section-day2#3');
@@ -101,10 +102,32 @@ eq('Sun 19:00 ADT -> Day2 stop3 (Arrive)',   at('2026-06-28T19:00-03:00'), 'sect
 eq('Sat 07:00 EDT -> Day1 top(-1)',          at('2026-06-27T07:00-04:00'), 'section-day1#-1');
 eq('Sat 15:00 EDT -> Day1 stop0 (Afternoon)',at('2026-06-27T15:00-04:00'), 'section-day1#0');
 eq('Sat 19:30 EDT -> Day1 stop1 (Evening)',  at('2026-06-27T19:30-04:00'), 'section-day1#1');
-// Day 5 (NDT): Morning(0)->MidMorn(1 @10)->Lunch(2 @12:30)->Evening(3 @18)
-eq('Wed 09:00 NDT -> Day5 stop0',            at('2026-07-01T09:00-02:30'), 'section-day5#0');
+// Day 5 (NDT): top(-1) -> Morning(0 @07:00) -> MidMorn(1 @10) -> Lunch(2 @12:30) -> Evening(3 @18)
+eq('Wed 06:00 NDT -> Day5 top(-1) on ferry', at('2026-07-01T06:00-02:30'), 'section-day5#-1');
+eq('Wed 09:00 NDT -> Day5 stop0 (Morning)',  at('2026-07-01T09:00-02:30'), 'section-day5#0');
 eq('Wed 13:00 NDT -> Day5 stop2 (Lunch)',    at('2026-07-01T13:00-02:30'), 'section-day5#2');
 eq('Wed 20:00 NDT -> Day5 stop3 (Evening)',  at('2026-07-01T20:00-02:30'), 'section-day5#3');
+
+// 1e. Pre-departure summary card on every travel day. Reproduces the bug
+// reported on Mon Jun 29 ~5:30 AM EDT (=6:30 AM ADT): app opened at the
+// Morning 'Scenic Drive' stop instead of the summary card. Expected behavior
+// is now stopIdx -1 (section top) until the day's documented departure time.
+console.log('\n1e) Pre-departure opens land on the day summary (stopIdx -1):');
+eq('Mon Jun 29 06:30 ADT (the reported bug) -> Day3 top(-1)', at('2026-06-29T06:30-03:00'), 'section-day3#-1');
+eq('Mon Jun 29 08:59 ADT (one min before depart) -> Day3 top(-1)', at('2026-06-29T08:59-03:00'), 'section-day3#-1');
+eq('Mon Jun 29 09:00 ADT (depart) -> Day3 stop0', at('2026-06-29T09:00-03:00'), 'section-day3#0');
+eq('Tue Jun 30 06:00 ADT pre-depart -> Day4 top(-1)', at('2026-06-30T06:00-03:00'), 'section-day4#-1');
+eq('Tue Jun 30 08:00 ADT depart -> Day4 stop0', at('2026-06-30T08:00-03:00'), 'section-day4#0');
+eq('Thu Jul 2 06:00 NDT pre-depart -> Fogo top(-1)', at('2026-07-02T06:00-02:30'), 'section-fogo#-1');
+eq('Thu Jul 2 08:00 NDT depart -> Fogo stop0', at('2026-07-02T08:00-02:30'), 'section-fogo#0');
+eq('Sun Jul 5 05:30 NDT pre-depart -> Day9 top(-1)', at('2026-07-05T05:30-02:30'), 'section-day9#-1');
+eq('Sun Jul 5 07:00 NDT depart -> Day9 stop0', at('2026-07-05T07:00-02:30'), 'section-day9#0');
+eq('Mon Jul 6 06:00 ADT pre-depart -> Day10 top(-1)', at('2026-07-06T06:00-03:00'), 'section-day10#-1');
+eq('Mon Jul 6 08:00 ADT depart -> Day10 stop0', at('2026-07-06T08:00-03:00'), 'section-day10#0');
+eq('Tue Jul 7 06:00 ADT pre-depart -> Day11 top(-1)', at('2026-07-07T06:00-03:00'), 'section-day11#-1');
+eq('Tue Jul 7 08:00 ADT depart -> Day11 stop0', at('2026-07-07T08:00-03:00'), 'section-day11#0');
+eq('Wed Jul 8 06:00 EDT pre-depart -> Day12 top(-1)', at('2026-07-08T06:00-04:00'), 'section-day12#-1');
+eq('Wed Jul 8 07:00 EDT depart -> Day12 stop0', at('2026-07-08T07:00-04:00'), 'section-day12#0');
 
 // ── 2. Day 1 entry value is exactly the new time ────────────────
 console.log('\n2) Config value:');
