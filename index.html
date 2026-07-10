@@ -239,7 +239,58 @@ img{display:block;max-width:100%}
   .nav-chip{padding:3px 3px;font-size:6.8px;letter-spacing:0}
 }
 
-
+/* ── DAILY MINI SITES ────────────────────────────── */
+.nav-chip-mini.active{background:var(--teal);border-color:var(--teal);color:#fff}
+.nav-chip-mini.active:hover{background:var(--teal2);color:var(--navy2)}
+#section-minisites .content-section{max-width:760px}
+.mini-hub-header{margin-bottom:var(--sp16,20px)}
+.mini-hub-eyebrow{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);font-weight:600}
+.mini-hub-title{font-family:Georgia,'Times New Roman',serif;font-size:26px;line-height:1.15;color:var(--navy);margin-top:4px}
+.mini-hub-sub{font-size:14px;color:var(--muted);margin-top:8px;line-height:1.5}
+.mini-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
+@media(max-width:430px){.mini-grid{grid-template-columns:1fr}}
+.mini-card{text-align:left;background:var(--cream);border:1px solid var(--divider);border-radius:14px;padding:14px 14px 13px;cursor:pointer;transition:border-color .18s,box-shadow .18s,transform .05s;display:flex;flex-direction:column;gap:5px}
+.mini-card:hover{border-color:var(--teal);box-shadow:0 4px 14px rgba(27,40,56,.08)}
+.mini-card:active{transform:scale(.985)}
+.mini-card.is-today{border-color:var(--teal);background:var(--teal2)}
+.mini-card-day{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);font-weight:700;display:flex;align-items:center;gap:7px}
+.mini-card-today-tag{background:var(--teal);color:#fff;font-size:8.5px;padding:1px 6px;border-radius:8px;letter-spacing:.06em}
+.mini-card-date{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted)}
+.mini-card-route{font-family:Georgia,serif;font-size:16px;color:var(--navy);line-height:1.2}
+.mini-card-cta{font-size:11px;color:var(--teal);font-weight:600;margin-top:2px}
+/* Per-day digest view */
+.mini-view{display:none}
+.mini-view.open{display:block}
+.mini-back{display:inline-flex;align-items:center;gap:6px;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--teal);font-weight:600;background:none;border:none;cursor:pointer;padding:6px 0;margin-bottom:6px}
+.mini-back:active{transform:scale(.96)}
+.mini-dv-eyebrow{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);font-weight:600}
+.mini-dv-title{font-family:Georgia,serif;font-size:24px;line-height:1.15;color:var(--navy);margin-top:3px}
+.mini-dv-date{font-family:'DM Mono',monospace;font-size:12px;color:var(--muted);margin-top:4px}
+.mini-dv-intro{font-size:14px;line-height:1.55;color:var(--body);margin-top:12px;padding-bottom:14px;border-bottom:1px solid var(--divider)}
+.mini-dv-block-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-text);font-weight:700;margin:18px 0 8px}
+.mini-tl{display:flex;flex-direction:column;gap:0}
+.mini-tl-row{display:flex;gap:12px;padding:9px 0;border-bottom:1px dashed var(--divider2)}
+.mini-tl-row:last-child{border-bottom:none}
+.mini-tl-time{flex:0 0 92px;font-family:'DM Mono',monospace;font-size:11px;color:var(--teal);font-weight:600;padding-top:1px}
+.mini-tl-what{flex:1;min-width:0;font-size:14px;color:var(--body);line-height:1.4;overflow-wrap:anywhere}
+.mini-lodge{background:var(--cream);border:1px solid var(--divider);border-radius:12px;padding:12px 13px;margin-top:8px}
+.mini-lodge-label{font-family:'DM Mono',monospace;font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.mini-lodge-name{font-family:Georgia,serif;font-size:15px;color:var(--navy);margin-top:3px;line-height:1.25}
+.mini-lodge-addr{font-size:12.5px;color:var(--muted);margin-top:3px;line-height:1.4}
+.mini-lodge-actions{display:flex;gap:8px;margin-top:9px;flex-wrap:wrap}
+.mini-lodge-btn{font-family:'DM Mono',monospace;font-size:10.5px;letter-spacing:.04em;text-transform:uppercase;font-weight:600;color:var(--navy);background:var(--cream2);border:1px solid var(--divider);border-radius:9px;padding:6px 11px;text-decoration:none;white-space:nowrap}
+.mini-lodge-btn:active{transform:scale(.96)}
+.mini-dv-full{display:block;text-align:center;margin-top:22px;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;font-weight:600;color:#fff;background:var(--teal);border:none;border-radius:11px;padding:12px 16px;cursor:pointer;width:100%}
+.mini-dv-full:active{transform:scale(.985)}
+/* On-load today banner */
+#mini-today-banner{position:fixed;left:12px;right:12px;bottom:16px;z-index:70;background:var(--navy);color:var(--cream);border:1px solid var(--teal);border-radius:14px;padding:12px 14px;box-shadow:0 8px 28px rgba(0,0,0,.28);display:none;align-items:center;gap:12px;max-width:520px;margin:0 auto}
+#mini-today-banner.show{display:flex}
+.mini-banner-txt{flex:1;min-width:0}
+.mini-banner-eyebrow{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold2);font-weight:600}
+.mini-banner-title{font-size:13.5px;line-height:1.3;margin-top:2px}
+.mini-banner-open{font-family:'DM Mono',monospace;font-size:10.5px;letter-spacing:.04em;text-transform:uppercase;font-weight:700;color:var(--navy2);background:var(--gold);border:none;border-radius:9px;padding:9px 13px;cursor:pointer;white-space:nowrap}
+.mini-banner-open:active{transform:scale(.96)}
+.mini-banner-close{background:none;border:none;color:rgba(255,255,255,.6);font-size:18px;cursor:pointer;padding:2px 4px;line-height:1}
 
 /* ── PRINT BUTTON ────────────────────────────────── */
 .print-btn{
@@ -4029,6 +4080,7 @@ function dismissWelcome() {
       <button class="nav-chip" data-target="section-day12">Home</button>
     </nav>
     <nav class="hdr-nav hdr-row-3" aria-label="Reference sections">
+      <button class="nav-chip nav-chip-mini" data-target="section-minisites">Daily Mini Sites</button>
       <button class="nav-chip" data-target="section-essentials">Info</button>
       <button class="nav-chip" data-target="section-reference">Reference</button>
       <button class="nav-chip" data-target="section-history">History</button>
@@ -4071,6 +4123,7 @@ function dismissWelcome() {
   <div class="nav-drawer-group">
     <div class="nav-drawer-group-label">Reference</div>
     <div class="nav-drawer-chips">
+      <button class="nav-chip nav-chip-mini" data-target="section-minisites" data-drawer>Daily Mini Sites</button>
       <button class="nav-chip" data-target="section-essentials" data-drawer>Info</button>
       <button class="nav-chip" data-target="section-reference" data-drawer>Reference</button>
       <button class="nav-chip" data-target="section-history" data-drawer>History</button>
@@ -4234,6 +4287,39 @@ function dismissWelcome() {
 
   </div>
 </section>
+
+<!-- ══════════════════════════════════════════════════
+     DAILY MINI SITES
+     ══════════════════════════════════════════════════ -->
+<span class="section-anchor" id="section-minisites-anchor"></span>
+<section id="section-minisites" aria-label="Daily mini sites">
+  <div class="content-section">
+    <!-- HUB: grid of day cards -->
+    <div id="mini-hub">
+      <div class="mini-hub-header">
+        <div class="mini-hub-eyebrow">Daily Mini Sites</div>
+        <div class="mini-hub-title">One Card Per Day</div>
+        <div class="mini-hub-sub">A quick digest of each day&rsquo;s plan &mdash; timeline, dinner, and where you&rsquo;re sleeping &mdash; without scrolling the full app. Tap any day, or open today&rsquo;s automatically when it arrives.</div>
+      </div>
+      <div class="mini-grid" id="mini-grid"><!-- cards injected by JS --></div>
+    </div>
+    <!-- VIEW: single day digest (injected by JS) -->
+    <div id="mini-view" class="mini-view">
+      <button class="mini-back" id="mini-back-btn" type="button">&larr; All Days</button>
+      <div id="mini-view-body"></div>
+    </div>
+  </div>
+</section>
+
+<!-- On-load today's mini site banner -->
+<div id="mini-today-banner" role="dialog" aria-label="Open today's mini site">
+  <div class="mini-banner-txt">
+    <div class="mini-banner-eyebrow">Today on the Loop</div>
+    <div class="mini-banner-title" id="mini-banner-title">Open today&rsquo;s mini site</div>
+  </div>
+  <button class="mini-banner-open" id="mini-banner-open" type="button">Open</button>
+  <button class="mini-banner-close" id="mini-banner-close" type="button" aria-label="Dismiss">&times;</button>
+</div>
 
 <div id="deferred-sections" class="deferred-content">
 <div class="location-banner" role="img" aria-label="Portland">
@@ -11559,5 +11645,133 @@ requestAnimationFrame(function(){
 })();
 
 </script>
+
+<!-- ── DAILY MINI SITES ─────────────────────────────── -->
+<script>
+(function(){
+  var MINI = [{"sid": "section-day1", "day": "Day 1", "dates": ["2026-06-27"], "date": "Saturday, June 27", "title": "Portland, ME", "intro": "Meet up, unwind, and ease into the trip. Old Port stroll with Molly and Bonie, then an early dinner before the long drive north tomorrow.", "stops": [{"t": "Afternoon", "w": "Meet Molly & Bonie"}, {"t": "Evening", "w": "Dinner in Portland"}], "dinners": [], "lodge": {"label": "Confirmed Lodging · Night 1", "name": "Courtyard by Marriott Portland Downtown/Waterfront", "addr": "321 Commercial St, Portland, ME 04101", "tel": "tel:+12077806000", "map": "https://maps.google.com/maps?q=Courtyard+Marriott+321+Commercial+St+Portland+ME"}}, {"sid": "section-day2", "day": "Day 2", "dates": ["2026-06-28"], "date": "Sunday, June 28", "title": "Portland → Digby", "intro": "Drive north to Saint John, NB, then take the Fundy Rose ferry across the Bay of Fundy to Digby, Nova Scotia.", "stops": [{"t": "Morning", "w": "Drive: Portland → Saint John, NB"}, {"t": "En Route", "w": "Suggested Stops"}, {"t": "2:15 PM AT", "w": "Arrive Digby · Explore Waterfront"}], "dinners": [], "lodge": {"label": "Confirmed Lodging · Night 2", "name": "Fundy Complex Dockside Suites (1 room)", "addr": "34 Water St, Digby, NS B0V 1A0", "tel": "", "map": "https://maps.google.com/maps?q=34+Water+St+Digby+NS"}}, {"sid": "section-day3", "day": "Day 3", "dates": ["2026-06-29"], "date": "Monday, June 29", "title": "Digby → Lunenburg", "intro": "Scenic coastal drive along the South Shore to Lunenburg — a UNESCO World Heritage town. Colourful waterfront, the Bluenose II, and outstanding seafood.", "stops": [{"t": "Morning", "w": "Scenic Drive · South Shore"}, {"t": "Afternoon", "w": "Explore Lunenburg"}], "dinners": [{"label": "Confirmed Dinner · Mon Jun 29 · 8:00 PM ADT (Atlantic Time)", "name": "Beach Pea Kitchen & Bar", "addr": "Lunenburg, NS"}], "lodge": {"label": "Confirmed Lodging · Night 3", "name": "Smugglers Cove Inn (1 room)", "addr": "139 Montague St, Lunenburg, NS B0J 2C0", "tel": "", "map": "https://maps.google.com/maps?q=139+Montague+St+Lunenburg+NS"}}, {"sid": "section-day4", "day": "Day 4", "dates": ["2026-06-30"], "date": "Tuesday, June 30", "title": "Lunenburg → Ferry", "intro": "Early departure. Long drive to North Sydney, then board the Marine Atlantic overnight ferry to Newfoundland. Sleep on the water.", "stops": [], "dinners": [{"label": "Confirmed Dinner · Tue Jun 30 · 7:00 PM ADT (Atlantic Time)", "name": "Black Spoon Bistro", "addr": "320 Esplanade, Sydney, NS · pre-ferry (~12 min from North Sydney terminal)"}], "lodge": {"label": "Confirmed Lodging · Night 4", "name": "Marine Atlantic Ferry Cabin", "addr": "Overnight crossing · North Sydney → Port aux Basques", "tel": "", "map": ""}}, {"sid": "section-day5", "day": "Day 5", "dates": ["2026-07-01"], "date": "Wednesday, July 1", "title": "Port aux Basques → Twillingate", "intro": "Welcome to Newfoundland. Drive across the island — the Trans-Canada Highway passes through Corner Brook and Deer Lake before turning east to the iceberg capital, Twillingate.", "stops": [{"t": "Morning", "w": "Arrive Port aux Basques"}, {"t": "Mid-Morning", "w": "Suggested Stop · Corner Brook"}, {"t": "Lunch", "w": "Lunch Stop · Deer Lake"}, {"t": "Evening", "w": "Arrive Twillingate"}], "dinners": [], "lodge": {"label": "Confirmed Lodging · Night 5", "name": "Anchor Inn Hotel & Suites (2 rooms)", "addr": "3 Path End, Twillingate, NL A0G 4M0", "tel": "", "map": "https://maps.google.com/maps?q=Anchor+Inn+Twillingate+NL"}}, {"sid": "section-fogo", "day": "Days 6-8", "dates": ["2026-07-02", "2026-07-03", "2026-07-04"], "date": "Thursday, July 2", "title": "Fogo Island", "intro": "The crown jewel of the trip. Three nights at the world-renowned Fogo Island Inn on one of the four corners of the earth. Remote, stunning, and utterly unique.", "stops": [{"t": "Day 6 · Morning", "w": "Check In · Fogo Island Inn"}, {"t": "Days 6–8", "w": "Explore Fogo Island"}], "dinners": [], "lodge": {"label": "Confirmed Lodging · Nights 6, 7 & 8", "name": "Fogo Island Inn", "addr": "Joe Batt's Arm, Fogo Island, NL", "tel": "", "map": "https://maps.google.com/maps?q=Fogo+Island+Inn"}}, {"sid": "section-day9", "day": "Day 9", "dates": ["2026-07-05"], "date": "Sunday, July 5", "title": "Fogo → Ferry", "intro": "Say goodbye to Fogo Island. Ferry back to the mainland, then drive across Newfoundland to Port aux Basques for the overnight return ferry.", "stops": [{"t": "Morning", "w": "Drive: Farewell → Port aux Basques"}, {"t": "En Route", "w": "Suggested Stops"}], "dinners": [], "lodge": {"label": "Confirmed Lodging · Night 9", "name": "Marine Atlantic Ferry Cabin", "addr": "Overnight crossing · Port aux Basques → North Sydney", "tel": "", "map": ""}}, {"sid": "section-day10", "day": "Day 10", "dates": ["2026-07-06"], "date": "Monday, July 6", "title": "North Sydney → Pictou", "intro": "Morning arrival in Nova Scotia. Easy drive to Pictou — birthplace of New Scotland, known for its Scottish heritage and the Hector ship museum.", "stops": [{"t": "Morning", "w": "Arrive North Sydney"}, {"t": "Afternoon", "w": "Explore Pictou"}], "dinners": [], "lodge": {"label": "Confirmed Lodging · Night 10", "name": "The Scotsman Inn (2 rooms)", "addr": "78 Coleraine St, Pictou, NS B0K 1H0", "tel": "tel:+19024851924", "map": "https://maps.google.com/maps?q=78+Coleraine+St+Pictou+NS"}}, {"sid": "section-day11", "day": "Day 11", "dates": ["2026-07-07"], "date": "Tuesday, July 7", "title": "Pictou → Fredericton", "intro": "Drive through New Brunswick to the provincial capital. Stroll the Saint John River waterfront and enjoy a final Maritime evening.", "stops": [{"t": "Morning", "w": "Drive: Pictou → Fredericton"}, {"t": "En Route", "w": "Suggested Stops"}, {"t": "Afternoon", "w": "Fredericton Riverfront"}], "dinners": [], "lodge": {"label": "Confirmed Lodging · Night 11", "name": "Delta Hotels by Marriott Fredericton (2 rooms)", "addr": "225 Woodstock Rd, Fredericton, NB E3B 2H8", "tel": "", "map": "https://maps.google.com/maps?q=225+Woodstock+Rd+Fredericton+NB"}}, {"sid": "section-day12", "day": "Day 12", "dates": ["2026-07-08"], "date": "Wednesday, July 8", "title": "Fredericton → Portland", "intro": "The final drive home. Cross back into the US and return to Portland, ME. Full circle — 12 days, three provinces, one unforgettable island.", "stops": [{"t": "Morning", "w": "Final Drive · Fredericton → Portland"}, {"t": "En Route", "w": "Suggested Stops"}, {"t": "Afternoon", "w": "Arrive Portland · Trip Complete"}], "dinners": [], "lodge": {"label": "Confirmed Lodging · Night 12", "name": "Courtyard by Marriott Portland Downtown/Waterfront (1 room)", "addr": "321 Commercial St, Portland, ME 04101", "tel": "", "map": "https://maps.google.com/maps?q=Courtyard+Marriott+321+Commercial+St+Portland+ME"}}];
+
+  function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+  // Build the hub grid of day cards
+  function renderGrid(){
+    var grid = document.getElementById('mini-grid');
+    if(!grid) return;
+    var todayKey = todayISO();
+    grid.innerHTML = MINI.map(function(d,i){
+      var isToday = d.dates.indexOf(todayKey) !== -1;
+      return '<button class="mini-card'+(isToday?' is-today':'')+'" type="button" data-mini="'+i+'">'
+        + '<span class="mini-card-day">'+esc(d.day)+(isToday?'<span class="mini-card-today-tag">Today</span>':'')+'</span>'
+        + '<span class="mini-card-date">'+esc(d.date)+'</span>'
+        + '<span class="mini-card-route">'+esc(d.title)+'</span>'
+        + '<span class="mini-card-cta">View mini site &rarr;</span>'
+        + '</button>';
+    }).join('');
+    grid.querySelectorAll('[data-mini]').forEach(function(b){
+      b.addEventListener('click', function(){ openMini(parseInt(b.dataset.mini,10)); });
+    });
+  }
+
+  // Render a single day's digest into the view container
+  function renderView(i){
+    var d = MINI[i]; if(!d) return '';
+    var h = '';
+    h += '<div class="mini-dv-eyebrow">'+esc(d.day)+'</div>';
+    h += '<h2 class="mini-dv-title">'+esc(d.title)+'</h2>';
+    h += '<div class="mini-dv-date">'+esc(d.date)+'</div>';
+    h += '<p class="mini-dv-intro">'+esc(d.intro)+'</p>';
+    if(d.stops && d.stops.length){
+      h += '<div class="mini-dv-block-label">The Day at a Glance</div><div class="mini-tl">';
+      h += d.stops.map(function(s){
+        return '<div class="mini-tl-row"><div class="mini-tl-time">'+esc(s.t)+'</div><div class="mini-tl-what">'+esc(s.w)+'</div></div>';
+      }).join('');
+      h += '</div>';
+    }
+    if(d.dinners && d.dinners.length){
+      h += '<div class="mini-dv-block-label">Dinner Reservation</div>';
+      h += d.dinners.map(function(dn){
+        return '<div class="mini-lodge"><div class="mini-lodge-label">'+esc(dn.label)+'</div>'
+          + '<div class="mini-lodge-name">'+esc(dn.name)+'</div>'
+          + (dn.addr?'<div class="mini-lodge-addr">'+esc(dn.addr)+'</div>':'')+'</div>';
+      }).join('');
+    }
+    if(d.lodge){
+      var L = d.lodge, acts='';
+      if(L.map) acts += '<a class="mini-lodge-btn" href="'+esc(L.map)+'" target="_blank" rel="noopener">🗺 Map</a>';
+      if(L.tel) acts += '<a class="mini-lodge-btn" href="'+esc(L.tel)+'">📞 Call</a>';
+      h += '<div class="mini-dv-block-label">Where You&rsquo;re Sleeping</div>';
+      h += '<div class="mini-lodge"><div class="mini-lodge-label">'+esc(L.label)+'</div>'
+        + '<div class="mini-lodge-name">'+esc(L.name)+'</div>'
+        + (L.addr?'<div class="mini-lodge-addr">'+esc(L.addr)+'</div>':'')
+        + (acts?'<div class="mini-lodge-actions">'+acts+'</div>':'')+'</div>';
+    }
+    h += '<button class="mini-dv-full" type="button" data-mini-full="'+esc(d.sid)+'">Open Full Day in the App &rarr;</button>';
+    return h;
+  }
+
+  function openMini(i){
+    var body = document.getElementById('mini-view-body');
+    var hub = document.getElementById('mini-hub');
+    var view = document.getElementById('mini-view');
+    if(!body||!hub||!view) return;
+    body.innerHTML = renderView(i);
+    hub.style.display = 'none';
+    view.classList.add('open');
+    var full = body.querySelector('[data-mini-full]');
+    if(full) full.addEventListener('click', function(){
+      var sid = full.getAttribute('data-mini-full');
+      if(typeof navTo === 'function') navTo(sid, null);
+    });
+    // Ensure the mini-sites section is in view at the top
+    if(typeof navTo === 'function') navTo('section-minisites', null);
+    else { var sec=document.getElementById('section-minisites'); if(sec) sec.scrollIntoView(); }
+  }
+
+  function closeMini(){
+    var hub = document.getElementById('mini-hub');
+    var view = document.getElementById('mini-view');
+    if(view) view.classList.remove('open');
+    if(hub) hub.style.display = '';
+  }
+
+  // Local calendar date (device tz) as YYYY-MM-DD
+  function todayISO(){
+    var n = new Date();
+    var y=n.getFullYear(), m=('0'+(n.getMonth()+1)).slice(-2), da=('0'+n.getDate()).slice(-2);
+    return y+'-'+m+'-'+da;
+  }
+  function todayIndex(){
+    var k = todayISO();
+    for(var i=0;i<MINI.length;i++){ if(MINI[i].dates.indexOf(k)!==-1) return i; }
+    return -1;
+  }
+
+  function initBanner(){
+    var idx = todayIndex();
+    var banner = document.getElementById('mini-today-banner');
+    if(!banner || idx<0) return;               // only show during the trip
+    if(sessionStorage.getItem('miniBannerDismissed')==='1') return;
+    var d = MINI[idx];
+    var t = document.getElementById('mini-banner-title');
+    if(t) t.textContent = "Open today's mini site — " + d.title;
+    var openBtn = document.getElementById('mini-banner-open');
+    var closeBtn = document.getElementById('mini-banner-close');
+    if(openBtn) openBtn.addEventListener('click', function(){ banner.classList.remove('show'); openMini(idx); });
+    if(closeBtn) closeBtn.addEventListener('click', function(){ banner.classList.remove('show'); sessionStorage.setItem('miniBannerDismissed','1'); });
+    // Reveal after a short delay so it doesn't fight the existing on-load auto-nav
+    setTimeout(function(){ banner.classList.add('show'); }, 1600);
+  }
+
+  function init(){
+    renderGrid();
+    var back = document.getElementById('mini-back-btn');
+    if(back) back.addEventListener('click', closeMini);
+    initBanner();
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+</script>
+
 </body>
 </html>
