@@ -245,6 +245,7 @@ img{display:block;max-width:100%}
 /* ── DAILY MINI SITES ────────────────────────────── */
 .nav-chip-mini.active{background:var(--teal);border-color:var(--teal);color:#fff}
 .nav-chip-mini.active:hover{background:var(--teal2);color:var(--navy2)}
+#section-minisites{scroll-margin-top:calc(var(--nav-h, 84px) + 8px)}
 #section-minisites .content-section{max-width:760px}
 .mini-hub-header{margin-bottom:var(--sp16,20px)}
 .mini-hub-eyebrow{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);font-weight:600}
@@ -6568,6 +6569,26 @@ function navTo(sectionId, btn) {
 
   const gap = 20;
   const targetTop = Math.max(0, scrollTarget.getBoundingClientRect().top + window.scrollY - hdrH - gap);
+
+  // Daily Mini Sites lands mid-fade on iOS because the header height/visibility
+  // shifts during the 260ms fade, leaving the pre-computed target stale. Re-measure
+  // after the scroll settles and correct so the hub eyebrow lands just below the header.
+  if (sectionId === 'section-minisites') {
+    fadeScrollTo(targetTop, function(){
+      var doCorrect = function(){
+        var s = document.getElementById('section-minisites');
+        var hEl = document.getElementById('site-header');
+        if (!s) return;
+        var hH = hEl ? hEl.getBoundingClientRect().height : 82;
+        var want = Math.max(0, s.getBoundingClientRect().top + window.scrollY - hH - gap);
+        if (Math.abs(want - window.scrollY) > 2) window.scrollTo(0, want);
+      };
+      // two passes: once next frame, once after iOS momentum/header settle
+      requestAnimationFrame(doCorrect);
+      setTimeout(doCorrect, 380);
+    });
+    return;
+  }
 
   fadeScrollTo(targetTop);
 }
