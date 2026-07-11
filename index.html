@@ -180,11 +180,14 @@ img{display:block;max-width:100%}
   display:flex;flex-direction:column;gap:2px;
 }
 .hdr-row-1,.hdr-row-2,.hdr-row-3{
-  display:flex;align-items:center;justify-content:center;
+  display:flex;align-items:center;justify-content:safe center;
   gap:3px 4px;
   flex-wrap:nowrap;
   padding:1px 0;
+  overflow-x:auto;overflow-y:hidden;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none;
 }
+.hdr-row-1::-webkit-scrollbar,.hdr-row-2::-webkit-scrollbar,.hdr-row-3::-webkit-scrollbar{display:none}
 .nav-chip{
   font-family:'DM Mono',monospace;
   font-size:8.5px;letter-spacing:0.04em;
@@ -258,10 +261,32 @@ img{display:block;max-width:100%}
 .mini-card-date{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted)}
 .mini-card-route{font-family:Georgia,serif;font-size:16px;color:var(--navy);line-height:1.2}
 .mini-card-cta{font-size:11px;color:var(--teal);font-weight:600;margin-top:2px}
-/* Per-day digest view */
+/* Per-day digest view — full-screen persistent overlay (only that day) */
 .mini-view{display:none}
-.mini-view.open{display:block}
-.mini-back{display:inline-flex;align-items:center;gap:6px;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--teal);font-weight:600;background:none;border:none;cursor:pointer;padding:6px 0;margin-bottom:6px}
+.mini-view.open{
+  display:block;position:fixed;inset:0;z-index:9500;
+  background:var(--cream,#FAF7F2);
+  overflow-y:auto;-webkit-overflow-scrolling:touch;
+  overscroll-behavior:contain;
+  padding:0 0 calc(env(safe-area-inset-bottom,0px) + 28px);
+}
+/* While a mini site is open, hide the floating chrome so it stays isolated */
+body.mini-open #float-menu,
+body.mini-open #search-fab-wrap,
+body.mini-open #chat-fab-wrap,
+body.mini-open #time-pill{display:none!important}
+/* Sticky bar holding the jump-back pill */
+.mini-view-bar{
+  position:sticky;top:0;z-index:2;
+  display:flex;align-items:center;
+  padding:calc(env(safe-area-inset-top,0px) + 10px) 14px 10px;
+  background:rgba(17,29,43,.97);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border-bottom:1px solid rgba(201,169,110,.2);
+}
+.mini-view-body-wrap{max-width:760px;margin:0 auto;padding:20px 18px 0}
+/* Jump-back-to-main-site pill */
+.mini-back{display:inline-flex;align-items:center;gap:7px;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--navy2);font-weight:700;background:var(--gold);border:1px solid var(--gold);border-radius:999px;cursor:pointer;padding:8px 15px}
+.mini-back:hover{background:var(--gold2)}
 .mini-back:active{transform:scale(.96)}
 .mini-dv-eyebrow{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);font-weight:600}
 .mini-dv-title{font-family:Georgia,serif;font-size:24px;line-height:1.15;color:var(--navy);margin-top:3px}
@@ -4303,10 +4328,14 @@ function dismissWelcome() {
       </div>
       <div class="mini-grid" id="mini-grid"><!-- cards injected by JS --></div>
     </div>
-    <!-- VIEW: single day digest (injected by JS) -->
-    <div id="mini-view" class="mini-view">
-      <button class="mini-back" id="mini-back-btn" type="button">&larr; All Days</button>
-      <div id="mini-view-body"></div>
+    <!-- VIEW: single day digest (injected by JS) — full-screen persistent overlay -->
+    <div id="mini-view" class="mini-view" role="dialog" aria-modal="true" aria-label="Day mini site">
+      <div class="mini-view-bar">
+        <button class="mini-back" id="mini-back-btn" type="button">&larr; Back to Main Site</button>
+      </div>
+      <div class="mini-view-body-wrap">
+        <div id="mini-view-body"></div>
+      </div>
     </div>
   </div>
 </section>
@@ -11711,27 +11740,28 @@ requestAnimationFrame(function(){
 
   function openMini(i){
     var body = document.getElementById('mini-view-body');
-    var hub = document.getElementById('mini-hub');
     var view = document.getElementById('mini-view');
-    if(!body||!hub||!view) return;
+    if(!body||!view) return;
     body.innerHTML = renderView(i);
-    hub.style.display = 'none';
+    // Full-screen persistent overlay: only this day is shown, nothing scrolls to other days.
     view.classList.add('open');
+    view.scrollTop = 0;
+    document.body.classList.add('mini-open');
+    document.body.style.overflow = 'hidden';   // lock the main site behind the overlay
     var full = body.querySelector('[data-mini-full]');
     if(full) full.addEventListener('click', function(){
       var sid = full.getAttribute('data-mini-full');
+      closeMini();                              // leave the mini site first
       if(typeof navTo === 'function') navTo(sid, null);
     });
-    // Ensure the mini-sites section is in view at the top
-    if(typeof navTo === 'function') navTo('section-minisites', null);
-    else { var sec=document.getElementById('section-minisites'); if(sec) sec.scrollIntoView(); }
   }
 
+  // The jump-back pill: exit the mini site and return to the main app.
   function closeMini(){
-    var hub = document.getElementById('mini-hub');
     var view = document.getElementById('mini-view');
     if(view) view.classList.remove('open');
-    if(hub) hub.style.display = '';
+    document.body.classList.remove('mini-open');
+    document.body.style.overflow = '';
   }
 
   // Local calendar date (device tz) as YYYY-MM-DD
