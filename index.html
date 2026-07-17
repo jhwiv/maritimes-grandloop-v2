@@ -1690,6 +1690,84 @@ table.rtbl tr:nth-child(even) td{background:rgba(240,237,230,.5)}
   width:6px;height:6px;border-radius:50%;
   background:var(--gold);opacity:.7;
 }
+/* Hide the gold dot when an <li> contains an interactive label (the checkbox takes its place). */
+.packing-list li:has(label)::before{display:none}
+.packing-list li:has(label){padding-left:0}
+
+/* ── INTERACTIVE PACKING CONTROLS ─────────────── */
+.pack-actions{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:16px;margin:0 0 var(--sp16);padding:12px 14px;
+  background:var(--cream2);
+  border:1px solid var(--divider);
+  border-left:3px solid var(--gold);
+  border-radius:4px;
+  font-family:'DM Mono',monospace;
+  font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--navy);
+}
+.pack-progress-group{
+  display:flex;gap:18px;align-items:center;flex-wrap:wrap;justify-content:flex-end;
+}
+.pack-progress{color:var(--amber);font-weight:600;letter-spacing:.08em;white-space:nowrap}
+.pack-reset{
+  font-family:'DM Mono',monospace;
+  font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+  background:transparent;color:var(--steel);
+  border:1px solid var(--divider);
+  padding:7px 12px;border-radius:3px;cursor:pointer;
+  transition:color .15s ease,border-color .15s ease,background .15s ease;
+}
+.pack-reset:hover{color:var(--amber);border-color:var(--amber);background:rgba(139,105,20,.04)}
+.pack-reset:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+
+/* Interactive label rows */
+.packing-list label{
+  display:flex;align-items:flex-start;gap:11px;
+  padding:8px 2px;cursor:pointer;
+  font-family:'Crimson Pro',serif;
+  font-size:15px;line-height:1.55;color:var(--body);
+  user-select:none;
+  -webkit-tap-highlight-color:transparent;
+}
+.packing-list input[type="checkbox"]{
+  appearance:none;-webkit-appearance:none;
+  width:18px;height:18px;flex-shrink:0;margin-top:3px;
+  border:1.5px solid var(--gold);
+  border-radius:3px;background:#fff;
+  position:relative;cursor:pointer;
+  transition:background .15s ease,border-color .15s ease;
+}
+.packing-list input[type="checkbox"]:hover{border-color:var(--amber)}
+.packing-list input[type="checkbox"]:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.packing-list input[type="checkbox"]:checked{background:var(--amber);border-color:var(--amber)}
+.packing-list input[type="checkbox"]:checked::after{
+  content:"";position:absolute;left:4px;top:0;
+  width:6px;height:11px;
+  border:solid #fff;border-width:0 2px 2px 0;
+  transform:rotate(45deg);
+}
+.packing-list li.is-packed span{
+  color:var(--steel);
+  text-decoration:line-through;
+  text-decoration-color:var(--gold);
+  text-decoration-thickness:1px;
+}
+
+@media (max-width:540px){
+  .pack-actions{flex-direction:column;align-items:stretch;gap:10px}
+  .pack-progress-group{justify-content:space-between}
+  .packing-list label{font-size:15px}
+}
+
+/* Print: hide HTML checkboxes, show empty ballot boxes instead */
+@media print{
+  .pack-actions{display:none !important}
+  .packing-list input[type="checkbox"]{display:none}
+  .packing-list label{display:block;padding:4px 0}
+  .packing-list label::before{content:"\2610  ";font-size:14px}
+  .packing-list li:has(label)::before{display:none}
+}
 
 /* ── SURVIVAL / ACCORDION ──────────────────────── */
 .survival-section{background:var(--navy2)}
@@ -6075,55 +6153,64 @@ function dismissWelcome() {
 
     <p class="ref-note" style="margin:0 0 var(--sp16);max-width:680px">12 days, 11 nights — casual throughout, with one polished outfit each for Fogo Island Inn. Coastal Maritimes weather: highs 60&ndash;72&deg;F, lows 46&ndash;57&deg;F, fog and wind routine. Fogo Island Inn provides laundry service mid-trip (Jul 2&ndash;5), so the wardrobe below is sized for one cycle plus a refresh — carry-on rollers fit comfortably with a cube system.</p>
 
+    <!-- Interactive controls: reset + per-traveler progress -->
+    <div class="pack-actions" role="group" aria-label="Packing checklist controls">
+      <button type="button" class="pack-reset" id="mar-pack-reset">Reset checklist</button>
+      <div class="pack-progress-group">
+        <span class="pack-progress" id="mar-pack-progress-his" aria-live="polite">His: 0 of 0</span>
+        <span class="pack-progress" id="mar-pack-progress-her" aria-live="polite">Her: 0 of 0</span>
+      </div>
+    </div>
+
     <!-- ─────────────  HIS LIST  ───────────── -->
     <div class="ref-block">
       <div class="ref-title">His List</div>
 
       <div class="packing-cat"><div class="packing-cat-title">Tops</div>
-        <ul class="packing-list">
-          <li>5 mix-and-match tops (merino or synthetic tees and polos dry fastest on the road)</li>
-          <li>2 long-sleeve henleys or sun shirts for cool ferry mornings and bug cover in NL</li>
-          <li>1 button-down for Fogo Inn dinners (linen or brushed cotton, repeats across 3 nights)</li>
-          <li>1 mid-weight quarter-zip fleece or fisherman sweater (also doubles as evening layer)</li>
+        <ul class="packing-list" data-pack-group="his-tops">
+          <li><label><input type="checkbox"><span>5 mix-and-match tops (merino or synthetic tees and polos dry fastest on the road)</span></label></li>
+          <li><label><input type="checkbox"><span>2 long-sleeve henleys or sun shirts for cool ferry mornings and bug cover in NL</span></label></li>
+          <li><label><input type="checkbox"><span>1 button-down for Fogo Inn dinners (linen or brushed cotton, repeats across 3 nights)</span></label></li>
+          <li><label><input type="checkbox"><span>1 mid-weight quarter-zip fleece or fisherman sweater (also doubles as evening layer)</span></label></li>
         </ul>
       </div>
 
       <div class="packing-cat"><div class="packing-cat-title">Bottoms</div>
-        <ul class="packing-list">
-          <li>2 pairs travel pants or chinos (one worn on the drive day)</li>
-          <li>1 pair dark chinos or clean slim jeans — pairs with the button-down for Fogo Inn</li>
-          <li>1 pair shorts for Portland and the warmer Lunenburg afternoon</li>
+        <ul class="packing-list" data-pack-group="his-bottoms">
+          <li><label><input type="checkbox"><span>2 pairs travel pants or chinos (one worn on the drive day)</span></label></li>
+          <li><label><input type="checkbox"><span>1 pair dark chinos or clean slim jeans — pairs with the button-down for Fogo Inn</span></label></li>
+          <li><label><input type="checkbox"><span>1 pair shorts for Portland and the warmer Lunenburg afternoon</span></label></li>
         </ul>
       </div>
 
       <div class="packing-cat"><div class="packing-cat-title">Layers &amp; outerwear</div>
-        <ul class="packing-list">
-          <li>Waterproof, wind-resistant shell with hood &mdash; non-negotiable for coast fog and sideways rain</li>
-          <li>Light puffer (down or synthetic) &mdash; Fogo evenings drop into the 40s</li>
-          <li>Brimmed cap for sun and rain</li>
+        <ul class="packing-list" data-pack-group="his-layers">
+          <li><label><input type="checkbox"><span>Waterproof, wind-resistant shell with hood &mdash; non-negotiable for coast fog and sideways rain</span></label></li>
+          <li><label><input type="checkbox"><span>Light puffer (down or synthetic) &mdash; Fogo evenings drop into the 40s</span></label></li>
+          <li><label><input type="checkbox"><span>Brimmed cap for sun and rain</span></label></li>
         </ul>
       </div>
 
       <div class="packing-cat"><div class="packing-cat-title">Footwear (2 pairs)</div>
-        <ul class="packing-list">
-          <li>Waterproof light hikers &mdash; the workhorse for coastal trails, Brimstone Head, Shoal Bay, and town cobbles. Wear on the drive day.</li>
-          <li>Casual sneakers or loafers for evenings, ferry decks, and Fogo Inn dinners</li>
+        <ul class="packing-list" data-pack-group="his-shoes">
+          <li><label><input type="checkbox"><span>Waterproof light hikers &mdash; the workhorse for coastal trails, Brimstone Head, Shoal Bay, and town cobbles. Wear on the drive day.</span></label></li>
+          <li><label><input type="checkbox"><span>Casual sneakers or loafers for evenings, ferry decks, and Fogo Inn dinners</span></label></li>
         </ul>
       </div>
 
       <div class="packing-cat"><div class="packing-cat-title">Underlayers</div>
-        <ul class="packing-list">
-          <li>6 pairs of socks (2 merino for hiking and ferry nights, 4 everyday) &mdash; sized for one Fogo laundry cycle</li>
-          <li>6 pairs of underwear</li>
-          <li>Sleepwear (long sleeves &mdash; hotel rooms run cool)</li>
+        <ul class="packing-list" data-pack-group="his-under">
+          <li><label><input type="checkbox"><span>6 pairs of socks (2 merino for hiking and ferry nights, 4 everyday) &mdash; sized for one Fogo laundry cycle</span></label></li>
+          <li><label><input type="checkbox"><span>6 pairs of underwear</span></label></li>
+          <li><label><input type="checkbox"><span>Sleepwear (long sleeves &mdash; hotel rooms run cool)</span></label></li>
         </ul>
       </div>
 
       <div class="packing-cat"><div class="packing-cat-title">Accessories</div>
-        <ul class="packing-list">
-          <li>Belt</li>
-          <li>Polarized sunglasses (essential for water, fog glare, and icebergs)</li>
-          <li>Reading glasses plus a spare pair</li>
+        <ul class="packing-list" data-pack-group="his-acc">
+          <li><label><input type="checkbox"><span>Belt</span></label></li>
+          <li><label><input type="checkbox"><span>Polarized sunglasses (essential for water, fog glare, and icebergs)</span></label></li>
+          <li><label><input type="checkbox"><span>Reading glasses plus a spare pair</span></label></li>
         </ul>
       </div>
     </div>
@@ -6133,51 +6220,51 @@ function dismissWelcome() {
       <div class="ref-title">Her List</div>
 
       <div class="packing-cat"><div class="packing-cat-title">Tops</div>
-        <ul class="packing-list">
-          <li>5 mix-and-match tops &mdash; tees, lightweight long-sleeves, or breathable blouses</li>
-          <li>2 long-sleeve layering tops (one merino or thermal for cool ferry mornings)</li>
-          <li>1 nicer top or blouse for Fogo Inn dinners (repeats across 3 nights)</li>
-          <li>1 mid-weight cardigan, fisherman sweater, or fleece pullover</li>
+        <ul class="packing-list" data-pack-group="her-tops">
+          <li><label><input type="checkbox"><span>5 mix-and-match tops &mdash; tees, lightweight long-sleeves, or breathable blouses</span></label></li>
+          <li><label><input type="checkbox"><span>2 long-sleeve layering tops (one merino or thermal for cool ferry mornings)</span></label></li>
+          <li><label><input type="checkbox"><span>1 nicer top or blouse for Fogo Inn dinners (repeats across 3 nights)</span></label></li>
+          <li><label><input type="checkbox"><span>1 mid-weight cardigan, fisherman sweater, or fleece pullover</span></label></li>
         </ul>
       </div>
 
       <div class="packing-cat"><div class="packing-cat-title">Bottoms</div>
-        <ul class="packing-list">
-          <li>2 pairs travel pants or jeans (one worn on the drive day)</li>
-          <li>1 pair nicer pants or a casual dress/skirt for Fogo Inn</li>
-          <li>1 pair leggings for layering and long car days</li>
+        <ul class="packing-list" data-pack-group="her-bottoms">
+          <li><label><input type="checkbox"><span>2 pairs travel pants or jeans (one worn on the drive day)</span></label></li>
+          <li><label><input type="checkbox"><span>1 pair nicer pants or a casual dress/skirt for Fogo Inn</span></label></li>
+          <li><label><input type="checkbox"><span>1 pair leggings for layering and long car days</span></label></li>
         </ul>
       </div>
 
       <div class="packing-cat"><div class="packing-cat-title">Layers &amp; outerwear</div>
-        <ul class="packing-list">
-          <li>Waterproof, wind-resistant shell with hood</li>
-          <li>Light puffer (down or synthetic)</li>
-          <li>Brimmed hat or packable rain hat</li>
-          <li>Lightweight scarf or buff &mdash; wind on the coast, warmth on the ferry</li>
+        <ul class="packing-list" data-pack-group="her-layers">
+          <li><label><input type="checkbox"><span>Waterproof, wind-resistant shell with hood</span></label></li>
+          <li><label><input type="checkbox"><span>Light puffer (down or synthetic)</span></label></li>
+          <li><label><input type="checkbox"><span>Brimmed hat or packable rain hat</span></label></li>
+          <li><label><input type="checkbox"><span>Lightweight scarf or buff &mdash; wind on the coast, warmth on the ferry</span></label></li>
         </ul>
       </div>
 
       <div class="packing-cat"><div class="packing-cat-title">Footwear (2 pairs)</div>
-        <ul class="packing-list">
-          <li>Waterproof walking shoes or light hikers &mdash; the workhorse for trails, town cobbles, and ferry decks. Wear on the drive day.</li>
-          <li>Casual flats, loafers, or low boots for evenings and Fogo Inn dinners</li>
+        <ul class="packing-list" data-pack-group="her-shoes">
+          <li><label><input type="checkbox"><span>Waterproof walking shoes or light hikers &mdash; the workhorse for trails, town cobbles, and ferry decks. Wear on the drive day.</span></label></li>
+          <li><label><input type="checkbox"><span>Casual flats, loafers, or low boots for evenings and Fogo Inn dinners</span></label></li>
         </ul>
       </div>
 
       <div class="packing-cat"><div class="packing-cat-title">Underlayers</div>
-        <ul class="packing-list">
-          <li>6 pairs of socks (2 merino for hiking and ferry nights, 4 everyday)</li>
-          <li>6 pairs of underwear, 2 bras</li>
-          <li>Sleepwear (long sleeves &mdash; hotel rooms run cool)</li>
+        <ul class="packing-list" data-pack-group="her-under">
+          <li><label><input type="checkbox"><span>6 pairs of socks (2 merino for hiking and ferry nights, 4 everyday)</span></label></li>
+          <li><label><input type="checkbox"><span>6 pairs of underwear, 2 bras</span></label></li>
+          <li><label><input type="checkbox"><span>Sleepwear (long sleeves &mdash; hotel rooms run cool)</span></label></li>
         </ul>
       </div>
 
       <div class="packing-cat"><div class="packing-cat-title">Accessories</div>
-        <ul class="packing-list">
-          <li>Polarized sunglasses</li>
-          <li>Reading glasses plus a spare pair</li>
-          <li>Simple jewelry that mixes across casual and Fogo Inn evenings</li>
+        <ul class="packing-list" data-pack-group="her-acc">
+          <li><label><input type="checkbox"><span>Polarized sunglasses</span></label></li>
+          <li><label><input type="checkbox"><span>Reading glasses plus a spare pair</span></label></li>
+          <li><label><input type="checkbox"><span>Simple jewelry that mixes across casual and Fogo Inn evenings</span></label></li>
         </ul>
       </div>
     </div>
@@ -6187,61 +6274,61 @@ function dismissWelcome() {
       <div class="ref-title">Both Bring</div>
 
       <div class="packing-cat"><div class="packing-cat-title">Border &amp; ferry documents</div>
-        <ul class="packing-list">
-          <li>US passports (6+ months validity)</li>
-          <li>Driver&rsquo;s license, vehicle registration, and auto insurance card with Canada coverage confirmed</li>
-          <li>Credit cards plus a backup; a small amount of Canadian cash for tips and rural stops</li>
-          <li>Travel insurance documents &mdash; US health coverage often does not apply in Canada</li>
-          <li>Printed ferry confirmations: Fundy Rose, Marine Atlantic (&times;2), Fogo Island</li>
-          <li>Hotel and Fogo Island Inn confirmations as backup</li>
+        <ul class="packing-list" data-pack-group="both-docs">
+          <li><label><input type="checkbox"><span>US passports (6+ months validity)</span></label></li>
+          <li><label><input type="checkbox"><span>Driver&rsquo;s license, vehicle registration, and auto insurance card with Canada coverage confirmed</span></label></li>
+          <li><label><input type="checkbox"><span>Credit cards plus a backup; a small amount of Canadian cash for tips and rural stops</span></label></li>
+          <li><label><input type="checkbox"><span>Travel insurance documents &mdash; US health coverage often does not apply in Canada</span></label></li>
+          <li><label><input type="checkbox"><span>Printed ferry confirmations: Fundy Rose, Marine Atlantic (&times;2), Fogo Island</span></label></li>
+          <li><label><input type="checkbox"><span>Hotel and Fogo Island Inn confirmations as backup</span></label></li>
         </ul>
       </div>
 
       <div class="packing-cat"><div class="packing-cat-title">Tech for road and rural NL</div>
-        <ul class="packing-list">
-          <li>Phones plus chargers (no adapter needed &mdash; Canada is 120V Type A/B)</li>
-          <li>Portable battery pack &mdash; rural NL and ferry legs have limited outlets</li>
-          <li>12V car charger with two USB ports</li>
-          <li>Headphones or earbuds for the overnight ferry cabin</li>
-          <li>Offline Google Maps pre-downloaded for NS, NB, and NL</li>
+        <ul class="packing-list" data-pack-group="both-tech">
+          <li><label><input type="checkbox"><span>Phones plus chargers (no adapter needed &mdash; Canada is 120V Type A/B)</span></label></li>
+          <li><label><input type="checkbox"><span>Portable battery pack &mdash; rural NL and ferry legs have limited outlets</span></label></li>
+          <li><label><input type="checkbox"><span>12V car charger with two USB ports</span></label></li>
+          <li><label><input type="checkbox"><span>Headphones or earbuds for the overnight ferry cabin</span></label></li>
+          <li><label><input type="checkbox"><span>Offline Google Maps pre-downloaded for NS, NB, and NL</span></label></li>
         </ul>
       </div>
 
       <div class="packing-cat"><div class="packing-cat-title">Coast &amp; wildlife</div>
-        <ul class="packing-list">
-          <li>Compact binoculars &mdash; whales, icebergs, seabirds off Twillingate and Fogo</li>
-          <li>Small daypack for hikes, ferry walk-ons, and town walks</li>
-          <li>Reusable water bottle each</li>
-          <li>Strong DEET or picaridin repellent &mdash; blackflies are serious in NL in late June / early July</li>
+        <ul class="packing-list" data-pack-group="both-coast">
+          <li><label><input type="checkbox"><span>Compact binoculars &mdash; whales, icebergs, seabirds off Twillingate and Fogo</span></label></li>
+          <li><label><input type="checkbox"><span>Small daypack for hikes, ferry walk-ons, and town walks</span></label></li>
+          <li><label><input type="checkbox"><span>Reusable water bottle each</span></label></li>
+          <li><label><input type="checkbox"><span>Strong DEET or picaridin repellent &mdash; blackflies are serious in NL in late June / early July</span></label></li>
         </ul>
       </div>
 
       <div class="packing-cat"><div class="packing-cat-title">Health &amp; toiletries (shared, kept light)</div>
-        <ul class="packing-list">
-          <li>Compact shared toiletry kit &mdash; all hotels and Fogo Inn provide basics</li>
-          <li>Prescription medications in original bottles plus a few extra days</li>
-          <li>Basic first-aid: bandages, pain reliever, antacid, allergy tablets</li>
-          <li>Sunscreen SPF 30+ and lip balm &mdash; North Atlantic sun is stronger than it feels</li>
-          <li>Motion-sickness tablets for the Marine Atlantic overnight crossings if either of you is sensitive</li>
+        <ul class="packing-list" data-pack-group="both-health">
+          <li><label><input type="checkbox"><span>Compact shared toiletry kit &mdash; all hotels and Fogo Inn provide basics</span></label></li>
+          <li><label><input type="checkbox"><span>Prescription medications in original bottles plus a few extra days</span></label></li>
+          <li><label><input type="checkbox"><span>Basic first-aid: bandages, pain reliever, antacid, allergy tablets</span></label></li>
+          <li><label><input type="checkbox"><span>Sunscreen SPF 30+ and lip balm &mdash; North Atlantic sun is stronger than it feels</span></label></li>
+          <li><label><input type="checkbox"><span>Motion-sickness tablets for the Marine Atlantic overnight crossings if either of you is sensitive</span></label></li>
         </ul>
       </div>
 
       <div class="packing-cat"><div class="packing-cat-title">Ferry cabin &amp; car comfort</div>
-        <ul class="packing-list">
-          <li>Light travel blanket or large scarf for the overnight ferry cabin</li>
-          <li>Neck pillow each</li>
-          <li>Reusable shopping bag (Canada charges for plastic) and a small cooler for road snacks</li>
-          <li>Swimsuits for the Portland and Fredericton hotel pools</li>
+        <ul class="packing-list" data-pack-group="both-ferry">
+          <li><label><input type="checkbox"><span>Light travel blanket or large scarf for the overnight ferry cabin</span></label></li>
+          <li><label><input type="checkbox"><span>Neck pillow each</span></label></li>
+          <li><label><input type="checkbox"><span>Reusable shopping bag (Canada charges for plastic) and a small cooler for road snacks</span></label></li>
+          <li><label><input type="checkbox"><span>Swimsuits for the Portland and Fredericton hotel pools</span></label></li>
         </ul>
       </div>
 
       <div class="packing-cat"><div class="packing-cat-title">Expert-packer notes</div>
-        <ul class="packing-list">
-          <li>Carry-on rollers each, plus one personal bag for ferry-cabin nights (toothbrush, layer, charger, sleep kit) so the main roller stays in the car</li>
-          <li>Packing cubes keep Fogo Inn items clean and separate from road-day layers</li>
-          <li>Wear the bulkiest items &mdash; shell, fleece, hikers &mdash; on the drive day to save bag volume</li>
-          <li>Plan the Fogo Island Inn laundry mid-trip (Jul 2&ndash;5) and you halve the clothing count</li>
-          <li>Keep the arrival outfit at the top of the bag &mdash; coastal weather flips fast and you may need the shell within an hour of leaving Portland</li>
+        <ul class="packing-list" data-pack-group="both-notes">
+          <li><label><input type="checkbox"><span>Carry-on rollers each, plus one personal bag for ferry-cabin nights (toothbrush, layer, charger, sleep kit) so the main roller stays in the car</span></label></li>
+          <li><label><input type="checkbox"><span>Packing cubes keep Fogo Inn items clean and separate from road-day layers</span></label></li>
+          <li><label><input type="checkbox"><span>Wear the bulkiest items &mdash; shell, fleece, hikers &mdash; on the drive day to save bag volume</span></label></li>
+          <li><label><input type="checkbox"><span>Plan the Fogo Island Inn laundry mid-trip (Jul 2&ndash;5) and you halve the clothing count</span></label></li>
+          <li><label><input type="checkbox"><span>Keep the arrival outfit at the top of the bag &mdash; coastal weather flips fast and you may need the shell within an hour of leaving Portland</span></label></li>
         </ul>
       </div>
     </div>
@@ -12168,6 +12255,73 @@ requestAnimationFrame(function(){
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', init);
   else init();
+})();
+</script>
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     PACKING LIST: persistence + per-traveler progress
+     Adapted from packing-list-v2 (santafe-itinerary, 2026-05-23)
+     Two counters (His + Her); reset clears all groups including Both Bring.
+     ═══════════════════════════════════════════════════════════════════════ -->
+<script>
+(function(){
+  const panel = document.getElementById('section-packing');
+  if (!panel) return;
+  const STORAGE_KEY = 'maritimes-packing-v1';
+  const checks = Array.from(panel.querySelectorAll('.packing-list input[type="checkbox"]'));
+  if (!checks.length) return;
+
+  // Assign a stable id from group + index-within-group so order changes won't wipe state.
+  const groupCounts = {};
+  checks.forEach(cb => {
+    const group = cb.closest('[data-pack-group]')?.getAttribute('data-pack-group') || 'x';
+    const i = groupCounts[group] = (groupCounts[group] || 0) + 1;
+    cb.dataset.pkid = group + ':' + (i - 1);
+    cb.dataset.pkgroup = group;
+  });
+
+  // Restore saved state
+  let saved = {};
+  try { saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch(e) { saved = {}; }
+  checks.forEach(cb => { if (saved[cb.dataset.pkid]) cb.checked = true; });
+
+  const progHis = document.getElementById('mar-pack-progress-his');
+  const progHer = document.getElementById('mar-pack-progress-her');
+
+  function updateProgress(){
+    let hisTotal=0, hisDone=0, herTotal=0, herDone=0;
+    checks.forEach(c => {
+      const g = c.dataset.pkgroup || '';
+      if (g.startsWith('his-')) { hisTotal++; if (c.checked) hisDone++; }
+      else if (g.startsWith('her-')) { herTotal++; if (c.checked) herDone++; }
+      const li = c.closest('li');
+      if (li) li.classList.toggle('is-packed', c.checked);
+    });
+    if (progHis) progHis.textContent = 'His: ' + hisDone + ' of ' + hisTotal;
+    if (progHer) progHer.textContent = 'Her: ' + herDone + ' of ' + herTotal;
+  }
+
+  function save(){
+    const out = {};
+    checks.forEach(c => { if (c.checked) out[c.dataset.pkid] = 1; });
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(out)); } catch(e){}
+  }
+
+  checks.forEach(cb => {
+    cb.addEventListener('change', () => { save(); updateProgress(); });
+  });
+
+  const resetBtn = document.getElementById('mar-pack-reset');
+  if (resetBtn) {
+    resetBtn.addEventListener('click', () => {
+      if (!confirm('Clear all checked items on the packing list?')) return;
+      checks.forEach(c => { c.checked = false; });
+      try { localStorage.removeItem(STORAGE_KEY); } catch(e){}
+      updateProgress();
+    });
+  }
+
+  updateProgress();
 })();
 </script>
 
